@@ -1,4 +1,5 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en"><html lang="en">
 
 <head>
 <meta charset="UTF-8">
@@ -802,6 +803,739 @@ function stopFireworks(){
   fwRunning=false;fwRAF=null;particles=[];
   fwCtx.clearRect(0,0,fwCanvas.width,fwCanvas.height);
   fwCanvas.style.display='none';
+}
+</script>
+</body>
+</html>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Jack & The Temple of Shadows</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Nunito',sans-serif;
+  background:#000;
+  overflow:hidden;
+  height:100vh;
+  width:100vw;
+  user-select:none;
+}
+
+/* SCREENS */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;}
+.screen.active{display:flex;}
+
+/* TITLE */
+#title-screen{
+  background:radial-gradient(ellipse at center,#1e4a1e 0%,#0a1a0a 70%);
+  gap:1rem;text-align:center;padding:2rem;
+}
+.title-emoji{font-size:clamp(2.5rem,8vw,5rem);animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.game-title{
+  font-family:'Bangers',cursive;
+  font-size:clamp(1.8rem,7vw,4rem);
+  color:#FFD700;
+  text-shadow:3px 3px 0 #8B6914;
+  letter-spacing:2px;line-height:1.1;
+}
+.game-sub{font-family:'Bangers',cursive;font-size:clamp(0.9rem,3vw,1.4rem);color:#90ee90;letter-spacing:3px;}
+.prep-pills{display:flex;gap:0.8rem;justify-content:center;}
+.pill{
+  background:rgba(255,255,255,0.15);border:2px solid #FFD700;
+  border-radius:50px;padding:0.3rem 1.2rem;
+  font-family:'Bangers',cursive;font-size:clamp(1rem,3vw,1.4rem);
+  color:#FFD700;letter-spacing:2px;
+}
+.start-btn{
+  background:linear-gradient(135deg,#FFD700,#FFA500);
+  color:#1a1a00;font-family:'Bangers',cursive;
+  font-size:clamp(1.1rem,3.5vw,1.8rem);letter-spacing:2px;
+  border:none;padding:0.7rem 2.5rem;border-radius:50px;cursor:pointer;
+  box-shadow:0 5px 0 #8B6914;transition:transform 0.1s;
+}
+.start-btn:active{transform:translateY(3px);}
+
+/* GAME */
+#game-screen{justify-content:flex-start;background:#000;}
+
+/* Background image - covers whole screen */
+#scene-bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background-size:cover;
+  background-position:center center;
+  background-repeat:no-repeat;
+  transition:background-image 1s ease;
+}
+/* Dark overlay so text is readable */
+#scene-bg::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+}
+
+/* HUD */
+#hud{
+  position:relative;z-index:20;width:100%;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0.4rem 1rem;
+  background:rgba(0,0,0,0.8);
+  border-bottom:2px solid #FFD700;
+  flex-shrink:0;
+}
+.hud-title{font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(0.75rem,2.5vw,1.1rem);letter-spacing:2px;}
+.hud-score{font-family:'Bangers',cursive;color:#90ee90;font-size:clamp(0.85rem,2.5vw,1.1rem);letter-spacing:2px;}
+
+/* Progress bar */
+#prog-wrap{position:relative;z-index:20;width:100%;height:5px;background:rgba(255,255,255,0.15);flex-shrink:0;}
+#prog-bar{height:100%;background:linear-gradient(90deg,#FFD700,#FFA500);width:0%;transition:width 0.5s;}
+
+/* Balloon zone */
+#balloon-zone{
+  position:relative;z-index:20;width:100%;
+  height:clamp(90px,17vh,130px);
+  display:flex;align-items:center;justify-content:center;
+  gap:clamp(1.5rem,5vw,4rem);
+  flex-shrink:0;
+}
+.balloon{
+  display:flex;flex-direction:column;align-items:center;
+  cursor:grab;touch-action:none;
+  animation:bobble 2.5s ease-in-out infinite;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,0.7));
+}
+.balloon:nth-child(2){animation-delay:0.7s;}
+.balloon:nth-child(3){animation-delay:1.4s;}
+@keyframes bobble{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.balloon-body{
+  width:clamp(70px,16vw,100px);height:clamp(80px,18vw,115px);
+  border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bangers',cursive;
+  font-size:clamp(1.2rem,4vw,2rem);
+  color:#fff;text-shadow:2px 2px 4px rgba(0,0,0,0.6);
+  letter-spacing:1px;
+  box-shadow:inset -8px -8px 20px rgba(0,0,0,0.3),inset 4px 4px 10px rgba(255,255,255,0.3);
+}
+.balloon-string{width:2px;height:20px;background:rgba(255,255,255,0.5);}
+
+/* Middle scene area */
+#scene-area{
+  flex:1;
+  position:relative;
+  z-index:5;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.scene-label-display{
+  position:absolute;top:0.5rem;left:50%;transform:translateX(-50%);
+  font-family:'Bangers',cursive;font-size:clamp(0.6rem,2vw,0.85rem);
+  color:#FFD700;letter-spacing:3px;
+  background:rgba(0,0,0,0.65);padding:0.2rem 0.8rem;border-radius:4px;
+  white-space:nowrap;z-index:10;
+}
+
+/* STORY STRIP at bottom */
+#story-strip{
+  position:relative;z-index:20;width:100%;
+  height:clamp(90px,18vh,120px);
+  background:rgba(0,0,0,0.9);
+  border-top:3px solid #FFD700;
+  overflow:hidden;flex-shrink:0;
+}
+#scroll-track{
+  display:flex;align-items:center;
+  height:100%;
+  white-space:nowrap;
+}
+#story-content{
+  display:inline-flex;align-items:center;
+  font-size:clamp(0.95rem,2.8vw,1.25rem);
+  font-weight:700;color:#f0f0f0;
+  padding:0 100vw 0 20px;
+  line-height:1.4;
+}
+
+/* Gap slots */
+.gap-slot{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:clamp(55px,11vw,85px);height:clamp(34px,6vw,44px);
+  border:3px dashed #FFD700;border-radius:8px;
+  background:rgba(255,215,0,0.15);
+  margin:0 6px;
+  transition:all 0.2s;flex-shrink:0;
+  font-family:'Bangers',cursive;
+  font-size:clamp(0.9rem,2.5vw,1.2rem);
+  letter-spacing:2px;
+  cursor:default;
+}
+.gap-slot.drag-over{
+  background:rgba(255,215,0,0.4);
+  border-color:#fff;transform:scale(1.15);
+}
+.gap-slot.correct{
+  background:rgba(50,200,50,0.4);
+  border:3px solid #50c850;
+  color:#90ff90;
+}
+.gap-slot.wrong-flash{
+  background:rgba(230,50,50,0.4);
+  border:3px solid #e63232;
+  animation:shake 0.5s ease;
+}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+.scene-divider{display:inline-block;padding:0 2rem;font-size:1.2rem;opacity:0.4;color:#FFD700;}
+
+/* Touch clone for drag */
+#touch-clone{
+  position:fixed;pointer-events:none;z-index:9999;
+  display:none;flex-direction:column;align-items:center;
+  transform:translate(-50%,-70%) scale(1.3);
+}
+
+/* Fireworks */
+#fw-canvas{position:fixed;inset:0;z-index:150;pointer-events:none;display:none;}
+
+/* Wrong overlay */
+#wrong-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(180,0,0,0.35);
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:0.8rem;
+}
+#wrong-overlay.show{display:flex;}
+.wrong-msg{
+  font-family:'Bangers',cursive;font-size:clamp(2rem,8vw,4.5rem);
+  color:#ff5555;letter-spacing:4px;text-align:center;
+  text-shadow:0 0 20px rgba(255,0,0,0.8);
+  animation:popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+@keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
+.wrong-sub{color:#ffcccc;font-size:clamp(0.9rem,3vw,1.2rem);font-weight:700;text-align:center;}
+.wrong-restart{color:#ffaaaa;font-size:clamp(0.75rem,2vw,0.95rem);font-weight:600;}
+
+/* End screen */
+#end-screen{
+  background:radial-gradient(ellipse at center,#1e3a1e 0%,#0a1a0a 70%);
+  gap:1rem;text-align:center;padding:2rem;
+}
+.end-emoji{font-size:clamp(3rem,10vw,5rem);animation:float 2s ease-in-out infinite;}
+.end-title{font-family:'Bangers',cursive;font-size:clamp(2rem,8vw,4rem);color:#FFD700;text-shadow:3px 3px 0 #8B6914;letter-spacing:3px;}
+.end-score{font-family:'Bangers',cursive;font-size:clamp(1.3rem,5vw,2.5rem);color:#90ff90;}
+.end-msg{color:#ccc;font-size:clamp(0.85rem,2.5vw,1rem);max-width:380px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- TITLE SCREEN -->
+<div class="screen active" id="title-screen">
+  <div class="title-emoji">🗺️</div>
+  <div class="game-title">JACK &amp; THE<br>TEMPLE OF SHADOWS</div>
+  <div class="game-sub">JUNGLE ADVENTURE</div>
+  <div class="prep-pills">
+    <span class="pill">AT</span>
+    <span class="pill">IN</span>
+    <span class="pill">ON</span>
+  </div>
+  <p style="color:#aaa;font-size:0.9rem;max-width:340px;text-align:center;line-height:1.5;">
+    Drag the correct preposition balloon into the gap in the story.<br>
+    <strong style="color:#FFD700">Wrong answer = start again!</strong>
+  </p>
+  <button class="start-btn" onclick="startGame()">▶ START ADVENTURE</button>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="game-screen">
+  <div id="scene-bg"></div>
+
+  <div id="hud">
+    <div class="hud-title">🗺️ JACK'S QUEST</div>
+    <div class="hud-score">⭐ <span id="score-display">0</span> / <span id="total-display">48</span></div><button onclick="restartGame()" style="font-family:'Bangers',cursive;background:#e74c3c;color:white;border:none;padding:0.3rem 1rem;border-radius:20px;font-size:clamp(0.7rem,2vw,1rem);letter-spacing:1px;cursor:pointer;box-shadow:0 3px 0 #922b21;">↩ RESTART</button>
+  </div>
+  <div id="prog-wrap"><div id="prog-bar"></div></div>
+
+  <div id="balloon-zone"></div>
+
+  <div id="scene-area">
+    <div class="scene-label-display" id="scene-label">SCENE 1 · THE AIRPORT</div>
+  </div>
+
+  <div id="story-strip">
+    <div id="scroll-track">
+      <div id="story-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- END SCREEN -->
+<div class="screen" id="end-screen">
+  <div class="end-emoji">🏆</div>
+  <div class="end-title">ADVENTURE COMPLETE!</div>
+  <div class="end-score">SCORE: <span id="final-score">0</span> / 48</div>
+  <div class="end-msg">Jack escapes with the golden statue! You mastered AT, IN and ON! 🎉</div>
+  <button class="start-btn" onclick="restartGame()">🔄 PLAY AGAIN</button>
+</div>
+
+<!-- OVERLAYS -->
+<canvas id="fw-canvas"></canvas>
+<div id="wrong-overlay">
+  <div class="wrong-msg">❌ WRONG!</div>
+  <div class="wrong-sub">That's not right!</div>
+  <div class="wrong-restart">Starting again from the beginning...</div>
+</div>
+<div id="touch-clone"></div>
+
+<script>
+// ═══════════════════════════════════════
+// SCENES DATA — 12 scenes, 48 gaps
+// ═══════════════════════════════════════
+const SCENES = [
+  {
+    id:1, label:"SCENE 1 · THE AIRPORT",
+    bg:"scene01.jpg",
+    text:"Jack arrives [at] the airport [on] Monday morning. His flight leaves [at] seven o'clock. He sits [at] the gate and waits."
+  },
+  {
+    id:2, label:"SCENE 2 · IN THE AIR",
+    bg:"scene02.jpg",
+    text:"[In] the afternoon, Jack looks down [at] the jungle below. Somewhere [in] the jungle lies the Temple of Shadows. The pilot speaks [at] noon."
+  },
+  {
+    id:3, label:"SCENE 3 · THE AIRSTRIP",
+    bg:"scene03.jpg",
+    text:"The plane lands [at] a small airstrip [in] Peru. It is [at] six o'clock [in] the evening. Jack steps out onto the muddy ground."
+  },
+  {
+    id:4, label:"SCENE 4 · THE VILLAGE",
+    bg:"scene04.jpg",
+    text:"Jack arrives [at] a small village [at] night. He sits [at] a table [in] a small hut. An old man gives him a warning."
+  },
+  {
+    id:5, label:"SCENE 5 · THE WARNING",
+    bg:"scene05.jpg",
+    text:"[In] the morning, [at] sunrise, Jack walks [on] a narrow path [in] the forest. Colourful birds sing in the trees."
+  },
+  {
+    id:6, label:"SCENE 6 · THE RIVER",
+    bg:"scene06.jpg",
+    text:"Jack reaches the river [at] midday. He sits [on] a small boat [on] the water. The sun is very hot [at] noon."
+  },
+  {
+    id:7, label:"SCENE 7 · THE CHASE",
+    bg:"scene07.jpg",
+    text:"[In] the afternoon, warriors appear [in] the forest. Jack runs [on] the jungle path. Drums beat loudly [in] the distance."
+  },
+  {
+    id:8, label:"SCENE 8 · THE CAVE",
+    bg:"scene08.jpg",
+    text:"[At] sunset, Jack hides [in] a cave [in] the mountain. A huge snake hangs [on] the cave wall beside him."
+  },
+  {
+    id:9, label:"SCENE 9 · THE TEMPLE",
+    bg:"scene09.jpg",
+    text:"[In] the morning [on] Wednesday, Jack sees the temple. It stands [on] a cliff. Ancient fire burns [at] the entrance."
+  },
+  {
+    id:10, label:"SCENE 10 · INSIDE THE TEMPLE",
+    bg:"scene10.jpg",
+    text:"Jack enters [at] midday. Gold sits [on] stone altars. A golden statue stands [on] a black pedestal [in] the centre of the room."
+  },
+  {
+    id:11, label:"SCENE 11 · THE ESCAPE",
+    bg:"scene11.jpg",
+    text:"[At] six o'clock [in] the evening, Jack grabs the statue. He runs [on] the stone stairs and hides [in] a secret tunnel."
+  },
+  {
+    id:12, label:"SCENE 12 · FREEDOM!",
+    bg:"scene12.jpg",
+    text:"[At] midnight, Jack boards the plane. [In] the sky, he looks down [at] the jungle below. [At] dawn on Thursday, Jack is safe!"
+  }
+];
+
+// ═══════════════════════════════════════
+// BUILD FULL STORY HTML
+// ═══════════════════════════════════════
+function buildStoryHTML() {
+  let html = '';
+  let gapIdx = 0;
+  SCENES.forEach((scene, si) => {
+    if (si > 0) html += '<span class="scene-divider"> ✦ </span>';
+    // Split on [answer] pattern
+    const parts = scene.text.split(/\[([^\]]+)\]/);
+    parts.forEach((part, pi) => {
+      if (pi % 2 === 0) {
+        if (part) html += `<span>${part}</span>`;
+      } else {
+        html += `<span class="gap-slot" id="gap-${gapIdx}" data-answer="${part.toLowerCase()}" data-idx="${gapIdx}"></span>`;
+        gapIdx++;
+      }
+    });
+  });
+  return html;
+}
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let score = 0;
+let totalGaps = 0;
+let currentGapIdx = 0;
+let currentSceneIdx = 0;
+let scrollX = 0;
+let normalSpeed = 0.4;
+let slowSpeed = 0;
+let scrollSpeed = 0.7;
+let gameRunning = false;
+let draggedWord = null;
+let rafId = null;
+
+// Gaps per scene (for scene transitions)
+const gapsPerScene = SCENES.map(s => (s.text.match(/\[[^\]]+\]/g) || []).length);
+
+// ═══════════════════════════════════════
+// START / RESTART
+// ═══════════════════════════════════════
+function startGame() {
+  score = 0; currentGapIdx = 0; currentSceneIdx = 0;
+  scrollX = 0; scrollSpeed = normalSpeed; gameRunning = true;
+  draggedWord = null;
+
+  showScreen('game-screen');
+  buildBalloons();
+  document.getElementById('story-content').innerHTML = buildStoryHTML();
+  totalGaps = document.querySelectorAll('.gap-slot').length;
+  document.getElementById('total-display').textContent = totalGaps;
+  addDropListeners();
+  setSceneBg(0);
+  updateHUD();
+  if (rafId) cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(scrollLoop);
+}
+
+function restartGame() {
+  gameRunning = false;
+  if (rafId) cancelAnimationFrame(rafId);
+  rafId = null;
+  setTimeout(startGame, 100);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// BALLOONS
+// ═══════════════════════════════════════
+const BALLOON_DATA = [
+  {word:'AT', colors:['#e74c3c','#c0392b']},
+  {word:'IN', colors:['#2ecc71','#27ae60']},
+  {word:'ON', colors:['#3498db','#2980b9']}
+];
+
+function buildBalloons() {
+  const zone = document.getElementById('balloon-zone');
+  zone.innerHTML = '';
+  BALLOON_DATA.forEach(({word, colors}) => {
+    const div = document.createElement('div');
+    div.className = 'balloon';
+    div.draggable = true;
+    div.dataset.word = word.toLowerCase();
+    div.innerHTML = `
+      <div class="balloon-body" style="background:radial-gradient(circle at 35% 35%,${colors[0]},${colors[1]})">${word}</div>
+      <div class="balloon-string"></div>`;
+    // Desktop drag
+    div.addEventListener('dragstart', e => {
+      draggedWord = word.toLowerCase();
+      e.dataTransfer.setData('text/plain', word.toLowerCase());
+    });
+    div.addEventListener('dragend', () => {});
+    // Touch drag
+    div.addEventListener('touchstart', e => handleTouchStart(e, word.toLowerCase(), div), {passive:false});
+    zone.appendChild(div);
+  });
+}
+
+// ═══════════════════════════════════════
+// SCENE BACKGROUND
+// ═══════════════════════════════════════
+function setSceneBg(idx) {
+  const scene = SCENES[idx];
+  const bg = document.getElementById('scene-bg');
+  bg.style.backgroundImage = `url('${scene.bg}')`;
+  document.getElementById('scene-label').textContent = scene.label;
+}
+
+// ═══════════════════════════════════════
+// SCROLL LOOP
+// ═══════════════════════════════════════
+function scrollLoop() {
+  if (!gameRunning) return;
+
+  const track = document.getElementById('scroll-track');
+  const strip = document.getElementById('story-strip');
+  const stripW = strip.offsetWidth;
+  const currentGap = document.getElementById(`gap-${currentGapIdx}`);
+
+  if (currentGap && !currentGap.classList.contains('correct')) {
+    const rect = currentGap.getBoundingClientRect();
+    const stripRect = strip.getBoundingClientRect();
+    const gapLeft = rect.left - stripRect.left;
+    const center = stripW * 0.42;
+
+    if (gapLeft <= center + 40 && gapLeft >= -rect.width) {
+      scrollSpeed = 0;
+    } else if (gapLeft <= center + 150) {
+      scrollSpeed = slowSpeed;
+    } else {
+      scrollSpeed = normalSpeed;
+    }
+  } else {
+    scrollSpeed = normalSpeed;
+  }
+
+  scrollX -= scrollSpeed;
+
+  // Reset when content has scrolled fully off
+  const content = document.getElementById('story-content');
+  if (Math.abs(scrollX) > content.scrollWidth + stripW) {
+    scrollX = 0;
+  }
+
+  track.style.transform = `translateX(${scrollX}px)`;
+  rafId = requestAnimationFrame(scrollLoop);
+}
+
+// ═══════════════════════════════════════
+// DROP LISTENERS
+// ═══════════════════════════════════════
+function addDropListeners() {
+  document.querySelectorAll('.gap-slot').forEach(slot => {
+    slot.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (!slot.classList.contains('correct')) slot.classList.add('drag-over');
+    });
+    slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      const word = e.dataTransfer.getData('text/plain') || draggedWord;
+      if (word) handleDrop(slot, word);
+    });
+  });
+}
+
+// ═══════════════════════════════════════
+// HANDLE DROP
+// ═══════════════════════════════════════
+function handleDrop(slot, word) {
+  slot.classList.remove('drag-over');
+  if (slot.classList.contains('correct')) return;
+  if (!word) word = draggedWord;
+  if (!word) return;
+
+  const given = word.toLowerCase();
+  const correct = slot.dataset.answer.toLowerCase();
+
+  if (given === correct) {
+    // CORRECT
+    slot.classList.add('correct');
+    slot.textContent = given.toUpperCase();
+    score++;
+    currentGapIdx++;
+    updateHUD();
+    miniFirework();
+    scrollSpeed = normalSpeed;
+
+    // Check scene change
+    let cumulative = 0;
+    for (let i = 0; i < SCENES.length; i++) {
+      cumulative += gapsPerScene[i];
+      if (currentGapIdx <= cumulative) {
+        if (i !== currentSceneIdx) {
+          currentSceneIdx = i;
+          setSceneBg(currentSceneIdx);
+        }
+        break;
+      }
+    }
+
+    // Check win
+    if (currentGapIdx >= totalGaps) {
+      gameRunning = false;
+      bigFireworks();
+      setTimeout(() => {
+        stopFireworks();
+        document.getElementById('final-score').textContent = score;
+        showScreen('end-screen');
+      }, 3000);
+    }
+  } else {
+    // WRONG
+    slot.classList.add('wrong-flash');
+    setTimeout(() => slot.classList.remove('wrong-flash'), 600);
+    showWrong();
+    gameRunning = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    setTimeout(() => {
+      document.getElementById('wrong-overlay').classList.remove('show');
+      restartGame();
+    }, 2500);
+  }
+  draggedWord = null;
+}
+
+// ═══════════════════════════════════════
+// WRONG OVERLAY
+// ═══════════════════════════════════════
+function showWrong() {
+  document.getElementById('wrong-overlay').classList.add('show');
+}
+
+// ═══════════════════════════════════════
+// HUD
+// ═══════════════════════════════════════
+function updateHUD() {
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('prog-bar').style.width = (score / totalGaps * 100) + '%';
+}
+
+// ═══════════════════════════════════════
+// TOUCH DRAG
+// ═══════════════════════════════════════
+function handleTouchStart(e, word, srcEl) {
+  e.preventDefault();
+  draggedWord = word;
+  const clone = document.getElementById('touch-clone');
+  clone.innerHTML = srcEl.innerHTML;
+  clone.style.display = 'flex';
+  const t = e.touches[0];
+  positionClone(clone, t.clientX, t.clientY);
+
+  function onMove(ev) {
+    ev.preventDefault();
+    const tc = ev.touches[0];
+    positionClone(clone, tc.clientX, tc.clientY);
+    document.querySelectorAll('.gap-slot').forEach(s => s.classList.remove('drag-over'));
+    const el = document.elementFromPoint(tc.clientX, tc.clientY);
+    if (el && el.classList.contains('gap-slot') && !el.classList.contains('correct')) {
+      el.classList.add('drag-over');
+    }
+  }
+
+  function onEnd(ev) {
+    clone.style.display = 'none';
+    document.querySelectorAll('.gap-slot').forEach(s => s.classList.remove('drag-over'));
+    const t = ev.changedTouches[0];
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    if (el && el.classList.contains('gap-slot')) {
+      handleDrop(el, draggedWord);
+    } else {
+      draggedWord = null;
+    }
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onEnd);
+  }
+
+  document.addEventListener('touchmove', onMove, {passive:false});
+  document.addEventListener('touchend', onEnd);
+}
+
+function positionClone(clone, x, y) {
+  clone.style.left = x + 'px';
+  clone.style.top = y + 'px';
+}
+
+// ═══════════════════════════════════════
+// FIREWORKS
+// ═══════════════════════════════════════
+const fwCanvas = document.getElementById('fw-canvas');
+const fwCtx = fwCanvas.getContext('2d');
+let particles = [];
+let fwRunning = false;
+let fwRaf = null;
+
+function resizeFW() {
+  fwCanvas.width = window.innerWidth;
+  fwCanvas.height = window.innerHeight;
+}
+resizeFW();
+window.addEventListener('resize', resizeFW);
+
+function burst(x, y, count) {
+  const cols = ['#FFD700','#FF6B6B','#4ECDC4','#96CEB4','#DDA0DD','#98FB98','#FF69B4'];
+  for (let i = 0; i < count; i++) {
+    const a = (Math.PI * 2 / count) * i;
+    const s = 3 + Math.random() * 6;
+    particles.push({
+      x, y,
+      vx: Math.cos(a) * s,
+      vy: Math.sin(a) * s - 1.5,
+      color: cols[Math.floor(Math.random() * cols.length)],
+      life: 1,
+      decay: 0.025 + Math.random() * 0.02,
+      size: 2 + Math.random() * 3
+    });
+  }
+}
+
+function animFW() {
+  fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+  particles = particles.filter(p => p.life > 0);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy; p.vy += 0.12;
+    p.life -= p.decay;
+    fwCtx.beginPath();
+    fwCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+    fwCtx.fillStyle = p.color;
+    fwCtx.shadowColor = p.color;
+    fwCtx.shadowBlur = 6;
+    fwCtx.fill();
+    fwCtx.shadowBlur = 0;
+  });
+  if (fwRunning || particles.length > 0) {
+    fwRaf = requestAnimationFrame(animFW);
+  } else {
+    fwCanvas.style.display = 'none';
+    fwRaf = null;
+  }
+}
+
+function miniFirework() {
+  fwCanvas.style.display = 'block';
+  fwRunning = true;
+  const x = fwCanvas.width * 0.5 + (Math.random() - 0.5) * 300;
+  const y = fwCanvas.height * 0.6 + (Math.random() - 0.5) * 100;
+  burst(x, y, 20);
+  if (!fwRaf) animFW();
+  setTimeout(() => { fwRunning = false; }, 600);
+}
+
+function bigFireworks() {
+  fwCanvas.style.display = 'block';
+  fwRunning = true;
+  let n = 0;
+  const iv = setInterval(() => {
+    burst(Math.random() * fwCanvas.width, Math.random() * fwCanvas.height * 0.7, 50);
+    if (++n >= 5) clearInterval(iv);
+  }, 400);
+  if (!fwRaf) animFW();
+}
+
+function stopFireworks() {
+  fwRunning = false;
+  particles = [];
+  fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+  fwCanvas.style.display = 'none';
+  fwRaf = null;
 }
 </script>
 </body>
