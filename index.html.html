@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Jack & The Temple of Shadows</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --gold: #FFD700;
+  --dark-green: #1a3a1a;
+  --jungle: #2d5a27;
+  --light: #f0ffe0;
+  --red: #e74c3c;
+  --sky: #87CEEB;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #0d1a0d;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+}
+
+/* ── SCREENS ── */
+.screen { position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; }
+.screen.active { display:flex; }
+
+/* ── TITLE SCREEN ── */
+#title-screen {
+  background: radial-gradient(ellipse at center, #1e4a1e 0%, #0a1a0a 70%);
+  gap: 1rem;
+}
+
+.title-art {
+  font-size: clamp(3rem, 10vw, 6rem);
+  filter: drop-shadow(0 0 20px rgba(255,215,0,0.6));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+.game-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2rem, 8vw, 5rem);
+  color: var(--gold);
+  text-shadow: 4px 4px 0 #8B6914, 0 0 40px rgba(255,215,0,0.4);
+  letter-spacing: 3px;
+  text-align: center;
+  line-height: 1;
+}
+
+.game-subtitle {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1rem, 3vw, 1.8rem);
+  color: #90ee90;
+  letter-spacing: 4px;
+  text-align: center;
+}
+
+.start-btn {
+  margin-top: 1rem;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a1a00;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  letter-spacing: 3px;
+  border: none;
+  padding: 0.8rem 3rem;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #8B6914, 0 0 30px rgba(255,215,0,0.4);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.start-btn:hover { transform: translateY(-3px); box-shadow: 0 9px 0 #8B6914, 0 0 40px rgba(255,215,0,0.5); }
+.start-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #8B6914; }
+
+.prep-badge {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  padding: 0.5rem 1.5rem;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* ── GAME SCREEN ── */
+#game-screen {
+  flex-direction: column;
+  background: #000;
+  justify-content: flex-start;
+}
+
+/* Scene background */
+#scene-bg {
+  position: absolute;
+  inset: 0;
+  transition: background 1s ease;
+  z-index: 0;
+}
+
+/* HUD top bar */
+#hud {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background: rgba(0,0,0,0.7);
+  border-bottom: 2px solid var(--gold);
+}
+
+.hud-title {
+  font-family: 'Bangers', cursive;
+  color: var(--gold);
+  font-size: clamp(0.8rem, 2.5vw, 1.2rem);
+  letter-spacing: 2px;
+}
+
+.hud-progress {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.progress-text {
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.hud-score {
+  font-family: 'Bangers', cursive;
+  color: #90ee90;
+  font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+  letter-spacing: 2px;
+}
+
+/* Progress bar */
+#progress-bar-wrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+}
+#progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px rgba(255,215,0,0.6);
+}
+
+/* Balloon zone */
+#balloon-zone {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: clamp(80px, 18vh, 130px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.5rem, 2vw, 1.5rem);
+  padding: 0 1rem;
+  flex-shrink: 0;
+}
+
+/* Balloons */
+.balloon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: grab;
+  animation: bobble 2s ease-in-out infinite;
+  touch-action: none;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+  position: relative;
+}
+
+.balloon:nth-child(2) { animation-delay: 0.4s; }
+.balloon:nth-child(3) { animation-delay: 0.8s; }
+
+@keyframes bobble { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+.balloon-body {
+  width: clamp(60px, 14vw, 90px);
+  height: clamp(70px, 16vw, 105px);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1rem, 3.5vw, 1.8rem);
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  letter-spacing: 1px;
+  position: relative;
+  box-shadow: inset -8px -8px 20px rgba(0,0,0,0.3), inset 4px 4px 10px rgba(255,255,255,0.3);
+}
+
+.balloon-body::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid inherit;
+}
+
+.balloon-string {
+  width: 2px;
+  height: 20px;
+  background: rgba(255,255,255,0.6);
+}
+
+.balloon.dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+/* Scene canvas area */
+#scene-area {
+  flex: 1;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.scene-emoji-display {
+  font-size: clamp(4rem, 15vw, 10rem);
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.8));
+  animation: sceneFloat 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes sceneFloat { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-10px) scale(1.03)} }
+
+/* Story strip at bottom */
+#story-strip {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  background: rgba(0,0,0,0.88);
+  border-top: 3px solid var(--gold);
+  padding: 0.6rem 1rem 0.5rem;
+  flex-shrink: 0;
+}
+
+.scene-label {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.6rem, 2vw, 0.85rem);
+  color: var(--gold);
+  letter-spacing: 3px;
+  margin-bottom: 0.2rem;
+  display: block;
+}
+
+#story-text {
+  font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+  color: #f0f0f0;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.gap-slot {
+  display: inline-block;
+  min-width: clamp(50px, 10vw, 80px);
+  height: clamp(26px, 5vw, 34px);
+  border: 3px dashed var(--gold);
+  border-radius: 8px;
+  vertical-align: middle;
+  margin: 0 4px;
+  background: rgba(255,215,0,0.1);
+  transition: all 0.2s;
+  position: relative;
+  cursor: default;
+}
+
+.gap-slot.drag-over {
+  background: rgba(255,215,0,0.3);
+  border-color: #fff;
+  transform: scale(1.1);
+}
+
+.gap-slot.filled-correct {
+  background: rgba(50,200,50,0.3);
+  border-color: #50c850;
+  border-style: solid;
+  color: #90ff90;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+  text-align: center;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 2px;
+}
+
+.gap-slot.filled-wrong {
+  background: rgba(230,50,50,0.3);
+  border-color: #e63232;
+  border-style: solid;
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px)}
+  40%{transform:translateX(8px)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+
+/* Drag ghost */
+#drag-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+/* Feedback overlays */
+#feedback-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#feedback-overlay.show { display: flex; }
+
+.feedback-msg {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2rem, 8vw, 5rem);
+  letter-spacing: 4px;
+  text-align: center;
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn { 0%{transform:scale(0) rotate(-10deg)} 100%{transform:scale(1) rotate(0)} }
+
+.feedback-sub {
+  font-size: clamp(0.9rem, 3vw, 1.4rem);
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+}
+
+.feedback-btn {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  letter-spacing: 2px;
+  border: none;
+  padding: 0.6rem 2.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 5px 0 rgba(0,0,0,0.3);
+  transition: transform 0.1s;
+}
+.feedback-btn:active { transform: translateY(3px); }
+
+/* Fireworks canvas */
+#fireworks-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  pointer-events: none;
+  display: none;
+}
+
+/* Wrong answer overlay */
+#wrong-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  background: rgba(180,0,0,0.25);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  animation: flashRed 0.3s ease;
+}
+
+@keyframes flashRed { 0%{background:rgba(200,0,0,0.6)} 100%{background:rgba(180,0,0,0.25)} }
+
+#wrong-overlay.show { display: flex; }
+
+/* End screen */
+#end-screen {
+  background: radial-gradient(ellipse at center, #1e3a1e 0%, #0a1a0a 70%);
+  gap: 1.2rem;
+  text-align: center;
+}
+
+.end-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  color: var(--gold);
+  text-shadow: 4px 4px 0 #8B6914;
+  letter-spacing: 3px;
+}
+
+.end-score {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  color: #90ff90;
+  letter-spacing: 2px;
+}
+
+.end-art { font-size: clamp(3rem, 10vw, 6rem); animation: float 2s ease-in-out infinite; }
+
+/* Touch drag clone */
+#touch-clone {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -70%) scale(1.2);
+}
+</style>
+</head>
+<body>
+
+<!-- TITLE SCREEN -->
+<div class="screen active" id="title-screen">
+  <div class="title-art">🗺️⛺🏛️</div>
+  <div class="game-title">JACK & THE<br>TEMPLE OF<br>SHADOWS</div>
+  <div class="game-subtitle">JUNGLE ADVENTURE</div>
+  <div class="prep-badge">PREPOSITIONS: IN · ON · AT</div>
+  <button class="start-btn" onclick="startGame()">▶ START ADVENTURE</button>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="game-screen">
+
+  <div id="scene-bg"></div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="hud-title">🗺️ JACK'S QUEST</div>
+    <div class="hud-progress">
+      <span class="progress-text" id="progress-text">1 / 50</span>
+    </div>
+    <div class="hud-score">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div id="progress-bar-wrap"><div id="progress-bar" style="width:0%"></div></div>
+
+  <!-- Balloons -->
+  <div id="balloon-zone"></div>
+
+  <!-- Scene art -->
+  <div id="scene-area">
+    <div class="scene-emoji-display" id="scene-emoji"></div>
+  </div>
+
+  <!-- Story strip -->
+  <div id="story-strip">
+    <span class="scene-label" id="scene-label">SCENE 01 · STORM OVER PERU</span>
+    <div id="story-text"></div>
+  </div>
+
+</div>
+
+<!-- END SCREEN -->
+<div class="screen" id="end-screen">
+  <div class="end-art">🏆</div>
+  <div class="end-title">ADVENTURE<br>COMPLETE!</div>
+  <div class="end-score">SCORE: <span id="final-score">0</span> / 50</div>
+  <div style="color:#ccc; font-size:1rem; font-weight:700; max-width:400px; padding:0 1rem;">
+    Jack escapes with the golden statue! The Temple of Shadows is conquered! 🎉
+  </div>
+  <button class="start-btn" onclick="restartGame()">🔄 PLAY AGAIN</button>
+</div>
+
+<!-- Fireworks -->
+<canvas id="fireworks-canvas"></canvas>
+
+<!-- Wrong overlay -->
+<div id="wrong-overlay">
+  <div class="feedback-msg" style="color:#ff6060">❌ NOT QUITE!</div>
+  <div class="feedback-sub" style="color:#ffcccc">Try a different preposition!</div>
+</div>
+
+<!-- Touch drag clone -->
+<div id="touch-clone"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// GAME DATA
+// ══════════════════════════════════════════════
+const scenes = [
+  {
+    id: 1, label: "SCENE 01 · STORM OVER PERU", emoji: "⛈️✈️",
+    bg: "linear-gradient(180deg, #0a0a2a 0%, #1a1a4a 40%, #0d1a0d 100%)",
+    story: 'Rain crashes down [1] midnight as Jack\'s plane flies low above the jungle [2] Peru. Lightning flashes [3] the sky.',
+    gaps: [{id:1, answer:'at'}, {id:2, answer:'in'}, {id:3, answer:'in'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 2, label: "SCENE 02 · THE LOST TEMPLE", emoji: "🗺️🏔️",
+    bg: "linear-gradient(180deg, #0d1a0d 0%, #1a2a10 50%, #0a1505 100%)",
+    story: 'Jack looks down [4] his map. Somewhere deep [5] the jungle lies the Temple of Shadows — hidden [6] the mountains for two hundred years.',
+    gaps: [{id:4, answer:'at'}, {id:5, answer:'in'}, {id:6, answer:'in'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 3, label: "SCENE 03 · EMERGENCY LANDING", emoji: "🛬⌚",
+    bg: "linear-gradient(180deg, #1a0d05 0%, #2a1508 50%, #1a1005 100%)",
+    story: '"We must land [7] the airport before the storm gets worse." The plane lands hard [8] a small airstrip. It is exactly [9] 11:30 p.m.',
+    gaps: [{id:7, answer:'at'}, {id:8, answer:'on'}, {id:9, answer:'at'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 4, label: "SCENE 04 · INTO THE JUNGLE", emoji: "🚣🌙",
+    bg: "linear-gradient(180deg, #050a10 0%, #0a1a20 50%, #051510 100%)",
+    story: '"The treasure appears only [10] midnight." Jack climbs [11] a boat waiting quietly [12] the river. Bright birds sleep [13] the trees.',
+    gaps: [{id:10, answer:'at'}, {id:11, answer:'on'}, {id:12, answer:'on'}, {id:13, answer:'in'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 5, label: "SCENE 05 · THE LIVING JUNGLE", emoji: "🐛🐍",
+    bg: "linear-gradient(180deg, #0d1a05 0%, #1a2a0a 50%, #0d1505 100%)",
+    story: 'Huge insects crawl [14] the wet ground. A snake moves slowly [15] the rocks. Jack travels silently [16] the river for almost an hour.',
+    gaps: [{id:14, answer:'on'}, {id:15, answer:'on'}, {id:16, answer:'on'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 6, label: "SCENE 06 · THE HIDDEN VILLAGE", emoji: "🏘️👴",
+    bg: "linear-gradient(180deg, #1a1005 0%, #2a1a08 50%, #1a1205 100%)",
+    story: '[17] 12:15 a.m., Jack arrives [18] a small village hidden deep [19] the jungle. An old man waits [20] the entrance.',
+    gaps: [{id:17, answer:'at'}, {id:18, answer:'at'}, {id:19, answer:'in'}, {id:20, answer:'at'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 7, label: "SCENE 07 · THE WARNING", emoji: "⚠️👁️",
+    bg: "linear-gradient(180deg, #1a0a05 0%, #2a1008 50%, #150805 100%)",
+    story: '"You should not travel here [21] night. The Shadow Tribe hunts strangers [22] the forest." But Jack keeps moving. Early [23] the morning, Jack walks carefully along a narrow path.',
+    gaps: [{id:21, answer:'at'}, {id:22, answer:'in'}, {id:23, answer:'in'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 8, label: "SCENE 08 · AMBUSH!", emoji: "🏹😱",
+    bg: "linear-gradient(180deg, #0a1a05 0%, #101a08 50%, #0a1505 100%)",
+    story: 'Jack walks carefully along a path [24] the jungle floor. Suddenly — a spear lands [25] the ground! Warriors appear [26] the trees carrying torches and bows!',
+    gaps: [{id:24, answer:'on'}, {id:25, answer:'on'}, {id:26, answer:'in'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 9, label: "SCENE 09 · HORSEBACK CHASE!", emoji: "🏃🐎",
+    bg: "linear-gradient(180deg, #2a0808 0%, #3a1010 50%, #1a0808 100%)",
+    story: '"Run!" Jack races deeper [27] the jungle as drums beat loudly [28] the distance. Warriors chase him [29] horseback through the trees.',
+    gaps: [{id:27, answer:'in'}, {id:28, answer:'in'}, {id:29, answer:'on'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 10, label: "SCENE 10 · LOG JUMP & RIVER'S EDGE", emoji: "🪵💦",
+    bg: "linear-gradient(180deg, #051a15 0%, #082a1e 50%, #051a10 100%)",
+    story: 'Jack jumps [30] a fallen log and slides down a muddy hill. He nearly falls [31] the river, but grabs a branch just [32] time. The sun is rising [33] the east.',
+    gaps: [{id:30, answer:'over'}, {id:31, answer:'into'}, {id:32, answer:'in'}, {id:33, answer:'in'}],
+    options: ['over', 'into', 'in', 'on']
+  },
+  {
+    id: 11, label: "SCENE 11 · THE SNAKE CAVE", emoji: "🐍🕳️",
+    bg: "linear-gradient(180deg, #0a0a1a 0%, #0d0d2a 50%, #050510 100%)",
+    story: 'Jack hides [34] a cave behind a waterfall. He sits quietly [35] the darkness. A giant snake hangs [36] the cave wall — only inches from his face!',
+    gaps: [{id:34, answer:'in'}, {id:35, answer:'in'}, {id:36, answer:'on'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 12, label: "SCENE 12 · SNAKE STRIKES!", emoji: "💦🐍",
+    bg: "linear-gradient(180deg, #051510 0%, #0a2018 50%, #051510 100%)",
+    story: 'Slowly, carefully, Jack moves backward [37] the cave entrance. The snake strikes! Jack dives [38] the water below and escapes downriver.',
+    gaps: [{id:37, answer:'to'}, {id:38, answer:'into'}],
+    options: ['to', 'into', 'on', 'at']
+  },
+  {
+    id: 13, label: "SCENE 13 · TEMPLE FOUND!", emoji: "🏛️⛰️",
+    bg: "linear-gradient(180deg, #1a1505 0%, #2a2008 50%, #1a1505 100%)",
+    story: 'Later [39] the afternoon, Jack finally sees the temple. It stands high [40] a cliff above the jungle. Ancient fire burns [41] the entrance.',
+    gaps: [{id:39, answer:'in'}, {id:40, answer:'on'}, {id:41, answer:'at'}],
+    options: ['in', 'on', 'at']
+  },
+  {
+    id: 14, label: "SCENE 14 · INSIDE THE TEMPLE", emoji: "🗿✨",
+    bg: "linear-gradient(180deg, #1a0a1a 0%, #2a102a 50%, #1a0a15 100%)",
+    story: 'Jack steps carefully [42] the temple. Strange symbols glow blue [43] the walls. A golden statue sits [44] a black altar at the centre of the room.',
+    gaps: [{id:42, answer:'into'}, {id:43, answer:'on'}, {id:44, answer:'on'}],
+    options: ['into', 'on', 'in', 'at']
+  },
+  {
+    id: 15, label: "SCENE 15 · THE FINAL ESCAPE!", emoji: "🏆🌅",
+    bg: "linear-gradient(180deg, #2a0505 0%, #3a0808 30%, #f08030 100%)",
+    story: 'Drums echo loudly [45] the temple. Jack grabs the statue and runs [46] a hidden tunnel. Outside, first sunlight appears [47] sunrise. He escapes [48] a small plane — rising [49] the air, looking down [50] the endless jungle below.',
+    gaps: [{id:45, answer:'in'}, {id:46, answer:'through'}, {id:47, answer:'at'}, {id:48, answer:'on'}, {id:49, answer:'into'}, {id:50, answer:'at'}],
+    options: ['in', 'through', 'at', 'on', 'into']
+  }
+];
+
+// ══════════════════════════════════════════════
+// GAME STATE
+// ══════════════════════════════════════════════
+let currentSceneIdx = 0;
+let currentGapIdx = 0;
+let score = 0;
+let draggedWord = null;
+let touchCloneEl = null;
+
+// ══════════════════════════════════════════════
+// BALLOON COLORS
+// ══════════════════════════════════════════════
+const balloonColors = [
+  ['#e74c3c','#c0392b'], ['#3498db','#2980b9'], ['#2ecc71','#27ae60'],
+  ['#f39c12','#d68910'], ['#9b59b6','#8e44ad'], ['#e91e8c','#c2185b'],
+  ['#00bcd4','#0097a7'], ['#ff5722','#e64a19']
+];
+
+// ══════════════════════════════════════════════
+// START / RESTART
+// ══════════════════════════════════════════════
+function startGame() {
+  currentSceneIdx = 0; currentGapIdx = 0; score = 0;
+  showScreen('game-screen');
+  loadScene(0);
+  updateHUD();
+}
+
+function restartGame() {
+  startGame();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+// LOAD SCENE
+// ══════════════════════════════════════════════
+function loadScene(idx) {
+  currentGapIdx = 0;
+  const scene = scenes[idx];
+
+  // Background
+  document.getElementById('scene-bg').style.background = scene.bg;
+
+  // Scene art
+  document.getElementById('scene-emoji').textContent = scene.emoji;
+
+  // Label
+  document.getElementById('scene-label').textContent = scene.label;
+
+  // Build story with gap slots
+  buildStoryText(scene);
+
+  // Build balloons
+  buildBalloons(scene);
+
+  updateHUD();
+}
+
+function buildStoryText(scene) {
+  let html = scene.story;
+  scene.gaps.forEach(gap => {
+    html = html.replace(
+      `[${gap.id}]`,
+      `<span class="gap-slot" id="gap-${gap.id}" data-gapid="${gap.id}" data-answer="${gap.answer}"></span>`
+    );
+  });
+  document.getElementById('story-text').innerHTML = html;
+
+  // Add drag-over listeners
+  document.querySelectorAll('.gap-slot').forEach(slot => {
+    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('drag-over'); });
+    slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+    slot.addEventListener('drop', e => { e.preventDefault(); handleDrop(slot); });
+  });
+}
+
+function buildBalloons(scene) {
+  const zone = document.getElementById('balloon-zone');
+  zone.innerHTML = '';
+
+  // Shuffle options
+  const opts = [...scene.options].sort(() => Math.random() - 0.5);
+
+  opts.forEach((word, i) => {
+    const colors = balloonColors[i % balloonColors.length];
+    const div = document.createElement('div');
+    div.className = 'balloon';
+    div.draggable = true;
+    div.dataset.word = word;
+    div.innerHTML = `
+      <div class="balloon-body" style="background: radial-gradient(circle at 35% 35%, ${colors[0]}, ${colors[1]})">
+        ${word.toUpperCase()}
+      </div>
+      <div class="balloon-string"></div>
+    `;
+
+    // Desktop drag
+    div.addEventListener('dragstart', e => {
+      draggedWord = word;
+      setTimeout(() => div.classList.add('dragging'), 0);
+    });
+    div.addEventListener('dragend', () => div.classList.remove('dragging'));
+
+    // Touch drag
+    div.addEventListener('touchstart', e => handleTouchStart(e, word, div), {passive: false});
+
+    zone.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════
+// DROP HANDLER
+// ══════════════════════════════════════════════
+function handleDrop(slot) {
+  slot.classList.remove('drag-over');
+  if (!draggedWord) return;
+  if (slot.classList.contains('filled-correct')) return;
+
+  const correct = slot.dataset.answer.toLowerCase();
+  const given = draggedWord.toLowerCase();
+
+  if (given === correct) {
+    // Correct!
+    slot.classList.add('filled-correct');
+    slot.textContent = given.toUpperCase();
+    score++;
+    updateHUD();
+
+    const scene = scenes[currentSceneIdx];
+    const allFilled = scene.gaps.every(g => {
+      const el = document.getElementById('gap-' + g.id);
+      return el && el.classList.contains('filled-correct');
+    });
+
+    if (allFilled) {
+      setTimeout(() => showSceneComplete(), 400);
+    } else {
+      // small firework burst
+      miniFirework();
+    }
+  } else {
+    // Wrong
+    slot.classList.add('filled-wrong');
+    setTimeout(() => slot.classList.remove('filled-wrong'), 600);
+    showWrong();
+  }
+
+  draggedWord = null;
+}
+
+// ══════════════════════════════════════════════
+// TOUCH DRAG
+// ══════════════════════════════════════════════
+function handleTouchStart(e, word, srcEl) {
+  e.preventDefault();
+  draggedWord = word;
+
+  const touch = e.touches[0];
+  const clone = document.getElementById('touch-clone');
+  clone.innerHTML = srcEl.innerHTML;
+  clone.style.display = 'flex';
+  moveTouchClone(clone, touch.clientX, touch.clientY);
+
+  function onMove(ev) {
+    const t = ev.touches[0];
+    moveTouchClone(clone, t.clientX, t.clientY);
+
+    // Highlight gap under finger
+    document.querySelectorAll('.gap-slot').forEach(s => s.classList.remove('drag-over'));
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    if (el && el.classList.contains('gap-slot')) el.classList.add('drag-over');
+  }
+
+  function onEnd(ev) {
+    clone.style.display = 'none';
+    document.querySelectorAll('.gap-slot').forEach(s => s.classList.remove('drag-over'));
+
+    const t = ev.changedTouches[0];
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    if (el && el.classList.contains('gap-slot')) {
+      handleDrop(el);
+    }
+    draggedWord = null;
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onEnd);
+  }
+
+  document.addEventListener('touchmove', onMove, {passive: false});
+  document.addEventListener('touchend', onEnd);
+}
+
+function moveTouchClone(clone, x, y) {
+  clone.style.left = x + 'px';
+  clone.style.top = y + 'px';
+}
+
+// ══════════════════════════════════════════════
+// SCENE COMPLETE
+// ══════════════════════════════════════════════
+function showSceneComplete() {
+  if (currentSceneIdx >= scenes.length - 1) {
+    bigFireworks();
+    setTimeout(() => {
+      document.getElementById('final-score').textContent = score;
+      showScreen('end-screen');
+    }, 3000);
+    return;
+  }
+
+  bigFireworks();
+
+  // After fireworks, move to next scene
+  setTimeout(() => {
+    stopFireworks();
+    currentSceneIdx++;
+    loadScene(currentSceneIdx);
+  }, 2500);
+}
+
+// ══════════════════════════════════════════════
+// WRONG ANSWER
+// ══════════════════════════════════════════════
+function showWrong() {
+  const overlay = document.getElementById('wrong-overlay');
+  overlay.classList.add('show');
+  setTimeout(() => overlay.classList.remove('show'), 800);
+}
+
+// ══════════════════════════════════════════════
+// HUD UPDATE
+// ══════════════════════════════════════════════
+function updateHUD() {
+  document.getElementById('score-display').textContent = score;
+  const total = scenes.reduce((a, s) => a + s.gaps.length, 0);
+  document.getElementById('progress-text').textContent = score + ' / ' + total;
+  const pct = (score / total) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+// ══════════════════════════════════════════════
+// FIREWORKS
+// ══════════════════════════════════════════════
+const fw = document.getElementById('fireworks-canvas');
+const fwCtx = fw.getContext('2d');
+let particles = [];
+let fwFrame = null;
+let fwRunning = false;
+
+function resizeFW() {
+  fw.width = window.innerWidth;
+  fw.height = window.innerHeight;
+}
+resizeFW();
+window.addEventListener('resize', resizeFW);
+
+function createBurst(x, y, count=60) {
+  const colors = ['#FFD700','#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98FB98','#FF69B4'];
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 / count) * i + Math.random() * 0.3;
+    const speed = 2 + Math.random() * 8;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 1,
+      decay: 0.015 + Math.random() * 0.02,
+      size: 3 + Math.random() * 4,
+      trail: []
+    });
+  }
+}
+
+function animateFW() {
+  fwCtx.clearRect(0, 0, fw.width, fw.height);
+  particles = particles.filter(p => p.life > 0);
+  particles.forEach(p => {
+    p.trail.push({x: p.x, y: p.y});
+    if (p.trail.length > 5) p.trail.shift();
+
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.15;
+    p.vx *= 0.98;
+    p.life -= p.decay;
+
+    // Trail
+    p.trail.forEach((pt, i) => {
+      fwCtx.beginPath();
+      fwCtx.arc(pt.x, pt.y, p.size * (i/p.trail.length) * p.life * 0.5, 0, Math.PI*2);
+      fwCtx.fillStyle = p.color + Math.floor(p.life * 80).toString(16).padStart(2,'0');
+      fwCtx.fill();
+    });
+
+    fwCtx.beginPath();
+    fwCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2);
+    fwCtx.fillStyle = p.color;
+    fwCtx.shadowColor = p.color;
+    fwCtx.shadowBlur = 10;
+    fwCtx.fill();
+    fwCtx.shadowBlur = 0;
+  });
+
+  if (fwRunning) fwFrame = requestAnimationFrame(animateFW);
+}
+
+function miniFirework() {
+  fw.style.display = 'block';
+  fwRunning = true;
+  const x = fw.width / 2 + (Math.random() - 0.5) * 300;
+  const y = fw.height / 2 + (Math.random() - 0.5) * 200;
+  createBurst(x, y, 30);
+  if (!fwFrame) animateFW();
+  setTimeout(() => {
+    if (particles.length === 0) { fw.style.display = 'none'; fwRunning = false; }
+  }, 1500);
+}
+
+function bigFireworks() {
+  fw.style.display = 'block';
+  fwRunning = true;
+  let count = 0;
+  const interval = setInterval(() => {
+    createBurst(Math.random() * fw.width, Math.random() * fw.height * 0.7, 80);
+    count++;
+    if (count >= 6) clearInterval(interval);
+  }, 300);
+  if (!fwFrame) animateFW();
+}
+
+function stopFireworks() {
+  fwRunning = false;
+  fwFrame = null;
+  particles = [];
+  fwCtx.clearRect(0, 0, fw.width, fw.height);
+  fw.style.display = 'none';
+}
+
+// ══════════════════════════════════════════════
+// KEYBOARD SUPPORT (for desktop testing)
+// ══════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') restartGame();
+});
+</script>
+</body>
+</html>
