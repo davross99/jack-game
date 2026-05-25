@@ -92,132 +92,137 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
   display:flex;
   align-items:flex-end;
   justify-content:space-around;
-  padding:0.25rem 0.4rem 0;
+  padding:0.3rem 0.5rem 0.2rem;
   flex-shrink:0;
-  background:linear-gradient(180deg,rgba(30,15,3,0.9),rgba(20,10,2,0.9));
+  background:linear-gradient(180deg,rgba(20,10,2,0.95),rgba(12,6,1,0.95));
   border-bottom:2px solid rgba(180,100,10,0.5);
 }
 
-/* Each treasure chest — detailed CSS */
 .chest-outer{
   display:flex;flex-direction:column;align-items:center;
-  width:clamp(85px,26vw,118px);
-  cursor:default;
+  width:clamp(78px,23vw,105px);
   position:relative;
 }
 
-/* Lid — open, rotated back */
+/* ── GOLD OVERFLOW — spills out of chest ── */
+.c-overflow{
+  position:relative;z-index:4;
+  width:115%;
+  text-align:center;
+  font-size:clamp(0.6rem,2.2vw,0.85rem);
+  line-height:1;
+  margin-bottom:-4px;
+  filter:drop-shadow(0 2px 4px rgba(255,180,0,0.6));
+  letter-spacing:-1px;
+}
+
+/* ── OPEN LID — hinged back ── */
 .c-lid{
-  width:94%;
-  height:clamp(14px,3.5vw,20px);
-  position:relative;
-  transform:perspective(120px) rotateX(-40deg) translateY(2px);
+  width:110%;
+  height:clamp(15px,4vw,22px);
+  position:relative;z-index:3;
+  transform:perspective(150px) rotateX(-42deg) translateY(3px);
   transform-origin:bottom center;
-  z-index:3;
-  border-radius:4px 4px 0 0;
+  border-radius:5px 5px 0 0;
+  box-shadow:0 -4px 10px rgba(0,0,0,0.7),inset 0 2px 0 rgba(255,200,80,0.3);
   overflow:hidden;
-  box-shadow:0 -3px 8px rgba(0,0,0,0.6);
 }
-/* Wood planks on lid */
 .c-lid::before{
-  content:'';
-  position:absolute;inset:0;
+  content:'';position:absolute;inset:0;
   background:
-    repeating-linear-gradient(90deg,rgba(0,0,0,0.15) 0,rgba(0,0,0,0.15) 1px,transparent 1px,transparent 20px),
-    linear-gradient(180deg,#C47A1E,#8B5510,#A06515);
+    repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 16px),
+    linear-gradient(180deg,#D4841E,#8B5210,#C07818);
 }
-/* Metal band on lid */
 .c-lid::after{
-  content:'';
-  position:absolute;
-  top:50%;left:0;right:0;height:4px;
+  content:'';position:absolute;
+  top:45%;left:0;right:0;height:4px;
   transform:translateY(-50%);
-  background:linear-gradient(180deg,#E8A020,#A06810,#E8A020);
-  box-shadow:0 1px 3px rgba(0,0,0,0.5);
+  background:linear-gradient(180deg,#F0B030,#A07010,#F0B030);
 }
 
-/* Gold glow from inside open chest */
+/* ── GOLD GLOW ── */
 .c-glow{
-  width:88%;
-  height:clamp(6px,1.5vw,10px);
-  background:radial-gradient(ellipse,rgba(255,210,40,0.85) 0%,rgba(255,160,0,0.4) 60%,transparent 100%);
+  width:90%;height:clamp(8px,2vw,12px);
+  background:radial-gradient(ellipse at center,rgba(255,215,0,0.9) 0%,rgba(255,150,0,0.5) 50%,transparent 100%);
+  filter:blur(3px);
   position:relative;z-index:2;
-  filter:blur(2px);
+  margin-top:-1px;
 }
 
-/* Chest body */
+/* ── CHEST BODY ── */
 .c-body{
   width:100%;
   position:relative;z-index:2;
-  border-radius:0 0 6px 6px;
-  overflow:hidden;
-  box-shadow:0 4px 12px rgba(0,0,0,0.7),inset 0 0 0 1px rgba(220,150,20,0.3);
+  border-radius:2px 2px 7px 7px;
+  overflow:visible;
+  box-shadow:0 5px 15px rgba(0,0,0,0.8),inset 0 0 0 1px rgba(220,150,20,0.2);
 }
-/* Wood texture */
 .c-body::before{
-  content:'';
-  position:absolute;inset:0;
+  content:'';position:absolute;inset:0;border-radius:2px 2px 7px 7px;
   background:
-    repeating-linear-gradient(90deg,rgba(0,0,0,0.1) 0,rgba(0,0,0,0.1) 1px,transparent 1px,transparent 20px),
-    linear-gradient(180deg,#8B5510,#5C3608,#7A4A10,#5C3608,#8B5510);
+    repeating-linear-gradient(90deg,rgba(0,0,0,0.08) 0,rgba(0,0,0,0.08) 1px,transparent 1px,transparent 16px),
+    linear-gradient(180deg,#7A4A0E,#4E2E06,#6A3E0C,#4E2E06,#7A4A0E);
   z-index:0;
 }
-/* Metal bands */
+/* Top metal band */
 .c-body::after{
-  content:'';
-  position:absolute;
-  top:30%;left:0;right:0;height:5px;
-  background:linear-gradient(180deg,rgba(220,150,20,0.8),rgba(160,100,10,0.8),rgba(220,150,20,0.8));
+  content:'';position:absolute;
+  top:22%;left:0;right:0;height:5px;
+  background:linear-gradient(180deg,rgba(230,160,20,0.85),rgba(150,95,8,0.85),rgba(230,160,20,0.85));
   z-index:1;
-  box-shadow:0 1px 3px rgba(0,0,0,0.4);
+  box-shadow:0 1px 4px rgba(0,0,0,0.4);
 }
+
 .c-body-inner{
   position:relative;z-index:2;
-  padding:0.3rem 0.2rem 0.25rem;
-  display:flex;flex-direction:column;align-items:center;gap:0.15rem;
+  padding:0.28rem 0.18rem 0.22rem;
+  display:flex;flex-direction:column;align-items:center;gap:0.12rem;
 }
 
-/* Coins inside chest */
-.c-coins{
-  font-size:clamp(0.55rem,2vw,0.75rem);
-  line-height:1;
-  text-align:center;
-  margin-bottom:0.05rem;
+/* Bottom band */
+.c-band{
+  position:absolute;bottom:28%;left:0;right:0;height:4px;
+  background:linear-gradient(180deg,rgba(230,160,20,0.75),rgba(150,95,8,0.75),rgba(230,160,20,0.75));
+  z-index:3;
 }
 
-/* Gold lock/clasp */
+/* Gold lock */
 .c-clasp{
-  position:absolute;
-  top:-3px;left:50%;transform:translateX(-50%);
-  width:clamp(14px,4vw,20px);height:clamp(7px,2vw,10px);
+  position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+  width:clamp(13px,3.5vw,18px);height:clamp(6px,1.8vw,9px);
   background:linear-gradient(180deg,#FFD700,#B8860B,#FFD700);
-  border-radius:3px 3px 2px 2px;
-  border:1px solid #8B6914;
-  z-index:5;
-  box-shadow:0 1px 3px rgba(0,0,0,0.5);
+  border-radius:3px 3px 2px 2px;border:1px solid #7a5500;
+  z-index:6;box-shadow:0 2px 4px rgba(0,0,0,0.6);
 }
 
-/* The DRAGGABLE preposition word on front of chest */
+/* Gold coins spilling at bottom */
+.c-coins-bottom{
+  position:absolute;bottom:-6px;left:-8px;right:-8px;
+  font-size:clamp(0.5rem,1.8vw,0.7rem);
+  text-align:center;line-height:1;
+  z-index:8;
+  filter:drop-shadow(0 2px 3px rgba(255,180,0,0.5));
+}
+
+/* Preposition word on front of chest */
 .prep-word{
   font-family:'Bangers',cursive;
-  font-size:clamp(1.1rem,4.8vw,1.6rem);
+  font-size:clamp(1.05rem,4.5vw,1.5rem);
   letter-spacing:2px;
-  cursor:grab;
-  touch-action:none;
+  cursor:grab;touch-action:none;
   position:relative;z-index:10;
-  padding:0.05rem 0.3rem;
+  padding:0.05rem 0.28rem;
   border-radius:3px;
-  text-shadow:1px 1px 3px rgba(0,0,0,0.9);
+  text-shadow:2px 2px 4px rgba(0,0,0,0.9);
   transition:filter 0.15s,transform 0.1s;
   -webkit-tap-highlight-color:transparent;
-  border-bottom:2px solid rgba(255,255,255,0.2);
 }
-.prep-word:active{transform:scale(0.92);}
-.prep-word.dragging{opacity:0.25;}
+.prep-word:active{transform:scale(0.9);}
+.prep-word.dragging{opacity:0.2;}
 
 .c-subtext{
-  font-size:clamp(0.36rem,1.2vw,0.5rem);
-  color:rgba(220,180,80,0.65);
+  font-size:clamp(0.34rem,1.1vw,0.48rem);
+  color:rgba(220,175,70,0.6);
   letter-spacing:1px;font-weight:700;
 }
 
@@ -360,46 +365,52 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 
       <!-- AT chest -->
       <div class="chest-outer">
+        <div class="c-overflow">🪙💎🪙💍🪙</div>
         <div class="c-lid"></div>
         <div class="c-glow"></div>
         <div class="c-body">
           <div class="c-clasp"></div>
+          <div class="c-band"></div>
           <div class="c-body-inner">
-            <div class="c-coins">🪙🪙🪙</div>
             <div class="prep-word" id="word-at" data-word="at"
-              style="color:#ff9999;" draggable="true">AT</div>
+              style="color:#ffbbbb;" draggable="true">AT</div>
             <div class="c-subtext">time &amp; place</div>
           </div>
+          <div class="c-coins-bottom">🪙🪙🪙🪙🪙</div>
         </div>
       </div>
 
       <!-- IN chest -->
       <div class="chest-outer">
+        <div class="c-overflow">💎🪙💎🪙💎</div>
         <div class="c-lid"></div>
         <div class="c-glow"></div>
         <div class="c-body">
           <div class="c-clasp"></div>
+          <div class="c-band"></div>
           <div class="c-body-inner">
-            <div class="c-coins">💎💎💎</div>
             <div class="prep-word" id="word-in" data-word="in"
-              style="color:#99ff99;" draggable="true">IN</div>
+              style="color:#bbffbb;" draggable="true">IN</div>
             <div class="c-subtext">time &amp; place</div>
           </div>
+          <div class="c-coins-bottom">🪙🪙🪙🪙🪙</div>
         </div>
       </div>
 
       <!-- ON chest -->
       <div class="chest-outer">
+        <div class="c-overflow">💍🪙💎💍🪙</div>
         <div class="c-lid"></div>
         <div class="c-glow"></div>
         <div class="c-body">
           <div class="c-clasp"></div>
+          <div class="c-band"></div>
           <div class="c-body-inner">
-            <div class="c-coins">💍💍💍</div>
             <div class="prep-word" id="word-on" data-word="on"
-              style="color:#9999ff;" draggable="true">ON</div>
+              style="color:#bbbbff;" draggable="true">ON</div>
             <div class="c-subtext">time &amp; place</div>
           </div>
+          <div class="c-coins-bottom">🪙🪙🪙🪙🪙</div>
         </div>
       </div>
 
@@ -491,10 +502,10 @@ let score=0,curGap=0,curScene=0,gameOn=false;
 let dragWord=null,scrollX=0,rafId=null;
 
 // Scroll speeds — faster than before
-const SPD=1.0;        // normal speed (was 0.55)
-const SPD_SLOW=0.2;   // approaching gap (was 0.1)
-const STOP_PX=60;
-const SLOW_PX=220;
+const SPD=0.65;       // comfortable reading pace for 10-12 yr old
+const SPD_SLOW=0.08;  // very slow as gap approaches
+const STOP_PX=70;
+const SLOW_PX=320;    // start slowing much earlier
 
 // ═══════════════════════════════════════
 // START / RESTART
