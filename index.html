@@ -33,8 +33,8 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 /* Scene image fills entire screen */
 #scene-bg{
   position:fixed;inset:0;z-index:0;
-  background-size:cover;
-  background-position:center center;
+  background-size:85%;
+  background-position:center 35%;
   background-repeat:no-repeat;
   background-color:#1a3a1a;
   transition:background-image 1.2s ease;
@@ -77,58 +77,175 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 }
 
 /* Middle spacer — the scene shows through here */
-#scene-space{flex:1;position:relative;z-index:5;min-height:0;}
+#scene-space{flex:1;position:relative;z-index:5;min-height:0;max-height:40vh;}
 
-/* THREE CHESTS — overlaid at bottom of scene, above story strip */
+/* THREE CHESTS */
 #chests-row{
   position:relative;z-index:30;
   width:100%;flex-shrink:0;
   display:flex;align-items:flex-end;justify-content:space-around;
-  padding:0 1.5rem 0.2rem;
+  padding:0 0.5rem 0.3rem;
 }
 
-/* Individual chest */
 .chest-outer{
   display:flex;flex-direction:column;align-items:center;
-  width:clamp(48px,13vw,68px);
+  width:clamp(90px,25vw,115px);
   position:relative;
 }
 
-/* Gold rays beaming upward */
-.c-rays{
-  width:140%;height:clamp(14px,4vw,22px);
-  position:relative;z-index:4;
+.chest-img-wrap{
+  position:relative;
+  width:100%;
+  display:flex;flex-direction:column;align-items:center;
+  cursor:grab;
+  touch-action:none;
+}
+
+/* Gold light rays */
+.chest-gold-rays{
+  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  width:120%;height:50px;z-index:1;
   background:radial-gradient(ellipse at center bottom,
-    rgba(255,230,50,0.95) 0%,
-    rgba(255,180,0,0.6) 40%,
-    rgba(255,120,0,0.2) 70%,
-    transparent 100%);
-  filter:blur(1.5px);
+    rgba(255,235,50,0.95) 0%,
+    rgba(255,180,0,0.5) 45%,
+    transparent 80%);
+  filter:blur(2px);
+}
+
+/* Coins and jewelry spilling out */
+.chest-emoji-large{
+  position:relative;z-index:5;
+  font-size:clamp(0.65rem,2.2vw,0.9rem);
+  line-height:1.1;text-align:center;
+  letter-spacing:-1px;
+  filter:drop-shadow(0 2px 4px rgba(255,200,0,0.8));
   margin-bottom:-6px;
 }
 
-/* Open lid container — shows treasure inside */
-.c-lid-open{
-  width:112%;
-  position:relative;z-index:5;
-  background:linear-gradient(180deg,rgba(255,200,30,0.95),rgba(220,150,10,0.9),rgba(180,100,5,0.85));
-  border:2px solid rgba(220,160,20,0.9);
+/* Chest frame */
+.chest-frame{
+  position:relative;z-index:4;
+  width:100%;
+}
+
+/* Lid leaning back */
+.chest-lid-back{
+  width:105%;margin-left:-2.5%;
+  height:clamp(14px,4vw,20px);
+  background:linear-gradient(180deg,
+    rgba(160,95,12,0.95),
+    rgba(210,135,18,0.95),
+    rgba(140,82,8,0.9));
+  border:2px solid rgba(210,150,15,0.9);
   border-bottom:none;
   border-radius:4px 4px 0 0;
-  padding:0.18rem 0.1rem 0.1rem;
+  box-shadow:0 -3px 8px rgba(255,180,0,0.4),inset 0 2px 4px rgba(255,220,50,0.3);
+  position:relative;
+  transform:perspective(40px) rotateX(15deg);
+  transform-origin:bottom;
+}
+.chest-lid-back::after{
+  content:'';position:absolute;
+  top:40%;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,rgba(230,165,15,0.9),rgba(255,210,40,0.95),rgba(230,165,15,0.9));
+}
+
+/* Gold glow from inside */
+.chest-inside{
+  width:100%;height:clamp(8px,2vw,12px);
+  background:linear-gradient(180deg,rgba(255,225,40,0.95),rgba(255,170,0,0.6),rgba(200,100,0,0.2));
+  box-shadow:0 0 10px rgba(255,200,0,0.6);
+}
+
+/* Chest front body */
+.chest-front{
+  width:100%;
+  height:clamp(28px,7vw,38px);
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,0.1) 0,rgba(0,0,0,0.1) 1px,transparent 1px,transparent 10px),
+    linear-gradient(180deg,rgba(110,65,10,0.9),rgba(68,38,5,0.95),rgba(95,55,8,0.9));
+  border:2px solid rgba(200,138,12,0.85);
+  border-top:none;
+  border-radius:0 0 5px 5px;
+  position:relative;
+  box-shadow:0 4px 8px rgba(0,0,0,0.7);
+}
+/* Gold band on body */
+.chest-front::before{
+  content:'';position:absolute;
+  top:35%;left:0;right:0;height:4px;
+  background:linear-gradient(180deg,rgba(225,158,12,0.9),rgba(175,108,8,0.85),rgba(225,158,12,0.9));
+}
+/* Gold clasp */
+.chest-front::after{
+  content:'';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  width:12px;height:8px;
+  background:linear-gradient(180deg,rgba(255,215,0,0.95),rgba(185,135,10,0.9));
+  border-radius:2px;border:1px solid rgba(130,85,0,0.8);
+}
+
+/* Gold rays beaming upward */
+/* Gold rays beaming out like reference image */
+.c-rays{
+  width:160%;
+  height:clamp(18px,5vw,28px);
+  position:relative;z-index:4;
+  background:
+    radial-gradient(ellipse at 50% 100%,
+      rgba(255,235,50,1) 0%,
+      rgba(255,190,0,0.7) 35%,
+      rgba(255,130,0,0.3) 65%,
+      transparent 100%);
+  filter:blur(1px);
+  margin-bottom:-8px;
+}
+
+/* Open lid — leaning back like reference */
+.c-lid-open{
+  width:108%;
+  position:relative;z-index:5;
+  /* Lid leaning back — visible inner face */
+  background:linear-gradient(
+    to bottom,
+    rgba(160,95,12,0.95) 0%,    /* top outer edge */
+    rgba(200,130,18,0.95) 30%,  /* gold band */
+    rgba(140,82,8,0.9) 60%,     /* wood */
+    rgba(180,110,12,0.9) 100%   /* bottom hinge */
+  );
+  border:2px solid rgba(200,145,15,0.9);
+  border-bottom:2px solid rgba(255,190,20,0.6);
+  border-radius:4px 4px 1px 1px;
+  padding:0.2rem 0.12rem 0.15rem;
   box-shadow:
-    inset 0 2px 8px rgba(255,220,50,0.6),
-    inset 0 -2px 4px rgba(0,0,0,0.3),
-    0 -3px 10px rgba(255,180,0,0.4);
-  transform:perspective(80px) rotateX(5deg);
+    0 -4px 12px rgba(255,200,0,0.5),
+    inset 0 2px 6px rgba(255,230,60,0.4),
+    inset 0 -1px 3px rgba(0,0,0,0.4);
+  /* Perspective tilt showing lid is open */
+  transform:perspective(60px) rotateX(12deg);
   transform-origin:bottom center;
 }
 
+/* Gold interior of open lid */
+.c-lid-open::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(
+    180deg,
+    rgba(255,220,40,0.3) 0%,
+    transparent 100%
+  );
+  border-radius:3px;
+}
+
+/* Treasure inside — coins diamonds jewelry */
 .c-treasure{
-  font-size:clamp(0.55rem,2vw,0.8rem);
-  line-height:1;text-align:center;
-  filter:drop-shadow(0 1px 3px rgba(255,200,0,0.8));
+  font-size:clamp(0.6rem,2.2vw,0.85rem);
+  line-height:1;
+  text-align:center;
+  filter:drop-shadow(0 1px 4px rgba(255,200,0,0.9));
   letter-spacing:-1px;
+  position:relative;z-index:2;
 }
 
 /* Chest body */
@@ -152,6 +269,7 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
   position:relative;z-index:2;
   padding:0.12rem 0.1rem 0.1rem;
   display:flex;flex-direction:column;align-items:center;gap:0.06rem;
+  border-bottom:3px solid rgba(210,148,12,0.9);
 }
 .c-clasp{
   position:absolute;top:-3px;left:50%;transform:translateX(-50%);
@@ -163,14 +281,16 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 /* Draggable preposition word */
 .prep-word{
   font-family:'Bangers',cursive;
-  font-size:clamp(0.85rem,3.5vw,1.15rem);
+  font-size:clamp(0.9rem,3.8vw,1.25rem);
   letter-spacing:2px;
   cursor:grab;touch-action:none;
   position:relative;z-index:10;
-  padding:0.02rem 0.18rem;
-  text-shadow:2px 2px 4px rgba(0,0,0,0.95);
+  padding:0.05rem 0.25rem;
+  text-shadow:2px 2px 5px rgba(0,0,0,0.98),0 0 8px rgba(0,0,0,0.8);
   transition:filter 0.15s,transform 0.1s;
   -webkit-tap-highlight-color:transparent;
+  margin-top:2px;
+  font-weight:900;
 }
 .prep-word:active{transform:scale(0.9);}
 .prep-word.dragging{opacity:0.2;}
@@ -281,41 +401,41 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
   <div id="chests-row">
     <!-- AT -->
     <div class="chest-outer">
-      <div class="c-rays"></div>
-      <div class="c-lid-open">
-        <div class="c-treasure">🪙💎💍🪙💎</div>
-      </div>
-      <div class="c-body">
-        <div class="c-clasp"></div>
-        <div class="c-inner">
-          <div class="prep-word" data-word="at" style="color:#ffbbbb;" draggable="true">AT</div>
+      <div class="chest-img-wrap">
+        <div class="chest-gold-rays"></div>
+        <div class="chest-emoji-large">🪙💎💍🪙💎<br>🪙💎🪙💎💍</div>
+        <div class="chest-frame">
+          <div class="chest-lid-back"></div>
+          <div class="chest-inside"></div>
+          <div class="chest-front"></div>
         </div>
+        <div class="prep-word" data-word="at" style="color:#ffdd99;" draggable="true">AT</div>
       </div>
     </div>
     <!-- IN -->
     <div class="chest-outer">
-      <div class="c-rays"></div>
-      <div class="c-lid-open">
-        <div class="c-treasure">💎🪙💍💎🪙</div>
-      </div>
-      <div class="c-body">
-        <div class="c-clasp"></div>
-        <div class="c-inner">
-          <div class="prep-word" data-word="in" style="color:#bbffbb;" draggable="true">IN</div>
+      <div class="chest-img-wrap">
+        <div class="chest-gold-rays"></div>
+        <div class="chest-emoji-large">💎🪙💍💎🪙<br>💎🪙💎💍🪙</div>
+        <div class="chest-frame">
+          <div class="chest-lid-back"></div>
+          <div class="chest-inside"></div>
+          <div class="chest-front"></div>
         </div>
+        <div class="prep-word" data-word="in" style="color:#99ffbb;" draggable="true">IN</div>
       </div>
     </div>
     <!-- ON -->
     <div class="chest-outer">
-      <div class="c-rays"></div>
-      <div class="c-lid-open">
-        <div class="c-treasure">💍💎🪙💍💎</div>
-      </div>
-      <div class="c-body">
-        <div class="c-clasp"></div>
-        <div class="c-inner">
-          <div class="prep-word" data-word="on" style="color:#bbbbff;" draggable="true">ON</div>
+      <div class="chest-img-wrap">
+        <div class="chest-gold-rays"></div>
+        <div class="chest-emoji-large">💍🪙💎💍🪙<br>🪙💍💎🪙💎</div>
+        <div class="chest-frame">
+          <div class="chest-lid-back"></div>
+          <div class="chest-inside"></div>
+          <div class="chest-front"></div>
         </div>
+        <div class="prep-word" data-word="on" style="color:#99bbff;" draggable="true">ON</div>
       </div>
     </div>
   </div>
@@ -392,8 +512,8 @@ const TOTAL_GAPS=cc;
 let score=0,curGap=0,curScene=0,gameOn=false,dragWord=null,scrollX=0,rafId=null;
 
 // Scroll speed calibrated for 12 year old reading pace
-const SPD=2.4;        // doubled speed as requested
-const SPD_SLOW=0.15;  // slows as gap approaches
+const SPD=10.0;       // speed 10/10
+const SPD_SLOW=0.3;   // slows as gap approaches
 const STOP_PX=65;     // stops completely here
 const SLOW_PX=280;    // starts slowing here
 
@@ -561,6 +681,105 @@ function bigFW(){
   if(!fwR)animFW();
 }
 function stopFW(){fwOn=false;parts=[];if(fwR){cancelAnimationFrame(fwR);fwR=null;}fc.clearRect(0,0,fwc.width,fwc.height);fwc.style.display='none';}
+
+// Draw treasure chests on canvas
+function drawChests(){
+  document.querySelectorAll('.chest-canvas').forEach(cv=>{
+    const ctx=cv.getContext('2d');
+    const w=cv.width,h=cv.height;
+    ctx.clearRect(0,0,w,h);
+
+    // Gold rays
+    const rayGrad=ctx.createRadialGradient(w/2,h*0.35,0,w/2,h*0.35,w*0.8);
+    rayGrad.addColorStop(0,'rgba(255,230,50,0.9)');
+    rayGrad.addColorStop(0.4,'rgba(255,180,0,0.4)');
+    rayGrad.addColorStop(1,'rgba(255,140,0,0)');
+    ctx.fillStyle=rayGrad;
+    ctx.fillRect(0,0,w,h*0.6);
+
+    // Chest body — dark brown wood
+    const bodyX=4,bodyY=h*0.48,bodyW=w-8,bodyH=h*0.48;
+    const bodyGrad=ctx.createLinearGradient(bodyX,bodyY,bodyX,bodyY+bodyH);
+    bodyGrad.addColorStop(0,'#8B5210');
+    bodyGrad.addColorStop(0.3,'#5C3408');
+    bodyGrad.addColorStop(0.6,'#7A4A0E');
+    bodyGrad.addColorStop(1,'#4E2E06');
+    ctx.fillStyle=bodyGrad;
+    ctx.beginPath();
+    ctx.roundRect(bodyX,bodyY,bodyW,bodyH,3);
+    ctx.fill();
+
+    // Wood grain lines
+    ctx.strokeStyle='rgba(0,0,0,0.12)';
+    ctx.lineWidth=1;
+    for(let x=bodyX+8;x<bodyX+bodyW;x+=10){
+      ctx.beginPath();ctx.moveTo(x,bodyY);ctx.lineTo(x,bodyY+bodyH);ctx.stroke();
+    }
+
+    // Gold band across body
+    const bandY=bodyY+bodyH*0.38;
+    const bandGrad=ctx.createLinearGradient(0,bandY,0,bandY+5);
+    bandGrad.addColorStop(0,'rgba(230,165,15,0.95)');
+    bandGrad.addColorStop(0.5,'rgba(180,110,8,0.9)');
+    bandGrad.addColorStop(1,'rgba(230,165,15,0.95)');
+    ctx.fillStyle=bandGrad;
+    ctx.fillRect(bodyX,bandY,bodyW,5);
+
+    // Gold border around body
+    ctx.strokeStyle='rgba(200,140,15,0.85)';
+    ctx.lineWidth=2;
+    ctx.beginPath();ctx.roundRect(bodyX,bodyY,bodyW,bodyH,3);ctx.stroke();
+
+    // Gold clasp
+    ctx.fillStyle='rgba(255,215,0,0.95)';
+    ctx.strokeStyle='rgba(140,90,0,0.9)';
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.roundRect(w/2-7,bodyY-4,14,8,2);ctx.fill();ctx.stroke();
+
+    // Open lid — leaning back, showing inner gold face
+    const lidX=2,lidY=h*0.2,lidW=w-4,lidH=h*0.28;
+    // Inner gold face of lid
+    const lidInnerGrad=ctx.createLinearGradient(lidX,lidY,lidX,lidY+lidH);
+    lidInnerGrad.addColorStop(0,'rgba(255,220,40,0.95)');
+    lidInnerGrad.addColorStop(0.5,'rgba(220,160,15,0.9)');
+    lidInnerGrad.addColorStop(1,'rgba(180,110,8,0.85)');
+    ctx.fillStyle=lidInnerGrad;
+    ctx.beginPath();ctx.roundRect(lidX,lidY,lidW,lidH,3);ctx.fill();
+
+    // Lid wood outer face (top strip)
+    const lidOuterGrad=ctx.createLinearGradient(lidX,lidY,lidX,lidY+8);
+    lidOuterGrad.addColorStop(0,'rgba(140,82,10,0.95)');
+    lidOuterGrad.addColorStop(1,'rgba(100,58,7,0.9)');
+    ctx.fillStyle=lidOuterGrad;
+    ctx.fillRect(lidX,lidY,lidW,8);
+
+    // Lid gold band
+    ctx.fillStyle='rgba(220,155,12,0.9)';
+    ctx.fillRect(lidX,lidY+10,lidW,4);
+
+    // Lid border
+    ctx.strokeStyle='rgba(200,140,12,0.85)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.roundRect(lidX,lidY,lidW,lidH,3);ctx.stroke();
+
+    // Gold glow inside chest (between lid and body)
+    const glowGrad=ctx.createLinearGradient(0,bodyY-8,0,bodyY+4);
+    glowGrad.addColorStop(0,'rgba(255,220,50,0.95)');
+    glowGrad.addColorStop(1,'rgba(255,180,0,0)');
+    ctx.fillStyle=glowGrad;
+    ctx.fillRect(bodyX+2,bodyY-8,bodyW-4,12);
+
+    // Treasure inside — coins pile
+    ctx.font=`${Math.floor(w*0.14)}px serif`;
+    ctx.textAlign='center';
+    // Coins row
+    const coinY=bodyY+bodyH*0.25;
+    ['🪙','💎','💍','🪙','💎'].forEach((em,i)=>{
+      ctx.fillText(em,bodyX+6+(i*(bodyW-8)/4),coinY);
+    });
+  });
+}
+// Draw after DOM ready
+setTimeout(drawChests,100);
 </script>
 </body>
 </html>
