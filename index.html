@@ -230,37 +230,102 @@ body {
   z-index: 1;
 }
 
+/* ─────────────────────────────────────
+   TREASURE CHESTS
+───────────────────────────────────── */
+#chests {
+  position: relative;
+  z-index: 40;
+  width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 0 0.8rem 0.2rem;
+}
 .chest {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: clamp(88px,25vw,110px);
+  width: clamp(82px,23vw,108px);
   cursor: grab;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
   position: relative;
 }
-.chest-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
-  pointer-events: none;
+/* Gold rays above chest */
+.chest-rays {
+  width:140%;height:clamp(14px,4vw,20px);
+  background:radial-gradient(ellipse at center bottom,rgba(255,230,40,0.95) 0%,rgba(255,170,0,0.5) 50%,transparent 100%);
+  filter:blur(2px);margin-bottom:-6px;position:relative;z-index:1;pointer-events:none;
+}
+/* Coins spilling out top */
+.chest-spill {
+  font-size:clamp(0.68rem,2.3vw,0.9rem);line-height:1;text-align:center;letter-spacing:-1px;
+  position:relative;z-index:6;margin-bottom:-4px;
+  filter:drop-shadow(0 -2px 5px rgba(255,210,0,0.85));pointer-events:none;white-space:nowrap;
+}
+/* Open lid — wide angle showing gold inside */
+.chest-lid {
+  width:112%;height:clamp(12px,3.5vw,18px);
+  position:relative;z-index:5;
+  transform:perspective(45px) rotateX(22deg);
+  transform-origin:bottom center;
+  border-radius:4px 4px 0 0;overflow:hidden;
+  box-shadow:0 -3px 8px rgba(255,175,0,0.4);
+}
+.chest-lid::before {
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0px,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 11px),
+    linear-gradient(180deg,#B8720E,#D49820,#8A5008,#C07818,#7A4A06);
+}
+.chest-lid::after {
+  content:'';position:absolute;top:42%;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#C8920A,#FFD700,#C8920A);
+}
+/* Glowing gold interior */
+.chest-glow {
+  width:100%;height:clamp(8px,2.2vw,13px);
+  background:linear-gradient(180deg,rgba(255,230,40,1) 0%,rgba(255,175,0,0.75) 50%,rgba(200,100,0,0.2) 100%);
+  box-shadow:0 0 10px rgba(255,210,0,0.6);
+  position:relative;z-index:4;pointer-events:none;
+}
+/* Wooden body */
+.chest-body {
+  width:100%;height:clamp(30px,8vw,44px);
+  position:relative;z-index:3;border-radius:0 0 5px 5px;overflow:hidden;
+  box-shadow:0 5px 14px rgba(0,0,0,0.78);
+}
+.chest-body::before {
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(0,0,0,0.11) 0px,rgba(0,0,0,0.11) 1px,transparent 1px,transparent 9px),
+    linear-gradient(180deg,#7C4C10,#4E2E06,#6A3A0C,#4A2A04,#7C4C10);
+}
+.chest-body::after {
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,#A07010,#FFD700,#A07010);z-index:1;
+}
+.chest-mid-band {
+  position:absolute;top:42%;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#A07010,#E8B828,#A07010);z-index:2;pointer-events:none;
+}
+.chest-clasp {
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:13px;height:9px;
+  background:linear-gradient(180deg,#FFD700,#B8860B,#FFD700);
+  border-radius:2px;border:1px solid #7a5500;box-shadow:0 1px 3px rgba(0,0,0,0.55);
+  z-index:3;pointer-events:none;
 }
 .chest-word {
-  font-family: 'Bangers', cursive;
-  font-size: clamp(1.1rem,4.5vw,1.5rem);
-  letter-spacing: 2px;
-  font-weight: 900;
-  color: #FFD700;
-  text-shadow: 2px 2px 0 #000, 0 0 12px rgba(0,0,0,0.9);
-  margin-top: 2px;
-  position: relative;
-  z-index: 10;
-  pointer-events: none;
+  font-family:'Bangers',cursive;font-size:clamp(1rem,4.2vw,1.35rem);
+  letter-spacing:2px;font-weight:900;
+  color:#FFD700;
+  text-shadow:2px 2px 0 rgba(0,0,0,1),0 0 10px rgba(0,0,0,0.85);
+  margin-top:3px;position:relative;z-index:10;pointer-events:none;
 }
 .chest.selected {
-  filter: drop-shadow(0 0 14px #FFD700) brightness(1.2);
+  filter:drop-shadow(0 0 12px #FFD700) brightness(1.22);
 }
 
 /* ─────────────────────────────────────
@@ -495,21 +560,50 @@ body {
   <!-- Flexible space — image shows through here -->
   <div id="scene-space"></div>
 
-  <!-- Three treasure chests using chest.png -->
+  <!-- Three treasure chests -->
   <div id="chests">
+
+    <!-- AT chest -->
     <div class="chest" id="chest-at" data-word="at">
-      <img class="chest-img" src="chest.png" alt="chest">
-      <div class="chest-word">AT</div>
+      <div class="chest-rays"></div>
+      <div class="chest-spill">🪙💎💍🪙💎</div>
+      <div class="chest-lid"></div>
+      <div class="chest-glow"></div>
+      <div class="chest-body" style="position:relative;">
+        <div class="chest-mid-band"></div>
+        <div class="chest-clasp"></div>
+      </div>
+      <div class="chest-word" style="color:#ffdd99;">AT</div>
     </div>
+
+    <!-- IN chest -->
     <div class="chest" id="chest-in" data-word="in">
-      <img class="chest-img" src="chest.png" alt="chest">
-      <div class="chest-word">IN</div>
+      <div class="chest-rays"></div>
+      <div class="chest-spill">💎🪙💍💎🪙</div>
+      <div class="chest-lid"></div>
+      <div class="chest-glow"></div>
+      <div class="chest-body" style="position:relative;">
+        <div class="chest-mid-band"></div>
+        <div class="chest-clasp"></div>
+      </div>
+      <div class="chest-word" style="color:#99ffbb;">IN</div>
     </div>
+
+    <!-- ON chest -->
     <div class="chest" id="chest-on" data-word="on">
-      <img class="chest-img" src="chest.png" alt="chest">
-      <div class="chest-word">ON</div>
+      <div class="chest-rays"></div>
+      <div class="chest-spill">💍🪙💎💍🪙</div>
+      <div class="chest-lid"></div>
+      <div class="chest-glow"></div>
+      <div class="chest-body" style="position:relative;">
+        <div class="chest-mid-band"></div>
+        <div class="chest-clasp"></div>
+      </div>
+      <div class="chest-word" style="color:#99bbff;">ON</div>
     </div>
-  </div>
+
+  </div><!-- end #chests -->
+
   <!-- Scrolling story strip -->
   <div id="story-strip">
     <div id="scroll-track">
