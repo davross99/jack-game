@@ -404,16 +404,16 @@ const gapsPerScene=SCENES.map(s=>(s.text.match(/\[[^\]]+\]/g)||[]).length);
 const cumGaps=[];let cc=0;gapsPerScene.forEach(g=>{cumGaps.push(cc);cc+=g;});
 const TOTAL_GAPS=cc;
 
-let score=0,curGap=0,curScene=0,gameOn=false,dragWord=null,scrollX=0,rafId=null,lastTime=0;
+let score=0,curGap=0,curScene=0,gameOn=false,dragWord=null,scrollX=0,rafId=null;
 
 // Scroll speed calibrated for 12 year old reading pace
-const SPD=0.85;       // comfortable reading speed for kids
+const SPD=1.2;        // consistent reading speed for 12 year olds
 const SPD_SLOW=0.15;  // slows as gap approaches
 const STOP_PX=65;     // stops completely here
 const SLOW_PX=280;    // starts slowing here
 
 function startGame(){
-  score=0;curGap=0;curScene=0;scrollX=0;gameOn=true;dragWord=null;lastTime=0;
+  score=0;curGap=0;curScene=0;scrollX=0;gameOn=true;dragWord=null;
   document.getElementById('total-val').textContent=TOTAL_GAPS;
   document.getElementById('final-total').textContent=TOTAL_GAPS;
   updateHUD();showScreen('game-screen');setScene(0);
@@ -526,9 +526,8 @@ function handleAnswer(slot,word){
   }
 }
 
-function scrollLoop(timestamp){
+function scrollLoop(){
   if(!gameOn) return;
-  const delta=lastTime?Math.min((timestamp-lastTime)/16.67,3):1;lastTime=timestamp;
   const track=document.getElementById('scroll-track');
   const strip=document.getElementById('story-strip');
   const sw=strip.offsetWidth;
@@ -541,7 +540,7 @@ function scrollLoop(timestamp){
     if(gx<=cx+STOP_PX&&gx>=-gr.width) spd=0;
     else if(gx<=cx+SLOW_PX) spd=SPD_SLOW;
   }
-  scrollX-=spd*delta;
+  scrollX-=spd;
   const total=content.scrollWidth+sw;
   if(Math.abs(scrollX)>total) scrollX=0;
   track.style.transform=`translateX(${scrollX}px)`;
