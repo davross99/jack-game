@@ -51,15 +51,38 @@ html,body{
 #prog{width:100%;height:4px;background:rgba(255,255,255,0.15);flex-shrink:0;z-index:30;position:relative;}
 #prog-bar{height:100%;background:linear-gradient(90deg,#FFD700,#FFA500);width:0%;transition:width 0.4s;}
 
-/* Balloon zone — fixed height */
+/* Treasure chest balloon zone */
 #balloon-zone{
   width:100%;flex-shrink:0;
-  height:clamp(72px,15vh,105px);
+  height:clamp(80px,16vh,115px);
   display:flex;align-items:center;justify-content:center;
   gap:clamp(0.8rem,5vw,3rem);
-  background:rgba(0,0,0,0.45);
+  background:transparent;
   z-index:30;position:relative;
   padding:0 0.5rem;
+}
+#balloon-zone::before{
+  content:'';
+  position:absolute;inset:4px 8px;
+  background:linear-gradient(135deg,rgba(101,67,33,0.75),rgba(139,90,43,0.75),rgba(101,67,33,0.75));
+  border:2px solid rgba(205,150,50,0.8);
+  border-radius:8px 8px 4px 4px;
+  box-shadow:0 0 20px rgba(180,120,0,0.3),inset 0 2px 8px rgba(255,200,50,0.2);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+#balloon-zone::after{
+  content:'🎁 CHOOSE A PREPOSITION';
+  position:absolute;
+  top:-0.8rem;left:50%;transform:translateX(-50%);
+  font-family:'Bangers',cursive;
+  font-size:clamp(0.5rem,1.8vw,0.7rem);
+  color:#FFD700;letter-spacing:2px;
+  background:linear-gradient(135deg,rgba(101,67,33,0.9),rgba(139,90,43,0.9));
+  border:1px solid rgba(205,150,50,0.8);
+  padding:0.1rem 0.6rem;
+  border-radius:10px;
+  white-space:nowrap;
 }
 .balloon{
   display:flex;flex-direction:column;align-items:center;
@@ -67,6 +90,7 @@ html,body{
   animation:bob 2.5s ease-in-out infinite;
   transition:transform 0.15s,filter 0.15s;
   -webkit-tap-highlight-color:transparent;
+  position:relative;z-index:2;
 }
 .balloon:nth-child(2){animation-delay:0.8s;}
 .balloon:nth-child(3){animation-delay:1.6s;}
@@ -101,6 +125,7 @@ html,body{
   background-position:center center;
   background-repeat:no-repeat;
   transition:background-image 1.2s ease;
+  background-color:#1a3a1a;
 }
 #scene-bg::after{
   content:'';position:absolute;inset:0;
