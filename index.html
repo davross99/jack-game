@@ -7,321 +7,235 @@
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{height:100%;}
-body{
-  width:100%;height:100%;
-  overflow:hidden;
-  background:#111;
-  font-family:'Nunito',sans-serif;
-  user-select:none;-webkit-user-select:none;
-  position:fixed;
-}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;position:fixed;}
+body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 
-/* ══════════════════════════════
-   SCREENS
-══════════════════════════════ */
-.screen{
-  position:fixed;inset:0;
-  display:none;flex-direction:column;
-  align-items:center;justify-content:center;
-}
+/* ── SCREENS ── */
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;}
 .screen.active{display:flex;}
 
-/* ══════════════════════════════
-   TITLE SCREEN
-══════════════════════════════ */
+/* ── TITLE ── */
 #title-screen{
-  background:
-    linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),
-    url('scene01.jpg') center/cover no-repeat;
-  gap:0.9rem;padding:1.5rem;text-align:center;
+  background:linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.55)),url('scene01.jpg') center/cover no-repeat;
+  gap:0.8rem;padding:1.5rem;text-align:center;
 }
 .t-emoji{font-size:clamp(2.5rem,10vw,4rem);animation:fl 3s ease-in-out infinite;}
 @keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.t-title{
-  font-family:'Bangers',cursive;
-  font-size:clamp(2rem,8vw,3.8rem);
-  color:#FFD700;
-  text-shadow:3px 3px 0 #5a3800,0 0 20px rgba(255,200,0,0.4);
-  letter-spacing:2px;line-height:1.1;
-}
-.t-sub{font-family:'Bangers',cursive;font-size:clamp(0.85rem,3vw,1.2rem);color:#90ee90;letter-spacing:3px;}
+.t-title{font-family:'Bangers',cursive;font-size:clamp(1.8rem,8vw,3.5rem);color:#FFD700;text-shadow:3px 3px 0 #5a3800;letter-spacing:2px;line-height:1.1;}
+.t-sub{font-family:'Bangers',cursive;font-size:clamp(0.8rem,3vw,1.2rem);color:#90ee90;letter-spacing:3px;}
 .t-pills{display:flex;gap:0.6rem;justify-content:center;}
-.pill{
-  background:rgba(255,215,0,0.15);
-  border:2px solid #FFD700;
-  border-radius:50px;padding:0.2rem 0.9rem;
-  font-family:'Bangers',cursive;font-size:clamp(1rem,4vw,1.4rem);
-  color:#FFD700;letter-spacing:2px;
-}
-.t-hint{
-  color:#ddd;font-size:clamp(0.75rem,2.5vw,0.9rem);
-  max-width:300px;line-height:1.5;text-align:center;
-  background:rgba(0,0,0,0.5);padding:0.5rem 0.8rem;border-radius:8px;
-}
-.go-btn{
-  background:linear-gradient(135deg,#FFD700,#FFA500);
-  color:#1a1a00;font-family:'Bangers',cursive;
-  font-size:clamp(1.1rem,4vw,1.7rem);letter-spacing:2px;
-  border:none;padding:0.65rem 2.2rem;border-radius:50px;
-  cursor:pointer;box-shadow:0 5px 0 #8B6914;
-  transition:transform 0.1s,box-shadow 0.1s;
-}
+.pill{background:rgba(255,215,0,0.15);border:2px solid #FFD700;border-radius:50px;padding:0.2rem 0.9rem;font-family:'Bangers',cursive;font-size:clamp(1rem,4vw,1.4rem);color:#FFD700;letter-spacing:2px;}
+.t-hint{color:#ddd;font-size:clamp(0.75rem,2.5vw,0.9rem);max-width:300px;line-height:1.5;text-align:center;background:rgba(0,0,0,0.55);padding:0.5rem 0.8rem;border-radius:8px;}
+.go-btn{background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;font-family:'Bangers',cursive;font-size:clamp(1.1rem,4vw,1.7rem);letter-spacing:2px;border:none;padding:0.65rem 2.2rem;border-radius:50px;cursor:pointer;box-shadow:0 5px 0 #8B6914;}
 .go-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #8B6914;}
 
-/* ══════════════════════════════
-   GAME SCREEN — full image
-══════════════════════════════ */
-#game-screen{
-  background:#111;
-  position:fixed;inset:0;
-  display:none;flex-direction:column;
-}
-#game-screen.active{display:flex;}
+/* ── GAME SCREEN ── */
+#game-screen{justify-content:flex-start;background:#000;}
 
-/* Scene image — fills entire screen */
-#scene-img{
-  position:absolute;
-  top:0;left:0;right:0;bottom:0;
-  background-size:cover;
-  background-position:center center;
-  background-repeat:no-repeat;
+/* Full screen background */
+#scene-bg{
+  position:fixed;inset:0;z-index:0;
+  background-size:cover;background-position:center;background-repeat:no-repeat;
   background-color:#1a3a1a;
   transition:background-image 1.5s ease;
-  z-index:0;
+}
+#scene-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,0.35) 0%,rgba(0,0,0,0.05) 40%,rgba(0,0,0,0.5) 100%);
 }
 
-/* ── HUD — top bar ── */
+/* HUD */
 #hud{
-  position:relative;z-index:20;
-  width:100%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:30;width:100%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;gap:0.4rem;
   padding:0.3rem 0.6rem;
-  background:rgba(0,0,0,0.7);
-  border-bottom:2px solid rgba(255,215,0,0.7);
-  gap:0.4rem;
+  background:rgba(0,0,0,0.75);
+  border-bottom:2px solid rgba(255,215,0,0.6);
 }
 .h-title{font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(0.65rem,2.5vw,0.95rem);letter-spacing:2px;white-space:nowrap;}
 .h-score{font-family:'Bangers',cursive;color:#90ee90;font-size:clamp(0.65rem,2.5vw,0.95rem);white-space:nowrap;}
-.h-restart{
-  font-family:'Bangers',cursive;font-size:clamp(0.6rem,2vw,0.85rem);
-  background:rgba(180,0,0,0.85);color:#fff;
-  border:1px solid rgba(255,100,100,0.5);
-  border-radius:12px;padding:0.18rem 0.55rem;
-  cursor:pointer;white-space:nowrap;flex-shrink:0;
-}
+.h-restart{font-family:'Bangers',cursive;font-size:clamp(0.6rem,2vw,0.85rem);background:rgba(180,0,0,0.9);color:#fff;border:none;border-radius:12px;padding:0.2rem 0.6rem;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.h-restart:active{transform:scale(0.95);}
 
-/* Progress */
-#prog{
-  position:relative;z-index:20;
-  width:100%;height:3px;flex-shrink:0;
-  background:rgba(255,255,255,0.15);
-}
+/* Progress bar */
+#prog{position:relative;z-index:30;width:100%;height:3px;flex-shrink:0;background:rgba(255,255,255,0.15);}
 #prog-bar{height:100%;background:linear-gradient(90deg,#FFD700,#FFA500);width:0%;transition:width 0.4s;}
 
-/* ── TREASURE CHEST ── */
-#chest-zone{
-  position:relative;z-index:20;
-  width:100%;flex-shrink:0;
-  padding:0.4rem 0.8rem 0.5rem;
-  display:flex;flex-direction:column;align-items:center;
-  gap:0.3rem;
+/* Scene label */
+#scene-lbl{
+  position:relative;z-index:30;
+  text-align:center;padding:0.3rem;
+  font-family:'Bangers',cursive;font-size:clamp(0.55rem,2vw,0.8rem);
+  color:rgba(255,215,0,0.85);letter-spacing:3px;
+  background:rgba(0,0,0,0.5);
+  flex-shrink:0;
 }
-/* Chest lid */
-.chest-lid{
-  width:clamp(200px,75vw,320px);
-  background:linear-gradient(180deg,#8B5E1A,#6B4410);
-  border:2px solid #C8860A;
-  border-bottom:none;
-  border-radius:8px 8px 0 0;
-  padding:0.15rem 0;
-  text-align:center;
-  font-family:'Bangers',cursive;
-  font-size:clamp(0.55rem,2vw,0.75rem);
-  color:#FFD700;letter-spacing:2px;
-  box-shadow:0 -2px 8px rgba(200,130,0,0.3);
+
+/* Middle spacer — pushes chest and story to bottom */
+#mid-space{flex:1;position:relative;z-index:5;}
+
+/* ── THREE INDIVIDUAL TREASURE CHESTS ── */
+#chests-row{
+  position:relative;z-index:30;
+  width:100%;flex-shrink:0;
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:clamp(0.5rem,3vw,1.2rem);
+  padding:0 0.8rem 0.3rem;
+}
+.chest{
+  display:flex;flex-direction:column;align-items:center;
+  cursor:pointer;
+  transition:transform 0.15s;
+  -webkit-tap-highlight-color:transparent;
   position:relative;
 }
-.chest-lid::before{
-  content:'';
-  position:absolute;top:50%;left:10%;right:10%;
-  height:2px;background:rgba(255,200,50,0.3);
-  transform:translateY(-50%);
+.chest:active{transform:scale(0.93);}
+.chest.selected .chest-body-wrap{
+  box-shadow:0 0 16px rgba(255,215,0,0.9),0 0 4px rgba(255,215,0,0.6);
+  transform:translateY(-4px);
+}
+.chest.selected .chest-lid-wrap{
+  transform:rotateX(-35deg) translateY(-4px);
+}
+
+/* Chest lid */
+.chest-lid-wrap{
+  width:clamp(70px,18vw,100px);
+  background:linear-gradient(180deg,#A0651A,#7A4A10);
+  border:2px solid #C8860A;border-bottom:none;
+  border-radius:5px 5px 0 0;
+  padding:0.15rem 0;
+  text-align:center;
+  font-size:clamp(0.9rem,3vw,1.2rem);
+  transition:transform 0.2s;
+  transform-origin:bottom center;
+  box-shadow:inset 0 1px 0 rgba(255,200,50,0.2);
 }
 /* Chest body */
-.chest-body{
-  width:clamp(200px,75vw,320px);
-  background:linear-gradient(180deg,rgba(90,55,15,0.85),rgba(60,35,8,0.9));
+.chest-body-wrap{
+  width:clamp(70px,18vw,100px);
+  background:linear-gradient(180deg,rgba(90,55,15,0.82),rgba(55,30,5,0.88));
   border:2px solid #C8860A;
-  border-top:1px solid #A06A00;
-  border-radius:0 0 8px 8px;
-  padding:0.5rem 0.4rem 0.55rem;
-  display:flex;align-items:center;justify-content:center;
-  gap:clamp(0.6rem,4vw,1.5rem);
-  box-shadow:0 4px 12px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,200,50,0.15);
+  border-top:1px solid #8B5E10;
+  border-radius:0 0 6px 6px;
+  padding:0.5rem 0.3rem 0.55rem;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0.2rem;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+  box-shadow:0 4px 10px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,200,50,0.1);
+  transition:transform 0.2s,box-shadow 0.2s;
   position:relative;
 }
 /* Gold clasp */
-.chest-body::before{
+.chest-body-wrap::before{
   content:'';
-  position:absolute;
-  top:-4px;left:50%;transform:translateX(-50%);
-  width:18px;height:8px;
+  position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+  width:14px;height:7px;
   background:linear-gradient(180deg,#FFD700,#B8860B);
-  border-radius:3px;
-  border:1px solid #8B6914;
+  border-radius:3px;border:1px solid #8B6914;
 }
-
-/* Preposition gems inside chest */
-.prep-gem{
-  display:flex;flex-direction:column;align-items:center;
-  cursor:pointer;
-  transition:transform 0.15s,filter 0.15s;
-  -webkit-tap-highlight-color:transparent;
-  gap:0.15rem;
-}
-.prep-gem:active{transform:scale(0.93);}
-.prep-gem.selected{
-  transform:scale(1.18) translateY(-3px);
-  filter:drop-shadow(0 0 10px #FFD700) brightness(1.25);
-}
-.gem-stone{
-  width:clamp(55px,13vw,78px);
-  height:clamp(55px,13vw,78px);
-  border-radius:50% 50% 50% 50%/55% 55% 45% 45%;
-  display:flex;align-items:center;justify-content:center;
+.chest-word{
   font-family:'Bangers',cursive;
-  font-size:clamp(1rem,4.5vw,1.6rem);
+  font-size:clamp(1.1rem,5vw,1.7rem);
   color:#fff;
-  text-shadow:1px 1px 2px rgba(0,0,0,0.7);
-  letter-spacing:1px;
-  box-shadow:
-    inset -4px -4px 10px rgba(0,0,0,0.4),
-    inset 3px 3px 8px rgba(255,255,255,0.25),
-    0 3px 8px rgba(0,0,0,0.4);
+  text-shadow:1px 1px 3px rgba(0,0,0,0.8);
+  letter-spacing:2px;
 }
-.gem-label{
-  font-family:'Bangers',cursive;
-  font-size:clamp(0.45rem,1.5vw,0.6rem);
+.chest-hint{
+  font-size:clamp(0.4rem,1.4vw,0.55rem);
   color:rgba(255,220,100,0.7);
   letter-spacing:1px;
+  text-align:center;
+  line-height:1.2;
 }
 
-/* Selected word hint — floats over scene */
-#sel-hint{
-  position:absolute;
-  z-index:15;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  font-family:'Bangers',cursive;
-  font-size:clamp(0.8rem,3vw,1rem);
-  color:#FFD700;letter-spacing:2px;
-  background:rgba(0,0,0,0.65);
-  padding:0.3rem 0.9rem;border-radius:20px;
-  border:1px solid rgba(255,215,0,0.5);
-  display:none;
-  white-space:nowrap;
-  pointer-events:none;
+/* ── STORY SENTENCE — overlaid on image ── */
+#story-box{
+  position:relative;z-index:30;
+  width:100%;flex-shrink:0;
+  padding:0.6rem 1rem 0.8rem;
+  background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(5,3,0,0.72) 15%,rgba(5,3,0,0.85) 100%);
+  min-height:clamp(70px,15vh,95px);
+  display:flex;align-items:center;justify-content:center;
 }
-
-/* ── STORY OVERLAY — floats on image ── */
-#story-overlay{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  z-index:20;
-  height:clamp(70px,17vh,105px);
-  overflow:hidden;
-  /* Semi-transparent overlay on image */
-  background:linear-gradient(
-    to bottom,
-    rgba(0,0,0,0) 0%,
-    rgba(10,5,0,0.65) 20%,
-    rgba(10,5,0,0.82) 100%
-  );
-  display:flex;align-items:center;
-}
-#scroll-track{
-  display:flex;align-items:center;
-  height:100%;
-  white-space:nowrap;
-  will-change:transform;
-}
-#story-content{
-  display:inline-flex;align-items:center;
-  font-size:clamp(0.92rem,3.8vw,1.15rem);
+#sentence-wrap{
+  font-size:clamp(0.95rem,4vw,1.2rem);
   font-weight:800;
   color:#fff;
-  text-shadow:1px 1px 3px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.7);
-  padding:0 108vw 0 15px;
-  line-height:1.4;
-  gap:0;
+  text-shadow:1px 1px 3px rgba(0,0,0,0.9);
+  text-align:center;
+  line-height:1.6;
+  max-width:95%;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:0.3rem;
 }
+.word-part{display:inline;}
 
-/* Gap dots */
-.gap-slot{
+/* Gap in sentence */
+.gap-inline{
   display:inline-flex;align-items:center;justify-content:center;
-  min-width:clamp(45px,11vw,72px);
-  height:clamp(28px,6vw,38px);
-  margin:0 4px;
-  flex-shrink:0;
+  min-width:clamp(50px,12vw,75px);
+  height:clamp(30px,7vw,40px);
+  cursor:pointer;
   font-family:'Bangers',cursive;
   font-size:clamp(0.9rem,3.5vw,1.1rem);
-  letter-spacing:1px;
-  cursor:pointer;
-  transition:all 0.15s;
+  letter-spacing:2px;
   color:rgba(255,215,0,0.9);
-  /* Dots look */
-  border-bottom:2px dotted rgba(255,215,0,0.7);
-  background:transparent;
-  border-radius:0;
-  padding:0 4px;
+  /* Dotted underline look */
+  border-bottom:2px dotted rgba(255,215,0,0.8);
+  padding:0 6px;
+  transition:all 0.15s;
+  position:relative;
 }
-.gap-slot::before{
-  content:'· · ·';
-  font-size:clamp(0.7rem,3vw,0.9rem);
-  color:rgba(255,215,0,0.7);
-}
-.gap-slot.ready{
-  color:#FFD700;
+.gap-inline::before{content:'· · ·';}
+.gap-inline.ready{
   border-bottom:2px solid #FFD700;
-  text-shadow:0 0 8px rgba(255,215,0,0.8);
-  animation:pulse 0.8s ease-in-out infinite;
+  color:#FFD700;
+  text-shadow:0 0 10px rgba(255,215,0,0.7);
+  animation:glow 0.8s ease-in-out infinite;
 }
-.gap-slot.ready::before{content:'_ _ _';}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
-.gap-slot.correct{
+.gap-inline.ready::before{content:'_ _ _';}
+@keyframes glow{0%,100%{opacity:1}50%{opacity:0.55}}
+.gap-inline.correct{
   color:#90ff90;
   border-bottom:2px solid #50c850;
-  cursor:default;
+  cursor:default;animation:none;
   font-weight:800;
-  animation:none;
 }
-.gap-slot.correct::before{content:'';}
-.gap-slot.wrong-flash{
+.gap-inline.correct::before{content:'';}
+.gap-inline.wrong-flash{
   color:#ff5555;
   border-bottom:2px solid #e63232;
-  animation:shk 0.45s ease;
+  animation:shk 0.4s ease;
 }
-.gap-slot.wrong-flash::before{content:'✗';}
 @keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
-.scene-div{
-  display:inline-block;
-  padding:0 1.2rem;
-  color:rgba(255,215,0,0.4);
-  font-size:0.8rem;
+/* Feedback message */
+#feedback{
+  position:relative;z-index:30;
+  text-align:center;flex-shrink:0;
+  font-family:'Bangers',cursive;
+  font-size:clamp(0.7rem,2.5vw,0.9rem);
+  letter-spacing:2px;
+  padding:0.2rem;
+  min-height:1.4rem;
+  color:rgba(255,215,0,0.8);
+  text-shadow:1px 1px 2px rgba(0,0,0,0.9);
 }
 
-/* ══════════════════════════════
-   OVERLAYS
-══════════════════════════════ */
+/* ── END SCREEN ── */
+#end-screen{
+  background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('scene12.jpg') center/cover no-repeat;
+  gap:1rem;text-align:center;padding:2rem;
+}
+.e-emoji{font-size:clamp(3rem,10vw,5rem);animation:fl 2s ease-in-out infinite;}
+.e-title{font-family:'Bangers',cursive;font-size:clamp(2rem,8vw,4rem);color:#FFD700;text-shadow:3px 3px 0 #8B6914;letter-spacing:3px;}
+.e-score{font-family:'Bangers',cursive;font-size:clamp(1.3rem,5vw,2.5rem);color:#90ff90;}
+.e-msg{color:#ddd;font-size:clamp(0.85rem,2.5vw,1rem);max-width:340px;line-height:1.6;background:rgba(0,0,0,0.55);padding:0.5rem 0.8rem;border-radius:8px;}
+
+/* ── OVERLAYS ── */
 #fw-canvas{position:fixed;inset:0;z-index:150;pointer-events:none;display:none;}
-
-#wrong-overlay{
-  position:fixed;inset:0;z-index:200;
-  background:rgba(120,0,0,0.5);
-  display:none;align-items:center;justify-content:center;flex-direction:column;gap:0.6rem;
-}
+#wrong-overlay{position:fixed;inset:0;z-index:200;background:rgba(120,0,0,0.5);display:none;align-items:center;justify-content:center;flex-direction:column;gap:0.6rem;}
 #wrong-overlay.show{display:flex;animation:fR 0.3s ease;}
 @keyframes fR{0%{background:rgba(200,0,0,0.75)}100%{background:rgba(120,0,0,0.5)}}
 .w-msg{font-family:'Bangers',cursive;font-size:clamp(2rem,9vw,4.5rem);color:#ff5555;letter-spacing:4px;text-align:center;text-shadow:0 0 20px rgba(255,0,0,0.8);animation:pI 0.3s cubic-bezier(0.175,0.885,0.32,1.275);}
@@ -329,210 +243,211 @@ body{
 .w-sub{color:#ffcccc;font-size:clamp(0.9rem,3vw,1.1rem);font-weight:700;text-align:center;}
 .w-info{color:#ffaaaa;font-size:clamp(0.7rem,2vw,0.85rem);}
 
-/* ══════════════════════════════
-   END SCREEN
-══════════════════════════════ */
-#end-screen{
-  background:
-    linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
-    url('scene12.jpg') center/cover no-repeat;
-  gap:1rem;text-align:center;padding:2rem;
+/* Correct flash */
+#correct-flash{
+  position:fixed;inset:0;z-index:160;
+  background:rgba(50,200,50,0.25);
+  pointer-events:none;
+  display:none;
 }
-.e-emoji{font-size:clamp(3rem,10vw,5rem);animation:fl 2s ease-in-out infinite;}
-.e-title{font-family:'Bangers',cursive;font-size:clamp(2rem,8vw,4rem);color:#FFD700;text-shadow:3px 3px 0 #8B6914;letter-spacing:3px;}
-.e-score{font-family:'Bangers',cursive;font-size:clamp(1.3rem,5vw,2.5rem);color:#90ff90;}
-.e-msg{color:#ddd;font-size:clamp(0.85rem,2.5vw,1rem);max-width:340px;line-height:1.6;background:rgba(0,0,0,0.5);padding:0.5rem 0.8rem;border-radius:8px;}
+#correct-flash.show{display:block;animation:cF 0.4s ease;}
+@keyframes cF{0%{opacity:1}100%{opacity:0}}
 </style>
 </head>
 <body>
 
-<!-- ══ TITLE ══ -->
+<!-- TITLE -->
 <div class="screen active" id="title-screen">
   <div class="t-emoji">🗺️</div>
   <div class="t-title">JACK &amp; THE<br>TEMPLE OF SHADOWS</div>
   <div class="t-sub">JUNGLE ADVENTURE</div>
-  <div class="t-pills">
-    <span class="pill">AT</span>
-    <span class="pill">IN</span>
-    <span class="pill">ON</span>
-  </div>
+  <div class="t-pills"><span class="pill">AT</span><span class="pill">IN</span><span class="pill">ON</span></div>
   <div class="t-hint">
-    👆 Tap a gem to select it<br>
-    👇 Then tap the dots ··· in the story<br>
-    <strong style="color:#FFD700">Wrong = start again! ⚠️</strong>
+    👆 Tap a chest to select<br>
+    👇 Then tap ··· in the sentence<br>
+    <strong style="color:#FFD700">Wrong answer = start again!</strong>
   </div>
   <button class="go-btn" onclick="startGame()">▶ START ADVENTURE</button>
 </div>
 
-<!-- ══ GAME ══ -->
+<!-- GAME -->
 <div class="screen" id="game-screen">
-
-  <!-- Full screen background image -->
-  <div id="scene-img"></div>
-
-  <!-- HUD on top -->
+  <div id="scene-bg"></div>
   <div id="hud">
     <div class="h-title">🗺️ JACK'S QUEST</div>
     <div class="h-score">⭐ <span id="score-val">0</span>/<span id="total-val">0</span></div>
     <button class="h-restart" onclick="restartGame()">↩ RESTART</button>
   </div>
   <div id="prog"><div id="prog-bar"></div></div>
-
-  <!-- Treasure chest -->
-  <div id="chest-zone">
-    <div class="chest-lid">🏛️ &nbsp; CHOOSE A PREPOSITION &nbsp; 🏛️</div>
-    <div class="chest-body" id="chest-body"></div>
+  <div id="scene-lbl">SCENE 1 · THE AIRPORT</div>
+  <div id="mid-space"></div>
+  <div id="chests-row"></div>
+  <div id="story-box">
+    <div id="sentence-wrap"></div>
   </div>
-
-  <!-- Selected word hint floats over scene -->
-  <div id="sel-hint"></div>
-
-  <!-- Story scrolls over the image at bottom -->
-  <div id="story-overlay">
-    <div id="scroll-track">
-      <div id="story-content"></div>
-    </div>
-  </div>
-
+  <div id="feedback"></div>
 </div>
 
-<!-- ══ END ══ -->
+<!-- END -->
 <div class="screen" id="end-screen">
   <div class="e-emoji">🏆</div>
   <div class="e-title">ADVENTURE<br>COMPLETE!</div>
-  <div class="e-score">SCORE: <span id="final-score">0</span> / <span id="final-total">0</span></div>
-  <div class="e-msg">Jack escapes with the golden statue! You mastered AT, IN and ON — brilliant work! 🎉</div>
+  <div class="e-score">SCORE: <span id="final-score">0</span>/<span id="final-total">0</span></div>
+  <div class="e-msg">Jack escapes with the golden statue! You mastered AT, IN and ON — brilliant! 🎉</div>
   <button class="go-btn" onclick="restartGame()">🔄 PLAY AGAIN</button>
 </div>
 
-<!-- ══ OVERLAYS ══ -->
+<!-- OVERLAYS -->
 <canvas id="fw-canvas"></canvas>
 <div id="wrong-overlay">
   <div class="w-msg">❌ WRONG!</div>
   <div class="w-sub">That's not right!</div>
   <div class="w-info">Starting again from the beginning...</div>
 </div>
+<div id="correct-flash"></div>
 
 <script>
-// ═══════════════════════════════════════════════
-// SCENES — 12 scenes, 60% time / 40% place
-// TIME prepositions (marked T): at+times, in+periods, on+days
-// PLACE prepositions (marked P): at+points, in+spaces, on+surfaces
-// ═══════════════════════════════════════════════
-const SCENES = [
-  {
-    id:1, label:"SCENE 1 · THE AIRPORT", bg:"scene01.jpg",
-    // T:on(Monday), T:at(7 o'clock), P:at(gate), P:in(terminal)
-    text:"Jack arrives [on] Monday morning. His flight leaves [at] seven o'clock. He waits [at] the gate [in] the busy terminal."
-  },
-  {
-    id:2, label:"SCENE 2 · IN THE AIR", bg:"scene02.jpg",
-    // T:In(afternoon), T:at(noon) | P:at(jungle)
-    text:"[In] the afternoon the plane flies high above the clouds. Jack looks down [at] the jungle far below. The pilot announces [at] noon — land soon."
-  },
-  {
-    id:3, label:"SCENE 3 · THE AIRSTRIP", bg:"scene03.jpg",
-    // T:at(6 o'clock), T:in(evening) | P:at(airstrip), P:in(Peru)
-    text:"The plane lands [at] six o'clock [in] the evening. Jack steps off [at] a small airstrip [in] Peru."
-  },
-  {
-    id:4, label:"SCENE 4 · THE VILLAGE", bg:"scene04.jpg",
-    // T:at(night), T:in(morning) | P:in(hut)
-    text:"Jack arrives [at] night. He sits [in] a warm hut with an old man. 'You must leave [in] the morning,' the old man warns."
-  },
-  {
-    id:5, label:"SCENE 5 · THE WARNING", bg:"scene05.jpg",
-    // T:In(morning), T:on(Tuesday), T:at(sunrise) | P:on(path)
-    text:"[In] the morning [on] Tuesday Jack walks [on] the narrow jungle path. [At] sunrise the birds begin to sing."
-  },
-  {
-    id:6, label:"SCENE 6 · THE RIVER", bg:"scene06.jpg",
-    // T:at(midday), T:at(noon) | P:on(boat), P:on(water)
-    text:"Jack reaches the river [at] midday. He sits [on] a small boat [on] the water. The sun burns hot [at] noon."
-  },
-  {
-    id:7, label:"SCENE 7 · THE CHASE", bg:"scene07.jpg",
-    // T:In(afternoon), T:in(distance) | P:in(forest), P:on(path)
-    text:"[In] the afternoon warriors appear [in] the forest. Jack runs [on] the jungle path. Drums beat loudly [in] the distance."
-  },
-  {
-    id:8, label:"SCENE 8 · THE CAVE", bg:"scene08.jpg",
-    // T:At(sunset), T:in(darkness) | P:in(cave), P:on(wall)
-    text:"[At] sunset Jack hides [in] a cave. He sits quietly [in] the darkness. A huge snake hangs [on] the cave wall."
-  },
-  {
-    id:9, label:"SCENE 9 · THE TEMPLE", bg:"scene09.jpg",
-    // T:In(morning), T:on(Wednesday) | P:on(cliff), P:at(entrance)
-    text:"[In] the morning [on] Wednesday Jack finds the temple. It stands [on] a high cliff. Ancient fire burns [at] the entrance."
-  },
-  {
-    id:10, label:"SCENE 10 · INSIDE THE TEMPLE", bg:"scene10.jpg",
-    // T:at(midday) | P:on(altars), P:on(pedestal), P:in(centre)
-    text:"Jack enters [at] midday. Gold sits [on] stone altars. A golden statue stands [on] a black pedestal [in] the centre of the room."
-  },
-  {
-    id:11, label:"SCENE 11 · THE ESCAPE", bg:"scene11.jpg",
-    // T:At(six o'clock), T:in(evening) | P:on(stairs), P:in(tunnel)
-    text:"[At] six o'clock [in] the evening Jack grabs the statue. He runs [on] the stone stairs and escapes [in] a secret tunnel."
-  },
-  {
-    id:12, label:"SCENE 12 · FREEDOM!", bg:"scene12.jpg",
-    // T:At(midnight), T:at(dawn), T:on(Thursday) | P:in(sky), P:at(jungle)
-    text:"[At] midnight Jack boards the plane. [In] the sky he looks down [at] the jungle far below. [At] dawn [on] Thursday — Jack is safe!"
-  }
+// ═══════════════════════════════════════════
+// ALL SENTENCES — each is one "card"
+// (T) = time preposition, (P) = place preposition
+// 60% time, 40% place across all 47 gaps
+// ═══════════════════════════════════════════
+const ALL_SENTENCES = [
+  // SCENE 1 — THE AIRPORT
+  { scene:1, label:"SCENE 1 · THE AIRPORT", bg:"scene01.jpg",
+    text:"Jack arrives [on] Monday morning.", answer:"on" },
+  { scene:1, label:"SCENE 1 · THE AIRPORT", bg:"scene01.jpg",
+    text:"His flight leaves [at] seven o'clock.", answer:"at" },
+  { scene:1, label:"SCENE 1 · THE AIRPORT", bg:"scene01.jpg",
+    text:"He waits [at] the gate [in] the busy terminal.", answer1:"at", answer2:"in",
+    text2:true },
+
+  // SCENE 2 — IN THE AIR
+  { scene:2, label:"SCENE 2 · IN THE AIR", bg:"scene02.jpg",
+    text:"[In] the afternoon the plane flies high.", answer:"in" },
+  { scene:2, label:"SCENE 2 · IN THE AIR", bg:"scene02.jpg",
+    text:"Jack looks down [at] the jungle far below.", answer:"at" },
+  { scene:2, label:"SCENE 2 · IN THE AIR", bg:"scene02.jpg",
+    text:"The pilot speaks [at] noon — land soon.", answer:"at" },
+
+  // SCENE 3 — THE AIRSTRIP
+  { scene:3, label:"SCENE 3 · THE AIRSTRIP", bg:"scene03.jpg",
+    text:"The plane lands [at] six o'clock.", answer:"at" },
+  { scene:3, label:"SCENE 3 · THE AIRSTRIP", bg:"scene03.jpg",
+    text:"It is [in] the evening.", answer:"in" },
+  { scene:3, label:"SCENE 3 · THE AIRSTRIP", bg:"scene03.jpg",
+    text:"Jack steps off [at] a small airstrip [in] Peru.", answer1:"at", answer2:"in", text2:true },
+
+  // SCENE 4 — THE VILLAGE
+  { scene:4, label:"SCENE 4 · THE VILLAGE", bg:"scene04.jpg",
+    text:"Jack arrives [at] the village [at] night.", answer1:"at", answer2:"at", text2:true },
+  { scene:4, label:"SCENE 4 · THE VILLAGE", bg:"scene04.jpg",
+    text:"He sits [in] a warm hut.", answer:"in" },
+  { scene:4, label:"SCENE 4 · THE VILLAGE", bg:"scene04.jpg",
+    text:"'Leave [in] the morning,' warns the old man.", answer:"in" },
+
+  // SCENE 5 — THE WARNING
+  { scene:5, label:"SCENE 5 · THE WARNING", bg:"scene05.jpg",
+    text:"[In] the morning [on] Tuesday Jack sets off.", answer1:"in", answer2:"on", text2:true },
+  { scene:5, label:"SCENE 5 · THE WARNING", bg:"scene05.jpg",
+    text:"He walks [on] the narrow jungle path.", answer:"on" },
+  { scene:5, label:"SCENE 5 · THE WARNING", bg:"scene05.jpg",
+    text:"[At] sunrise the birds begin to sing.", answer:"at" },
+
+  // SCENE 6 — THE RIVER
+  { scene:6, label:"SCENE 6 · THE RIVER", bg:"scene06.jpg",
+    text:"Jack reaches the river [at] midday.", answer:"at" },
+  { scene:6, label:"SCENE 6 · THE RIVER", bg:"scene06.jpg",
+    text:"He sits [on] a small boat [on] the water.", answer1:"on", answer2:"on", text2:true },
+  { scene:6, label:"SCENE 6 · THE RIVER", bg:"scene06.jpg",
+    text:"The sun burns very hot [at] noon.", answer:"at" },
+
+  // SCENE 7 — THE CHASE
+  { scene:7, label:"SCENE 7 · THE CHASE", bg:"scene07.jpg",
+    text:"[In] the afternoon warriors appear [in] the forest.", answer1:"in", answer2:"in", text2:true },
+  { scene:7, label:"SCENE 7 · THE CHASE", bg:"scene07.jpg",
+    text:"Jack runs [on] the jungle path.", answer:"on" },
+  { scene:7, label:"SCENE 7 · THE CHASE", bg:"scene07.jpg",
+    text:"Drums beat loudly [in] the distance.", answer:"in" },
+
+  // SCENE 8 — THE CAVE
+  { scene:8, label:"SCENE 8 · THE CAVE", bg:"scene08.jpg",
+    text:"[At] sunset Jack hides [in] a cave.", answer1:"at", answer2:"in", text2:true },
+  { scene:8, label:"SCENE 8 · THE CAVE", bg:"scene08.jpg",
+    text:"He sits quietly [in] the darkness.", answer:"in" },
+  { scene:8, label:"SCENE 8 · THE CAVE", bg:"scene08.jpg",
+    text:"A huge snake hangs [on] the cave wall.", answer:"on" },
+
+  // SCENE 9 — THE TEMPLE
+  { scene:9, label:"SCENE 9 · THE TEMPLE", bg:"scene09.jpg",
+    text:"[In] the morning [on] Wednesday Jack sees the temple.", answer1:"in", answer2:"on", text2:true },
+  { scene:9, label:"SCENE 9 · THE TEMPLE", bg:"scene09.jpg",
+    text:"It stands [on] a high cliff.", answer:"on" },
+  { scene:9, label:"SCENE 9 · THE TEMPLE", bg:"scene09.jpg",
+    text:"Ancient fire burns [at] the entrance.", answer:"at" },
+
+  // SCENE 10 — INSIDE THE TEMPLE
+  { scene:10, label:"SCENE 10 · INSIDE THE TEMPLE", bg:"scene10.jpg",
+    text:"Jack enters the temple [at] midday.", answer:"at" },
+  { scene:10, label:"SCENE 10 · INSIDE THE TEMPLE", bg:"scene10.jpg",
+    text:"Gold sits [on] stone altars.", answer:"on" },
+  { scene:10, label:"SCENE 10 · INSIDE THE TEMPLE", bg:"scene10.jpg",
+    text:"A golden statue stands [on] a black pedestal [in] the centre.", answer1:"on", answer2:"in", text2:true },
+
+  // SCENE 11 — THE ESCAPE
+  { scene:11, label:"SCENE 11 · THE ESCAPE", bg:"scene11.jpg",
+    text:"[At] six o'clock [in] the evening Jack grabs the statue.", answer1:"at", answer2:"in", text2:true },
+  { scene:11, label:"SCENE 11 · THE ESCAPE", bg:"scene11.jpg",
+    text:"He runs [on] the stone stairs.", answer:"on" },
+  { scene:11, label:"SCENE 11 · THE ESCAPE", bg:"scene11.jpg",
+    text:"Jack escapes [in] a secret tunnel.", answer:"in" },
+
+  // SCENE 12 — FREEDOM
+  { scene:12, label:"SCENE 12 · FREEDOM!", bg:"scene12.jpg",
+    text:"[At] midnight Jack boards the plane.", answer:"at" },
+  { scene:12, label:"SCENE 12 · FREEDOM!", bg:"scene12.jpg",
+    text:"[In] the sky he looks down [at] the jungle.", answer1:"in", answer2:"at", text2:true },
+  { scene:12, label:"SCENE 12 · FREEDOM!", bg:"scene12.jpg",
+    text:"[At] dawn [on] Thursday — Jack is safe!", answer1:"at", answer2:"on", text2:true }
 ];
 
-// Gap counts per scene for scene transitions
-const gapsPerScene = SCENES.map(s=>(s.text.match(/\[[^\]]+\]/g)||[]).length);
-const cumGaps = [];
-let cc=0;
-gapsPerScene.forEach(g=>{cumGaps.push(cc);cc+=g;});
-
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // STATE
-// ═══════════════════════════════════════════════
-let score=0, totalGaps=0, curGap=0, curScene=0;
-let scrollX=0, gameOn=false, rafId=null;
-let selectedWord=null;
+// ═══════════════════════════════════════════
+let sentIdx = 0;      // current sentence index
+let gapIdx = 0;       // which gap within sentence (0 or 1)
+let score = 0;
+let totalGaps = 0;
+let gameOn = false;
+let selectedWord = null;
 
-const SPD_NORMAL = 0.55;
-const SPD_SLOW   = 0.1;
-const STOP_PX    = 50;
-const SLOW_PX    = 200;
+// Count total gaps
+function countTotalGaps(){
+  let n = 0;
+  ALL_SENTENCES.forEach(s => { n += s.text2 ? 2 : 1; });
+  return n;
+}
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // START / RESTART
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function startGame(){
-  score=0;curGap=0;curScene=0;scrollX=0;
-  gameOn=true;selectedWord=null;
-
-  showScreen('game-screen');
-  buildChest();
-
-  const content=document.getElementById('story-content');
-  content.innerHTML=buildStoryHTML();
-  totalGaps=document.querySelectorAll('.gap-slot').length;
-  document.getElementById('total-val').textContent=totalGaps;
-  document.getElementById('final-total').textContent=totalGaps;
-
-  addGapListeners();
-  setScene(0);
+  sentIdx=0; gapIdx=0; score=0; gameOn=true; selectedWord=null;
+  totalGaps = countTotalGaps();
+  document.getElementById('total-val').textContent = totalGaps;
+  document.getElementById('final-total').textContent = totalGaps;
   updateHUD();
-  clearHint();
-
-  document.getElementById('scroll-track').style.transform='translateX(0px)';
-  if(rafId) cancelAnimationFrame(rafId);
-  rafId=requestAnimationFrame(scrollLoop);
+  buildChests();
+  showScreen('game-screen');
+  loadSentence();
 }
 
 function restartGame(){
   gameOn=false;
-  if(rafId){cancelAnimationFrame(rafId);rafId=null;}
   document.getElementById('wrong-overlay').classList.remove('show');
   stopFW();
-  clearHint();
-  setTimeout(startGame,80);
+  clearSelected();
+  setTimeout(startGame, 80);
 }
 
 function showScreen(id){
@@ -540,216 +455,224 @@ function showScreen(id){
   document.getElementById(id).classList.add('active');
 }
 
-// ═══════════════════════════════════════════════
-// BUILD STORY HTML
-// ═══════════════════════════════════════════════
-function buildStoryHTML(){
-  let html='',gIdx=0;
-  SCENES.forEach((sc,si)=>{
-    if(si>0) html+='<span class="scene-div"> ✦ </span>';
-    sc.text.split(/\[([^\]]+)\]/).forEach((p,pi)=>{
-      if(pi%2===0){if(p) html+=`<span>${p}</span>`;}
-      else{
-        html+=`<span class="gap-slot" id="gap-${gIdx}" data-answer="${p.toLowerCase()}" data-idx="${gIdx}"></span>`;
-        gIdx++;
+// ═══════════════════════════════════════════
+// LOAD SENTENCE
+// ═══════════════════════════════════════════
+function loadSentence(){
+  if(sentIdx >= ALL_SENTENCES.length){
+    // WIN
+    gameOn=false;
+    bigFW();
+    setTimeout(()=>{
+      stopFW();
+      document.getElementById('final-score').textContent = score;
+      showScreen('end-screen');
+    }, 3500);
+    return;
+  }
+
+  const s = ALL_SENTENCES[sentIdx];
+  gapIdx = 0;
+  clearSelected();
+  clearFeedback();
+
+  // Update scene
+  document.getElementById('scene-bg').style.backgroundImage = `url('${s.bg}')`;
+  document.getElementById('scene-lbl').textContent = s.label;
+
+  // Build sentence HTML
+  renderSentence(s);
+}
+
+function renderSentence(s){
+  const wrap = document.getElementById('sentence-wrap');
+  wrap.innerHTML = '';
+
+  if(!s.text2){
+    // Single gap sentence
+    const parts = s.text.split(/\[([^\]]+)\]/);
+    parts.forEach((p, pi) => {
+      if(pi % 2 === 0){
+        if(p){
+          const sp = document.createElement('span');
+          sp.className='word-part';
+          sp.textContent=p;
+          wrap.appendChild(sp);
+        }
+      } else {
+        const gap = document.createElement('span');
+        gap.className='gap-inline';
+        gap.id='gap-0';
+        gap.dataset.answer = s.answer;
+        gap.addEventListener('click', ()=>tryFill(gap, 0));
+        gap.addEventListener('touchend', e=>{e.preventDefault();tryFill(gap,0);},{passive:false});
+        wrap.appendChild(gap);
       }
     });
-  });
-  return html;
-}
-
-// ═══════════════════════════════════════════════
-// TREASURE CHEST GEMS
-// ═══════════════════════════════════════════════
-const GEMS=[
-  {word:'AT', c1:'#c0392b', c2:'#922b21', label:'TIME / PLACE'},
-  {word:'IN', c1:'#1e8449', c2:'#145a32', label:'TIME / PLACE'},
-  {word:'ON', c1:'#1a5276', c2:'#154360', label:'TIME / PLACE'}
-];
-
-function buildChest(){
-  const body=document.getElementById('chest-body');
-  body.innerHTML='';
-  GEMS.forEach(({word,c1,c2,label})=>{
-    const div=document.createElement('div');
-    div.className='prep-gem';
-    div.dataset.word=word.toLowerCase();
-    div.innerHTML=`
-      <div class="gem-stone" style="background:radial-gradient(circle at 35% 30%,${c1},${c2})">${word}</div>
-      <div class="gem-label">${label}</div>`;
-    div.addEventListener('click',()=>selectGem(word.toLowerCase(),div));
-    div.addEventListener('touchend',e=>{e.preventDefault();selectGem(word.toLowerCase(),div);},{passive:false});
-    body.appendChild(div);
-  });
-}
-
-function selectGem(word,el){
-  if(!gameOn) return;
-  document.querySelectorAll('.prep-gem').forEach(g=>g.classList.remove('selected'));
-  if(selectedWord===word){
-    selectedWord=null;
-    clearHint();
   } else {
-    selectedWord=word;
-    el.classList.add('selected');
-    showHint(`"${word.toUpperCase()}" selected — tap ··· in the story`);
-    highlightCurrentGap();
+    // Two gap sentence
+    let gCount = 0;
+    const parts = s.text.split(/\[([^\]]+)\]/);
+    parts.forEach((p, pi) => {
+      if(pi % 2 === 0){
+        if(p){
+          const sp = document.createElement('span');
+          sp.className='word-part';sp.textContent=p;
+          wrap.appendChild(sp);
+        }
+      } else {
+        const gi = gCount;
+        const gap = document.createElement('span');
+        gap.className='gap-inline';
+        gap.id=`gap-${gi}`;
+        gap.dataset.answer = gi===0 ? s.answer1 : s.answer2;
+        gap.addEventListener('click', ()=>tryFill(gap, gi));
+        gap.addEventListener('touchend', e=>{e.preventDefault();tryFill(gap,gi);},{passive:false});
+        wrap.appendChild(gap);
+        gCount++;
+      }
+    });
   }
+
+  // Highlight first gap
+  highlightGap(0);
 }
 
-function showHint(msg){
-  const h=document.getElementById('sel-hint');
-  h.textContent=msg;h.style.display='block';
-}
-function clearHint(){
-  const h=document.getElementById('sel-hint');
-  if(h) h.style.display='none';
-  document.querySelectorAll('.prep-gem').forEach(g=>g.classList.remove('selected'));
-  document.querySelectorAll('.gap-slot').forEach(s=>s.classList.remove('ready'));
-  selectedWord=null;
-}
-function highlightCurrentGap(){
-  document.querySelectorAll('.gap-slot').forEach(s=>s.classList.remove('ready'));
-  const g=document.getElementById(`gap-${curGap}`);
+function highlightGap(idx){
+  document.querySelectorAll('.gap-inline').forEach(g=>g.classList.remove('ready'));
+  const g = document.getElementById(`gap-${idx}`);
   if(g&&!g.classList.contains('correct')) g.classList.add('ready');
 }
 
-// ═══════════════════════════════════════════════
-// GAP LISTENERS
-// ═══════════════════════════════════════════════
-function addGapListeners(){
-  document.querySelectorAll('.gap-slot').forEach(slot=>{
-    slot.addEventListener('click',()=>tryFill(slot));
-    slot.addEventListener('touchend',e=>{e.preventDefault();tryFill(slot);},{passive:false});
+// ═══════════════════════════════════════════
+// CHEST SELECTION
+// ═══════════════════════════════════════════
+const CHEST_DATA = [
+  {word:'AT', c1:'#c0392b', c2:'#7b241c', hint:'time & place'},
+  {word:'IN', c1:'#1e8449', c2:'#145a32', hint:'time & place'},
+  {word:'ON', c1:'#1a5276', c2:'#154360', hint:'time & place'}
+];
+
+function buildChests(){
+  const row = document.getElementById('chests-row');
+  row.innerHTML='';
+  CHEST_DATA.forEach(({word,c1,c2,hint})=>{
+    const div = document.createElement('div');
+    div.className='chest';
+    div.dataset.word=word.toLowerCase();
+    div.innerHTML=`
+      <div class="chest-lid-wrap">📦</div>
+      <div class="chest-body-wrap">
+        <div class="chest-word" style="color:#fff;text-shadow:1px 1px 3px rgba(0,0,0,0.8);background:radial-gradient(circle at 40% 35%,${c1},${c2});width:clamp(44px,11vw,64px);height:clamp(44px,11vw,64px);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:inset -3px -3px 8px rgba(0,0,0,0.4),0 2px 6px rgba(0,0,0,0.4)">${word}</div>
+        <div class="chest-hint">${hint}</div>
+      </div>`;
+    div.addEventListener('click', ()=>selectChest(word.toLowerCase(), div));
+    div.addEventListener('touchend', e=>{e.preventDefault();selectChest(word.toLowerCase(),div);},{passive:false});
+    row.appendChild(div);
   });
 }
 
-function tryFill(slot){
+function selectChest(word, el){
   if(!gameOn) return;
-  if(slot.classList.contains('correct')) return;
+  document.querySelectorAll('.chest').forEach(c=>c.classList.remove('selected'));
+  if(selectedWord===word){
+    selectedWord=null;
+    clearFeedback();
+  } else {
+    selectedWord=word;
+    el.classList.add('selected');
+    setFeedback(`"${word.toUpperCase()}" selected — now tap · · ·`);
+    highlightGap(gapIdx);
+  }
+}
+
+function clearSelected(){
+  selectedWord=null;
+  document.querySelectorAll('.chest').forEach(c=>c.classList.remove('selected'));
+  document.querySelectorAll('.gap-inline').forEach(g=>g.classList.remove('ready'));
+}
+
+// ═══════════════════════════════════════════
+// TRY FILL GAP
+// ═══════════════════════════════════════════
+function tryFill(gap, idx){
+  if(!gameOn) return;
+  if(gap.classList.contains('correct')) return;
+  if(idx !== gapIdx) return; // must fill in order
+
   if(!selectedWord){
-    showHint('👆 Tap a gem first!');
-    setTimeout(()=>{
-      const h=document.getElementById('sel-hint');
-      if(h.textContent==='👆 Tap a gem first!') h.style.display='none';
-    },1500);
+    setFeedback('👆 Tap a chest first!');
+    setTimeout(clearFeedback, 1500);
     return;
   }
-  handleAnswer(slot,selectedWord);
-}
 
-// ═══════════════════════════════════════════════
-// ANSWER HANDLER
-// ═══════════════════════════════════════════════
-function handleAnswer(slot,word){
-  if(!gameOn) return;
-  const given=word.toLowerCase().trim();
-  const correct=slot.dataset.answer.toLowerCase().trim();
+  const given = selectedWord.toLowerCase();
+  const correct = gap.dataset.answer.toLowerCase();
 
-  if(given===correct){
-    slot.classList.remove('ready','wrong-flash');
-    slot.classList.add('correct');
-    slot.textContent=given.toUpperCase();
-    slot.style.cssText=''; // clear dot styles
-    slot.style.color='#90ff90';
-    slot.style.borderBottom='2px solid #50c850';
-    slot.style.fontFamily="'Bangers',cursive";
-    slot.style.fontSize='clamp(0.9rem,3.5vw,1.1rem)';
-    slot.style.letterSpacing='2px';
-    slot.style.cursor='default';
-    slot.style.minWidth='clamp(45px,11vw,72px)';
-    slot.style.height='clamp(28px,6vw,38px)';
-    slot.style.display='inline-flex';
-    slot.style.alignItems='center';
-    slot.style.justifyContent='center';
-    slot.style.margin='0 4px';
-    slot.style.padding='0 4px';
-
-    score++;curGap++;
-    clearHint();
+  if(given === correct){
+    // CORRECT
+    gap.classList.remove('ready','wrong-flash');
+    gap.classList.add('correct');
+    gap.textContent = given.toUpperCase();
+    score++;
     updateHUD();
-    miniFirework();
+    clearSelected();
 
-    // Scene change check
-    for(let i=SCENES.length-1;i>=0;i--){
-      if(curGap>cumGaps[i]){
-        if(i!==curScene){curScene=i;setScene(curScene);}
-        break;
-      }
-    }
+    const s = ALL_SENTENCES[sentIdx];
+    const totalInSentence = s.text2 ? 2 : 1;
 
-    if(curGap>=totalGaps){
-      gameOn=false;
-      setTimeout(()=>{
-        bigFW();
-        setTimeout(()=>{
-          stopFW();
-          document.getElementById('final-score').textContent=score;
-          showScreen('end-screen');
-        },3500);
-      },400);
+    if(gapIdx + 1 < totalInSentence){
+      // More gaps in this sentence
+      gapIdx++;
+      highlightGap(gapIdx);
+      setFeedback('✓ Correct! Now fill the next gap.');
+      setTimeout(clearFeedback, 1200);
     } else {
-      highlightCurrentGap();
+      // Sentence complete — mini firework then next sentence
+      miniFirework();
+      showCorrectFlash();
+      setFeedback('✓ Excellent!');
+      setTimeout(()=>{
+        sentIdx++;
+        loadSentence();
+      }, 1000);
     }
   } else {
-    slot.classList.add('wrong-flash');
+    // WRONG
+    gap.classList.add('wrong-flash');
     document.getElementById('wrong-overlay').classList.add('show');
     gameOn=false;
-    if(rafId){cancelAnimationFrame(rafId);rafId=null;}
-    setTimeout(()=>restartGame(),2200);
+    setTimeout(()=>restartGame(), 2200);
   }
 }
 
-// ═══════════════════════════════════════════════
-// SCENE
-// ═══════════════════════════════════════════════
-function setScene(idx){
-  if(idx>=SCENES.length) return;
-  document.getElementById('scene-img').style.backgroundImage=`url('${SCENES[idx].bg}')`;
+// ═══════════════════════════════════════════
+// FEEDBACK
+// ═══════════════════════════════════════════
+function setFeedback(msg){
+  document.getElementById('feedback').textContent=msg;
+}
+function clearFeedback(){
+  document.getElementById('feedback').textContent='';
+}
+function showCorrectFlash(){
+  const f=document.getElementById('correct-flash');
+  f.classList.add('show');
+  setTimeout(()=>f.classList.remove('show'),400);
 }
 
-// ═══════════════════════════════════════════════
-// SCROLL LOOP
-// ═══════════════════════════════════════════════
-function scrollLoop(){
-  if(!gameOn) return;
-
-  const track=document.getElementById('scroll-track');
-  const overlay=document.getElementById('story-overlay');
-  const ow=overlay.offsetWidth;
-  const content=document.getElementById('story-content');
-  const cx=ow*0.38;
-
-  const g=document.getElementById(`gap-${curGap}`);
-  let spd=SPD_NORMAL;
-
-  if(g&&!g.classList.contains('correct')){
-    const gr=g.getBoundingClientRect();
-    const or=overlay.getBoundingClientRect();
-    const gx=gr.left-or.left;
-    if(gx<=cx+STOP_PX&&gx>=-gr.width) spd=0;
-    else if(gx<=cx+SLOW_PX) spd=SPD_SLOW;
-  }
-
-  scrollX-=spd;
-  const total=content.scrollWidth+ow;
-  if(Math.abs(scrollX)>total) scrollX=0;
-  track.style.transform=`translateX(${scrollX}px)`;
-  rafId=requestAnimationFrame(scrollLoop);
-}
-
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // HUD
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function updateHUD(){
   document.getElementById('score-val').textContent=score;
   if(totalGaps>0)
     document.getElementById('prog-bar').style.width=(score/totalGaps*100)+'%';
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // FIREWORKS
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 const fwc=document.getElementById('fw-canvas');
 const fc=fwc.getContext('2d');
 let parts=[],fwOn=false,fwR=null;
@@ -760,9 +683,7 @@ function burst(x,y,n){
   const cols=['#FFD700','#FF6B6B','#4ECDC4','#96CEB4','#DDA0DD','#98FB98','#FF69B4'];
   for(let i=0;i<n;i++){
     const a=(Math.PI*2/n)*i,s=3+Math.random()*5;
-    parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,
-      color:cols[Math.floor(Math.random()*cols.length)],
-      life:1,decay:0.022+Math.random()*0.018,size:2+Math.random()*3});
+    parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,color:cols[i%cols.length],life:1,decay:0.022+Math.random()*0.018,size:2+Math.random()*3});
   }
 }
 function animFW(){
@@ -771,26 +692,21 @@ function animFW(){
   parts.forEach(p=>{
     p.x+=p.vx;p.y+=p.vy;p.vy+=0.1;p.life-=p.decay;
     fc.beginPath();fc.arc(p.x,p.y,p.size*p.life,0,Math.PI*2);
-    fc.fillStyle=p.color;fc.shadowColor=p.color;fc.shadowBlur=5;
-    fc.fill();fc.shadowBlur=0;
+    fc.fillStyle=p.color;fc.shadowColor=p.color;fc.shadowBlur=5;fc.fill();fc.shadowBlur=0;
   });
   if(fwOn||parts.length>0) fwR=requestAnimationFrame(animFW);
   else{fwc.style.display='none';fwR=null;}
 }
 function miniFirework(){
   fwc.style.display='block';fwOn=true;
-  const or=document.getElementById('story-overlay').getBoundingClientRect();
-  burst(innerWidth*0.5+(Math.random()-0.5)*180,or.top-20+(Math.random()-0.5)*25,16);
+  burst(innerWidth*0.5+(Math.random()-0.5)*200,innerHeight*0.6+(Math.random()-0.5)*60,18);
   if(!fwR) animFW();
-  setTimeout(()=>{fwOn=false;},450);
+  setTimeout(()=>{fwOn=false;},500);
 }
 function bigFW(){
   fwc.style.display='block';fwOn=true;
   let n=0;
-  const iv=setInterval(()=>{
-    burst(Math.random()*fwc.width,Math.random()*fwc.height*0.65,50);
-    if(++n>=6) clearInterval(iv);
-  },350);
+  const iv=setInterval(()=>{burst(Math.random()*fwc.width,Math.random()*fwc.height*0.65,50);if(++n>=6)clearInterval(iv);},350);
   if(!fwR) animFW();
 }
 function stopFW(){
