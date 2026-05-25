@@ -230,195 +230,37 @@ body {
   z-index: 1;
 }
 
-/* ─────────────────────────────────────
-   TREASURE CHESTS
-   Three open pirate chests overlaid on the image
-   Each chest = gold rays + spilling coins + open lid + glowing interior + wooden body + preposition word
-───────────────────────────────────── */
-#chests {
-  position: relative;
-  z-index: 40;
-  width: 100%;
-  flex-shrink: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-around;
-  padding: 0 1rem 0.25rem;
-}
-
 .chest {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: clamp(78px, 21vw, 100px);
+  width: clamp(88px,25vw,110px);
   cursor: grab;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
   position: relative;
 }
-
-/* Gold rays beaming upward from open chest */
-.chest-rays {
-  width: 150%;
-  height: clamp(16px, 4.5vw, 24px);
-  position: relative;
-  z-index: 1;
-  background: radial-gradient(
-    ellipse at center bottom,
-    rgba(255,235,40,0.95) 0%,
-    rgba(255,180,0,0.55) 45%,
-    rgba(255,120,0,0.15) 75%,
-    transparent 100%
-  );
-  filter: blur(2px);
-  margin-bottom: -8px;
-  pointer-events: none;
-}
-
-/* Coins and jewels spilling over the top */
-.chest-spill {
-  font-size: clamp(0.68rem, 2.3vw, 0.92rem);
-  line-height: 1;
-  text-align: center;
-  letter-spacing: -1px;
-  position: relative;
-  z-index: 5;
-  margin-bottom: -5px;
-  filter: drop-shadow(0 -2px 5px rgba(255,210,0,0.85));
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-/* Open lid — leaning back, showing gold inner face */
-.chest-lid {
-  width: 110%;
-  height: clamp(13px, 3.8vw, 19px);
-  position: relative;
-  z-index: 4;
-  /* Open lid leans back — rotated to look open */
-  transform: perspective(55px) rotateX(20deg);
-  transform-origin: bottom center;
-  border-radius: 4px 4px 0 0;
-  overflow: hidden;
-  box-shadow: 0 -4px 10px rgba(255,175,0,0.35);
-}
-/* Wood grain on lid */
-.chest-lid::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0,0,0,0.12) 0px,
-      rgba(0,0,0,0.12) 1px,
-      transparent 1px,
-      transparent 11px
-    ),
-    linear-gradient(180deg, #B8720E, #D49820, #8A5008, #C07818, #7A4A06);
-}
-/* Gold band on lid */
-.chest-lid::after {
-  content: '';
-  position: absolute;
-  top: 42%;
-  left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #C8920A, #FFD700, #C8920A);
-}
-
-/* Gold glow strip — the glowing interior peeking out */
-.chest-glow {
+.chest-img {
   width: 100%;
-  height: clamp(8px, 2.2vw, 13px);
-  position: relative;
-  z-index: 3;
-  background: linear-gradient(
-    180deg,
-    rgba(255,230,40,1.0) 0%,
-    rgba(255,175,0,0.75) 50%,
-    rgba(200,100,0,0.2) 100%
-  );
-  box-shadow: 0 0 10px rgba(255,210,0,0.6);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
   pointer-events: none;
 }
-
-/* Wooden body of chest */
-.chest-body {
-  width: 100%;
-  height: clamp(32px, 8.5vw, 46px);
-  position: relative;
-  z-index: 2;
-  border-radius: 0 0 5px 5px;
-  overflow: hidden;
-  box-shadow: 0 5px 14px rgba(0,0,0,0.78);
-}
-/* Wood grain on body */
-.chest-body::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0,0,0,0.11) 0px,
-      rgba(0,0,0,0.11) 1px,
-      transparent 1px,
-      transparent 9px
-    ),
-    linear-gradient(180deg, #7C4C10, #4E2E06, #6A3A0C, #4A2A04, #7C4C10);
-}
-/* Top gold band */
-.chest-body::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #A07010, #FFD700, #A07010);
-  z-index: 1;
-}
-/* Middle gold band */
-.chest-mid-band {
-  position: absolute;
-  top: 42%;
-  left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #A07010, #E8B828, #A07010);
-  z-index: 2;
-  pointer-events: none;
-}
-/* Gold clasp in centre */
-.chest-clasp {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 13px;
-  height: 9px;
-  background: linear-gradient(180deg, #FFD700, #B8860B, #FFD700);
-  border-radius: 2px;
-  border: 1px solid #7a5500;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.55);
-  z-index: 3;
-  pointer-events: none;
-}
-
-/* The preposition word label on the front of the chest */
 .chest-word {
   font-family: 'Bangers', cursive;
-  font-size: clamp(1rem, 4.2vw, 1.35rem);
+  font-size: clamp(1.1rem,4.5vw,1.5rem);
   letter-spacing: 2px;
   font-weight: 900;
-  text-shadow: 2px 2px 5px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.85);
-  margin-top: 4px;
+  color: #FFD700;
+  text-shadow: 2px 2px 0 #000, 0 0 12px rgba(0,0,0,0.9);
+  margin-top: 2px;
   position: relative;
   z-index: 10;
   pointer-events: none;
 }
-
-/* Chest glows gold when selected */
 .chest.selected {
-  filter: drop-shadow(0 0 10px #FFD700) brightness(1.22);
+  filter: drop-shadow(0 0 14px #FFD700) brightness(1.2);
 }
 
 /* ─────────────────────────────────────
@@ -636,10 +478,10 @@ body {
     <div class="hud-title">🗺️ JACK'S QUEST</div>
     <div class="hud-score">⭐ <span id="score-display">0</span>/<span id="total-display">0</span></div>
     <div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">
-      <span style="font-family:'Bangers',cursive;color:#FFD700;font-size:0.65rem;">🐢</span>
-      <input type="range" id="speed-slider" min="0.5" max="8" step="0.5" value="2.5"
-        style="width:clamp(50px,11vw,80px);accent-color:#FFD700;cursor:pointer;">
-      <span style="font-family:'Bangers',cursive;color:#FFD700;font-size:0.65rem;">🐇</span>
+      <span style="font-size:0.7rem;">🐢</span>
+      <input type="range" id="spd" min="0.5" max="8" step="0.5" value="2.5"
+        style="width:clamp(50px,11vw,80px);accent-color:#FFD700;">
+      <span style="font-size:0.7rem;">🐇</span>
     </div>
     <button class="btn-restart" onclick="restartGame()">↩ RESTART</button>
   </div>
@@ -653,50 +495,21 @@ body {
   <!-- Flexible space — image shows through here -->
   <div id="scene-space"></div>
 
-  <!-- Three treasure chests -->
+  <!-- Three treasure chests using chest.png -->
   <div id="chests">
-
-    <!-- AT chest -->
     <div class="chest" id="chest-at" data-word="at">
-      <div class="chest-rays"></div>
-      <div class="chest-spill">🪙💎💍🪙💎</div>
-      <div class="chest-lid"></div>
-      <div class="chest-glow"></div>
-      <div class="chest-body" style="position:relative;">
-        <div class="chest-mid-band"></div>
-        <div class="chest-clasp"></div>
-      </div>
-      <div class="chest-word" style="color:#ffdd99;">AT</div>
+      <img class="chest-img" src="chest.png" alt="chest">
+      <div class="chest-word">AT</div>
     </div>
-
-    <!-- IN chest -->
     <div class="chest" id="chest-in" data-word="in">
-      <div class="chest-rays"></div>
-      <div class="chest-spill">💎🪙💍💎🪙</div>
-      <div class="chest-lid"></div>
-      <div class="chest-glow"></div>
-      <div class="chest-body" style="position:relative;">
-        <div class="chest-mid-band"></div>
-        <div class="chest-clasp"></div>
-      </div>
-      <div class="chest-word" style="color:#99ffbb;">IN</div>
+      <img class="chest-img" src="chest.png" alt="chest">
+      <div class="chest-word">IN</div>
     </div>
-
-    <!-- ON chest -->
     <div class="chest" id="chest-on" data-word="on">
-      <div class="chest-rays"></div>
-      <div class="chest-spill">💍🪙💎💍🪙</div>
-      <div class="chest-lid"></div>
-      <div class="chest-glow"></div>
-      <div class="chest-body" style="position:relative;">
-        <div class="chest-mid-band"></div>
-        <div class="chest-clasp"></div>
-      </div>
-      <div class="chest-word" style="color:#99bbff;">ON</div>
+      <img class="chest-img" src="chest.png" alt="chest">
+      <div class="chest-word">ON</div>
     </div>
-
-  </div><!-- end #chests -->
-
+  </div>
   <!-- Scrolling story strip -->
   <div id="story-strip">
     <div id="scroll-track">
@@ -1150,7 +963,7 @@ function scrollLoop() {
   const centreX = stripW * 0.38;
 
   const currentGapEl = document.getElementById(`gap-${currentGap}`);
-  let speed = parseFloat(document.getElementById('speed-slider').value) || SCROLL_SPEED;
+  let speed = parseFloat(document.getElementById('spd').value)||SCROLL_SPEED;
 
   if (currentGapEl && !currentGapEl.classList.contains('correct')) {
     const gapRect   = currentGapEl.getBoundingClientRect();
