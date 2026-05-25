@@ -6,527 +6,1259 @@
 <title>Jack & The Temple of Shadows</title>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;position:fixed;}
-body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
-.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;}
-.screen.active{display:flex;}
 
-/* ══ TITLE ══ */
-#title-screen{
-  background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
-    url('scene01.jpg') center/cover no-repeat;
-  gap:0.8rem;padding:1.5rem;text-align:center;
+/* ─────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
-.t-title{font-family:'Bangers',cursive;font-size:clamp(1.8rem,7vw,3rem);
-  color:#FFD700;text-shadow:2px 2px 0 #5a3800;letter-spacing:2px;line-height:1.1;}
-.t-sub{font-family:'Bangers',cursive;font-size:clamp(0.8rem,3vw,1.2rem);color:#90ee90;letter-spacing:3px;}
-.t-pills{display:flex;gap:0.5rem;justify-content:center;}
-.pill{background:rgba(255,215,0,0.15);border:2px solid #FFD700;border-radius:40px;
-  padding:0.2rem 0.8rem;font-family:'Bangers',cursive;font-size:clamp(1rem,3.5vw,1.3rem);
-  color:#FFD700;letter-spacing:2px;}
-.t-hint{color:#ddd;font-size:clamp(0.75rem,2.5vw,0.9rem);max-width:280px;line-height:1.5;
-  text-align:center;background:rgba(0,0,0,0.6);padding:0.4rem 0.7rem;border-radius:8px;}
-.go-btn{background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;
-  font-family:'Bangers',cursive;font-size:clamp(1rem,3.5vw,1.5rem);letter-spacing:2px;
-  border:none;padding:0.6rem 2rem;border-radius:40px;cursor:pointer;box-shadow:0 4px 0 #8B6914;}
-.go-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #8B6914;}
-
-/* ══ GAME SCREEN ══ */
-#game-screen{justify-content:flex-start;background:#000;}
-
-#bg{
-  position:fixed;inset:0;z-index:0;
-  background-size:cover;
-  background-position:center top;
-  background-repeat:no-repeat;
-  background-color:#1a3a1a;
-  transition:background-image 1s ease;
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  position: fixed;
+  top: 0; left: 0;
 }
-#bg::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,
-    rgba(0,0,0,0.15) 0%,
-    rgba(0,0,0,0) 35%,
-    rgba(0,0,0,0) 50%,
-    rgba(0,0,0,0.5) 72%,
-    rgba(0,0,0,0.88) 88%,
-    rgba(0,0,0,0.95) 100%);
+body {
+  font-family: 'Nunito', sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-/* ══ HUD ══ */
-#hud{
-  position:relative;z-index:30;width:100%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0.3rem 0.6rem;
-  background:rgba(0,0,0,0.8);
-  border-bottom:2px solid rgba(255,215,0,0.4);
-  gap:0.3rem;
+/* ─────────────────────────────────────
+   SCREEN SYSTEM
+   All screens hidden except .active
+───────────────────────────────────── */
+.screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-.h-title{font-family:'Bangers',cursive;color:#FFD700;
-  font-size:clamp(0.6rem,2.2vw,0.9rem);letter-spacing:2px;white-space:nowrap;}
-.h-score{font-family:'Bangers',cursive;color:#90ee90;
-  font-size:clamp(0.6rem,2.2vw,0.9rem);white-space:nowrap;}
-.h-btn{font-family:'Bangers',cursive;font-size:clamp(0.6rem,2vw,0.82rem);
-  background:rgba(180,0,0,0.9);color:#fff;border:none;border-radius:10px;
-  padding:0.18rem 0.5rem;cursor:pointer;white-space:nowrap;flex-shrink:0;}
-.h-btn:active{transform:scale(0.93);}
+.screen.active { display: flex; }
 
-#prog{position:relative;z-index:30;width:100%;height:3px;flex-shrink:0;
-  background:rgba(255,255,255,0.1);}
-#prog-bar{height:100%;background:linear-gradient(90deg,#FFD700,#FFA500);width:0%;transition:width 0.4s;}
-
-#scene-lbl{
-  position:relative;z-index:30;flex-shrink:0;
-  text-align:center;padding:0.12rem;
-  font-family:'Bangers',cursive;font-size:clamp(0.48rem,1.8vw,0.7rem);
-  color:rgba(255,215,0,0.8);letter-spacing:2px;
-  background:rgba(0,0,0,0.5);
+/* ─────────────────────────────────────
+   TITLE SCREEN
+───────────────────────────────────── */
+#title-screen {
+  background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+    url('scene01.jpg') center / cover no-repeat;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  text-align: center;
 }
-
-#mid{flex:1;min-height:0;position:relative;z-index:5;}
-
-/* ══ TREASURE CHESTS ══ */
-#chests{
-  position:relative;z-index:30;
-  width:100%;flex-shrink:0;
-  display:flex;align-items:flex-end;justify-content:space-around;
-  padding:0 0.8rem 0.2rem;
+.tt { /* title text */
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1.9rem, 7.5vw, 3.2rem);
+  color: #FFD700;
+  text-shadow: 3px 3px 0 #5a3800;
+  letter-spacing: 2px;
+  line-height: 1.1;
 }
-.chest-unit{
-  display:flex;flex-direction:column;align-items:center;
-  width:clamp(80px,22vw,105px);
-  cursor:grab;touch-action:none;
-  -webkit-tap-highlight-color:transparent;
-  position:relative;
+.ts { /* subtitle */
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.85rem, 3vw, 1.25rem);
+  color: #90ee90;
+  letter-spacing: 4px;
 }
-.c-glow{width:140%;height:20px;
-  background:radial-gradient(ellipse at center bottom,
-    rgba(255,230,40,0.95) 0%,
-    rgba(255,170,0,0.5) 50%,
-    transparent 100%);
-  filter:blur(3px);margin-bottom:-6px;position:relative;z-index:1;}
-.c-overflow{
-  font-size:clamp(0.7rem,2.5vw,0.95rem);line-height:1.1;text-align:center;
-  filter:drop-shadow(0 2px 5px rgba(255,200,0,0.9));letter-spacing:-1px;
-  position:relative;z-index:6;margin-bottom:-4px;white-space:nowrap;
+.tp { /* pills row */
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
 }
-.c-lid{
-  width:108%;height:clamp(14px,4vw,20px);
-  background:linear-gradient(180deg,#A06010 0%, #D4921A 25%, #8B5208 50%, #C07815 75%, #7A4A06 100%);
-  border:2px solid #C8920A;border-bottom:none;border-radius:4px 4px 0 0;
-  position:relative;z-index:5;
-  transform:perspective(50px) rotateX(18deg);
-  transform-origin:bottom center;
-  box-shadow:0 -3px 8px rgba(255,180,0,0.35);
+.pill {
+  background: rgba(255,215,0,0.12);
+  border: 2px solid #FFD700;
+  border-radius: 40px;
+  padding: 0.22rem 0.9rem;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1rem, 3.5vw, 1.35rem);
+  color: #FFD700;
+  letter-spacing: 2px;
 }
-.c-lid::after{content:'';position:absolute;top:42%;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,#C8920A,#FFD700,#C8920A);}
-.c-inner-glow{width:100%;height:10px;
-  background:linear-gradient(180deg,rgba(255,225,40,1),rgba(255,160,0,0.5),transparent);
-  position:relative;z-index:4;}
-.c-body{
-  width:100%;height:clamp(34px,9vw,48px);position:relative;z-index:3;
-  background:repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0px,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 9px),
-    linear-gradient(180deg,#7A4A0E 0%,#4E2E06 30%,#6A3A0C 55%,#4A2A04 80%,#7A4A0E 100%);
-  border:2px solid #C8920A;border-top:none;border-radius:0 0 5px 5px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.75);
+.th { /* hint box */
+  color: #ddd;
+  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+  max-width: 290px;
+  line-height: 1.55;
+  text-align: center;
+  background: rgba(0,0,0,0.62);
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
 }
-.c-body::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;
-  background:linear-gradient(90deg,#A07010,#FFD700,#A07010);}
-.c-body::after{content:'';position:absolute;top:40%;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,#A07010,#E8B828,#A07010);}
-.c-clasp{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:13px;height:9px;z-index:4;
-  background:linear-gradient(180deg,#FFD700,#B8860B,#FFD700);
-  border-radius:2px;border:1px solid #7a5500;box-shadow:0 1px 3px rgba(0,0,0,0.5);
+.btn-go {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a1a00;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1.05rem, 3.8vw, 1.6rem);
+  letter-spacing: 2px;
+  border: none;
+  padding: 0.65rem 2.2rem;
+  border-radius: 40px;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #8B6914;
+  transition: transform 0.1s, box-shadow 0.1s;
 }
-.prep-label{
-  font-family:'Bangers',cursive;font-size:clamp(0.95rem,4vw,1.3rem);
-  letter-spacing:2px;
-  text-shadow:2px 2px 5px rgba(0,0,0,1),0 0 10px rgba(0,0,0,0.8);
-  margin-top:3px;font-weight:900;
-  position:relative;z-index:10;pointer-events:none;
+.btn-go:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #8B6914;
 }
 
-/* ══ STORY STRIP ══ */
-#story{
-  position:relative;z-index:30;width:100%;flex-shrink:0;
-  height:clamp(44px,9.5vh,60px);overflow:hidden;
-  display:flex;align-items:center;
-  background:rgba(5,2,0,0.92);
-  border-top:1px solid rgba(160,100,10,0.4);
+/* ─────────────────────────────────────
+   GAME SCREEN LAYOUT
+   Vertical flex column:
+   [HUD] [progress] [scene-label] [image fills all remaining space] [chests] [story strip]
+───────────────────────────────────── */
+#game-screen {
+  justify-content: flex-start;
+  background: #000;
 }
-#track{display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;}
-#words{
-  display:inline-flex;align-items:center;
-  font-size:clamp(0.95rem,3.9vw,1.18rem);font-weight:800;color:#f5e8c0;
-  text-shadow:1px 1px 2px rgba(0,0,0,0.9);
-  padding:0 115vw 0 20px;line-height:1;gap:0;
-}
-.gap{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:clamp(42px,10vw,66px);height:clamp(24px,5.5vw,34px);
-  margin:0 4px;flex-shrink:0;
-  font-family:'Bangers',cursive;font-size:clamp(0.82rem,3.5vw,1.05rem);
-  letter-spacing:2px;cursor:pointer;transition:all 0.12s;
-  color:rgba(255,215,0,0.85);
-  border-bottom:2px dotted rgba(255,215,0,0.6);padding:0 4px;
-}
-.gap::before{content:'···';}
-.gap.active{border-bottom:2px solid #FFD700;color:#FFD700;animation:glow 0.9s ease-in-out infinite;}
-.gap.active::before{content:'___';}
-@keyframes glow{0%,100%{opacity:1}50%{opacity:0.35}}
-.gap.correct{color:#7fff7f;border-bottom:2px solid #50c850;cursor:default;animation:none;font-weight:800;}
-.gap.correct::before{content:'';}
-.gap.drop-ready{background:rgba(255,215,0,0.2);border-radius:4px;border-bottom:2px solid #FFD700;transform:scale(1.12);}
-.gap.wrong-flash{color:#ff5555;border-bottom:2px solid #e63232;animation:shk 0.4s ease;}
-@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.sdiv{display:inline-block;padding:0 1.5rem;color:rgba(255,215,0,0.25);font-size:0.7rem;}
 
-#clone{
-  position:fixed;z-index:9999;pointer-events:none;display:none;
-  font-family:'Bangers',cursive;font-size:clamp(1.4rem,6vw,2.2rem);
-  letter-spacing:2px;transform:translate(-50%,-50%) scale(1.3);
-  text-shadow:0 0 15px currentColor,1px 1px 3px rgba(0,0,0,0.9);
-  background:rgba(0,0,0,0.7);padding:0.2rem 0.6rem;
-  border-radius:8px;border:2px solid rgba(255,215,0,0.6);
+/* Full-screen background image — always behind everything */
+#bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  /* Cover the entire screen, anchor to top so scene starts at top */
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-color: #0d1a0d;
+  transition: background-image 1.2s ease;
 }
-#fw{position:fixed;inset:0;z-index:150;pointer-events:none;display:none;}
-#wrong{
-  position:fixed;inset:0;z-index:200;background:rgba(120,0,0,0.5);
-  display:none;align-items:center;justify-content:center;flex-direction:column;gap:0.6rem;
+/* Dark gradient overlay — bottom of image fades dark for readability */
+#bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.20) 0%,
+    rgba(0,0,0,0.00) 28%,
+    rgba(0,0,0,0.00) 52%,
+    rgba(0,0,0,0.55) 75%,
+    rgba(0,0,0,0.90) 90%,
+    rgba(0,0,0,0.96) 100%
+  );
 }
-#wrong.show{display:flex;animation:fR 0.3s ease;}
-@keyframes fR{0%{background:rgba(200,0,0,0.75)}100%{background:rgba(120,0,0,0.5)}}
-.wm{font-family:'Bangers',cursive;font-size:clamp(2rem,9vw,4rem);color:#ff5555;letter-spacing:4px;text-align:center;text-shadow:0 0 20px rgba(255,0,0,0.8);animation:pI 0.3s cubic-bezier(0.175,0.885,0.32,1.275);}
-@keyframes pI{0%{transform:scale(0)}100%{transform:scale(1)}}
-.ws{color:#ffcccc;font-size:clamp(0.85rem,3vw,1rem);font-weight:700;text-align:center;}
-.wr{color:#ffaaaa;font-size:clamp(0.68rem,2vw,0.82rem);}
-#end-screen{
-  background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
-    url('scene12.jpg') center/cover no-repeat;
-  gap:0.9rem;text-align:center;padding:1.5rem;
+
+/* ── HUD BAR ── */
+#hud {
+  position: relative;
+  z-index: 40;
+  width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem;
+  padding: 0.32rem 0.65rem;
+  background: rgba(0,0,0,0.82);
+  border-bottom: 2px solid rgba(255,215,0,0.45);
 }
-.et{font-family:'Bangers',cursive;font-size:clamp(1.8rem,7vw,3.5rem);color:#FFD700;text-shadow:3px 3px 0 #8B6914;letter-spacing:3px;}
-.es{font-family:'Bangers',cursive;font-size:clamp(1.2rem,4.5vw,2.2rem);color:#90ff90;}
-.em{color:#ddd;font-size:clamp(0.82rem,2.5vw,0.95rem);max-width:320px;line-height:1.5;background:rgba(0,0,0,0.55);padding:0.4rem 0.7rem;border-radius:8px;}
+.hud-title {
+  font-family: 'Bangers', cursive;
+  color: #FFD700;
+  font-size: clamp(0.62rem, 2.2vw, 0.92rem);
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+.hud-score {
+  font-family: 'Bangers', cursive;
+  color: #90ee90;
+  font-size: clamp(0.62rem, 2.2vw, 0.92rem);
+  white-space: nowrap;
+}
+.btn-restart {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.58rem, 1.8vw, 0.82rem);
+  background: rgba(180,0,0,0.92);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.2rem 0.52rem;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-restart:active { transform: scale(0.92); }
+
+/* ── PROGRESS BAR ── */
+#prog {
+  position: relative;
+  z-index: 40;
+  width: 100%;
+  height: 4px;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+}
+#prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  width: 0%;
+  transition: width 0.4s;
+}
+
+/* ── SCENE LABEL ── */
+#scene-lbl {
+  position: relative;
+  z-index: 40;
+  width: 100%;
+  flex-shrink: 0;
+  text-align: center;
+  padding: 0.14rem 0;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.48rem, 1.8vw, 0.72rem);
+  color: rgba(255,215,0,0.82);
+  letter-spacing: 2px;
+  background: rgba(0,0,0,0.52);
+}
+
+/* ── SCENE SPACE — flexible, image shows through here ── */
+#scene-space {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─────────────────────────────────────
+   TREASURE CHESTS
+   Three open pirate chests overlaid on the image
+   Each chest = gold rays + spilling coins + open lid + glowing interior + wooden body + preposition word
+───────────────────────────────────── */
+#chests {
+  position: relative;
+  z-index: 40;
+  width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 0 1rem 0.25rem;
+}
+
+.chest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: clamp(78px, 21vw, 100px);
+  cursor: grab;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+/* Gold rays beaming upward from open chest */
+.chest-rays {
+  width: 150%;
+  height: clamp(16px, 4.5vw, 24px);
+  position: relative;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse at center bottom,
+    rgba(255,235,40,0.95) 0%,
+    rgba(255,180,0,0.55) 45%,
+    rgba(255,120,0,0.15) 75%,
+    transparent 100%
+  );
+  filter: blur(2px);
+  margin-bottom: -8px;
+  pointer-events: none;
+}
+
+/* Coins and jewels spilling over the top */
+.chest-spill {
+  font-size: clamp(0.68rem, 2.3vw, 0.92rem);
+  line-height: 1;
+  text-align: center;
+  letter-spacing: -1px;
+  position: relative;
+  z-index: 5;
+  margin-bottom: -5px;
+  filter: drop-shadow(0 -2px 5px rgba(255,210,0,0.85));
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Open lid — leaning back, showing gold inner face */
+.chest-lid {
+  width: 110%;
+  height: clamp(13px, 3.8vw, 19px);
+  position: relative;
+  z-index: 4;
+  /* Open lid leans back — rotated to look open */
+  transform: perspective(55px) rotateX(20deg);
+  transform-origin: bottom center;
+  border-radius: 4px 4px 0 0;
+  overflow: hidden;
+  box-shadow: 0 -4px 10px rgba(255,175,0,0.35);
+}
+/* Wood grain on lid */
+.chest-lid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,0.12) 0px,
+      rgba(0,0,0,0.12) 1px,
+      transparent 1px,
+      transparent 11px
+    ),
+    linear-gradient(180deg, #B8720E, #D49820, #8A5008, #C07818, #7A4A06);
+}
+/* Gold band on lid */
+.chest-lid::after {
+  content: '';
+  position: absolute;
+  top: 42%;
+  left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #C8920A, #FFD700, #C8920A);
+}
+
+/* Gold glow strip — the glowing interior peeking out */
+.chest-glow {
+  width: 100%;
+  height: clamp(8px, 2.2vw, 13px);
+  position: relative;
+  z-index: 3;
+  background: linear-gradient(
+    180deg,
+    rgba(255,230,40,1.0) 0%,
+    rgba(255,175,0,0.75) 50%,
+    rgba(200,100,0,0.2) 100%
+  );
+  box-shadow: 0 0 10px rgba(255,210,0,0.6);
+  pointer-events: none;
+}
+
+/* Wooden body of chest */
+.chest-body {
+  width: 100%;
+  height: clamp(32px, 8.5vw, 46px);
+  position: relative;
+  z-index: 2;
+  border-radius: 0 0 5px 5px;
+  overflow: hidden;
+  box-shadow: 0 5px 14px rgba(0,0,0,0.78);
+}
+/* Wood grain on body */
+.chest-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,0.11) 0px,
+      rgba(0,0,0,0.11) 1px,
+      transparent 1px,
+      transparent 9px
+    ),
+    linear-gradient(180deg, #7C4C10, #4E2E06, #6A3A0C, #4A2A04, #7C4C10);
+}
+/* Top gold band */
+.chest-body::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #A07010, #FFD700, #A07010);
+  z-index: 1;
+}
+/* Middle gold band */
+.chest-mid-band {
+  position: absolute;
+  top: 42%;
+  left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #A07010, #E8B828, #A07010);
+  z-index: 2;
+  pointer-events: none;
+}
+/* Gold clasp in centre */
+.chest-clasp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 13px;
+  height: 9px;
+  background: linear-gradient(180deg, #FFD700, #B8860B, #FFD700);
+  border-radius: 2px;
+  border: 1px solid #7a5500;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.55);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* The preposition word label on the front of the chest */
+.chest-word {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1rem, 4.2vw, 1.35rem);
+  letter-spacing: 2px;
+  font-weight: 900;
+  text-shadow: 2px 2px 5px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.85);
+  margin-top: 4px;
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Chest glows gold when selected */
+.chest.selected {
+  filter: drop-shadow(0 0 10px #FFD700) brightness(1.22);
+}
+
+/* ─────────────────────────────────────
+   STORY STRIP
+   Thin dark bar at very bottom, story scrolls left
+───────────────────────────────────── */
+#story-strip {
+  position: relative;
+  z-index: 40;
+  width: 100%;
+  flex-shrink: 0;
+  height: clamp(46px, 10vh, 62px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: rgba(4,2,0,0.93);
+  border-top: 1px solid rgba(160,100,8,0.45);
+}
+#scroll-track {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  white-space: nowrap;
+  will-change: transform;
+}
+#story-words {
+  display: inline-flex;
+  align-items: center;
+  font-size: clamp(0.96rem, 4vw, 1.2rem);
+  font-weight: 800;
+  color: #f5e8c0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.9);
+  padding: 0 115vw 0 22px;
+  line-height: 1;
+  gap: 0;
+}
+
+/* Gap slots in the story — the drop targets */
+.gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: clamp(44px, 10.5vw, 68px);
+  height: clamp(25px, 5.8vw, 36px);
+  margin: 0 5px;
+  flex-shrink: 0;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.84rem, 3.5vw, 1.08rem);
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: transform 0.12s, background 0.12s;
+  color: rgba(255,215,0,0.88);
+  border-bottom: 2px dotted rgba(255,215,0,0.62);
+  padding: 0 4px;
+}
+.gap::before { content: '···'; }
+
+/* Active gap — the one the student should fill now */
+.gap.active {
+  border-bottom: 2px solid #FFD700;
+  color: #FFD700;
+  animation: gapPulse 0.95s ease-in-out infinite;
+}
+.gap.active::before { content: '___'; }
+@keyframes gapPulse { 0%,100%{opacity:1} 50%{opacity:0.38} }
+
+/* Correctly filled gap */
+.gap.correct {
+  color: #80ff80;
+  border-bottom: 2px solid #50c850;
+  cursor: default;
+  animation: none;
+  font-weight: 800;
+}
+.gap.correct::before { content: ''; }
+
+/* Gap highlighted when dragging over it */
+.gap.drag-over {
+  background: rgba(255,215,0,0.22);
+  border-radius: 4px;
+  border-bottom: 2px solid #FFD700;
+  transform: scale(1.12);
+}
+
+/* Wrong flash */
+.gap.wrong {
+  color: #ff5555;
+  border-bottom: 2px solid #e63232;
+  animation: wrongShake 0.42s ease;
+}
+@keyframes wrongShake {
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-5px)}
+  75%{transform:translateX(5px)}
+}
+
+/* Scene divider between scenes in the scrolling text */
+.sdiv {
+  display: inline-block;
+  padding: 0 1.5rem;
+  color: rgba(255,215,0,0.28);
+  font-size: 0.72rem;
+}
+
+/* ─────────────────────────────────────
+   DRAG GHOST (touch drag clone)
+───────────────────────────────────── */
+#drag-ghost {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  display: none;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1.45rem, 6vw, 2.3rem);
+  letter-spacing: 2px;
+  transform: translate(-50%, -50%) scale(1.3);
+  text-shadow: 0 0 15px currentColor, 1px 1px 3px rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.72);
+  padding: 0.2rem 0.65rem;
+  border-radius: 8px;
+  border: 2px solid rgba(255,215,0,0.62);
+}
+
+/* ─────────────────────────────────────
+   WRONG ANSWER OVERLAY
+───────────────────────────────────── */
+#wrong-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(120,0,0,0.52);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+#wrong-overlay.show {
+  display: flex;
+  animation: wrongFlash 0.32s ease;
+}
+@keyframes wrongFlash {
+  0%{background:rgba(210,0,0,0.75)}
+  100%{background:rgba(120,0,0,0.52)}
+}
+.wrong-msg {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2.2rem, 9vw, 4.2rem);
+  color: #ff5555;
+  letter-spacing: 4px;
+  text-align: center;
+  text-shadow: 0 0 22px rgba(255,0,0,0.82);
+  animation: popIn 0.32s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+@keyframes popIn { 0%{transform:scale(0)} 100%{transform:scale(1)} }
+.wrong-sub { color:#ffcccc; font-size:clamp(0.88rem,3vw,1.05rem); font-weight:700; text-align:center; }
+.wrong-info { color:#ffaaaa; font-size:clamp(0.7rem,2vw,0.85rem); }
+
+/* ─────────────────────────────────────
+   FIREWORKS CANVAS
+───────────────────────────────────── */
+#fw-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  pointer-events: none;
+  display: none;
+}
+
+/* ─────────────────────────────────────
+   END SCREEN
+───────────────────────────────────── */
+#end-screen {
+  background:
+    linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)),
+    url('scene12.jpg') center / cover no-repeat;
+  gap: 1rem;
+  text-align: center;
+  padding: 1.5rem;
+}
+.end-trophy { font-size: clamp(2.8rem,9vw,4.5rem); animation: fl 2s ease-in-out infinite; }
+@keyframes fl { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.end-title { font-family:'Bangers',cursive; font-size:clamp(1.9rem,7.5vw,3.5rem); color:#FFD700; text-shadow:3px 3px 0 #8B6914; letter-spacing:3px; }
+.end-score { font-family:'Bangers',cursive; font-size:clamp(1.25rem,4.8vw,2.3rem); color:#90ff90; }
+.end-msg { color:#ddd; font-size:clamp(0.84rem,2.5vw,0.98rem); max-width:330px; line-height:1.55; background:rgba(0,0,0,0.58); padding:0.45rem 0.75rem; border-radius:8px; }
+
 </style>
 </head>
 <body>
 
+<!-- ═══════════════ TITLE SCREEN ═══════════════ -->
 <div class="screen active" id="title-screen">
-  <div class="t-title">🗺️ JACK &amp;<br>THE TEMPLE OF SHADOWS</div>
-  <div class="t-sub">JUNGLE ADVENTURE</div>
-  <div class="t-pills"><span class="pill">AT</span><span class="pill">IN</span><span class="pill">ON</span></div>
-  <div class="t-hint">🎁 Drag the preposition into the gap ···<br><strong style="color:#FFD700">Wrong = start again!</strong></div>
-  <button class="go-btn" onclick="go()">▶ START ADVENTURE</button>
+  <div class="tt">🗺️ JACK &amp; THE<br>TEMPLE OF SHADOWS</div>
+  <div class="ts">JUNGLE ADVENTURE</div>
+  <div class="tp">
+    <span class="pill">AT</span>
+    <span class="pill">IN</span>
+    <span class="pill">ON</span>
+  </div>
+  <div class="th">
+    🎁 Drag the preposition into the gap ···<br>
+    <strong style="color:#FFD700">Wrong answer = start again!</strong>
+  </div>
+  <button class="btn-go" onclick="startGame()">▶ START ADVENTURE</button>
 </div>
 
+<!-- ═══════════════ GAME SCREEN ═══════════════ -->
 <div class="screen" id="game-screen">
+
+  <!-- Full-screen background image (behind everything) -->
   <div id="bg"></div>
+
+  <!-- HUD bar -->
   <div id="hud">
-    <div class="h-title">🗺️ JACK'S QUEST</div>
-    <div class="h-score">⭐ <span id="sc">0</span>/<span id="tot">0</span></div>
-    <button class="h-btn" onclick="restart()">↩ RESTART</button>
+    <div class="hud-title">🗺️ JACK'S QUEST</div>
+    <div class="hud-score">⭐ <span id="score-display">0</span>/<span id="total-display">0</span></div>
+    <button class="btn-restart" onclick="restartGame()">↩ RESTART</button>
   </div>
-  <div id="prog"><div id="prog-bar"></div></div>
-  <div id="scene-lbl">SCENE 1</div>
-  <div id="mid"></div>
 
+  <!-- Progress bar -->
+  <div id="prog"><div id="prog-fill"></div></div>
+
+  <!-- Scene label -->
+  <div id="scene-lbl">SCENE 1 · THE AIRPORT</div>
+
+  <!-- Flexible space — image shows through here -->
+  <div id="scene-space"></div>
+
+  <!-- Three treasure chests -->
   <div id="chests">
-    <div class="chest-unit" id="cu-at">
-      <div class="c-glow"></div>
-      <div class="c-overflow">🪙💎💍🪙💎</div>
-      <div class="c-lid"></div>
-      <div class="c-inner-glow"></div>
-      <div class="c-body"><div class="c-clasp"></div></div>
-      <div class="prep-label" style="color:#ffdd99;" data-word="at">AT</div>
+
+    <!-- AT chest -->
+    <div class="chest" id="chest-at" data-word="at">
+      <div class="chest-rays"></div>
+      <div class="chest-spill">🪙💎💍🪙💎</div>
+      <div class="chest-lid"></div>
+      <div class="chest-glow"></div>
+      <div class="chest-body" style="position:relative;">
+        <div class="chest-mid-band"></div>
+        <div class="chest-clasp"></div>
+      </div>
+      <div class="chest-word" style="color:#ffdd99;">AT</div>
     </div>
-    <div class="chest-unit" id="cu-in">
-      <div class="c-glow"></div>
-      <div class="c-overflow">💎🪙💍💎🪙</div>
-      <div class="c-lid"></div>
-      <div class="c-inner-glow"></div>
-      <div class="c-body"><div class="c-clasp"></div></div>
-      <div class="prep-label" style="color:#99ffbb;" data-word="in">IN</div>
+
+    <!-- IN chest -->
+    <div class="chest" id="chest-in" data-word="in">
+      <div class="chest-rays"></div>
+      <div class="chest-spill">💎🪙💍💎🪙</div>
+      <div class="chest-lid"></div>
+      <div class="chest-glow"></div>
+      <div class="chest-body" style="position:relative;">
+        <div class="chest-mid-band"></div>
+        <div class="chest-clasp"></div>
+      </div>
+      <div class="chest-word" style="color:#99ffbb;">IN</div>
     </div>
-    <div class="chest-unit" id="cu-on">
-      <div class="c-glow"></div>
-      <div class="c-overflow">💍🪙💎💍🪙</div>
-      <div class="c-lid"></div>
-      <div class="c-inner-glow"></div>
-      <div class="c-body"><div class="c-clasp"></div></div>
-      <div class="prep-label" style="color:#99bbff;" data-word="on">ON</div>
+
+    <!-- ON chest -->
+    <div class="chest" id="chest-on" data-word="on">
+      <div class="chest-rays"></div>
+      <div class="chest-spill">💍🪙💎💍🪙</div>
+      <div class="chest-lid"></div>
+      <div class="chest-glow"></div>
+      <div class="chest-body" style="position:relative;">
+        <div class="chest-mid-band"></div>
+        <div class="chest-clasp"></div>
+      </div>
+      <div class="chest-word" style="color:#99bbff;">ON</div>
+    </div>
+
+  </div><!-- end #chests -->
+
+  <!-- Scrolling story strip -->
+  <div id="story-strip">
+    <div id="scroll-track">
+      <div id="story-words"></div>
     </div>
   </div>
 
-  <div id="story">
-    <div id="track"><div id="words"></div></div>
-  </div>
-</div>
+</div><!-- end #game-screen -->
 
+<!-- ═══════════════ END SCREEN ═══════════════ -->
 <div class="screen" id="end-screen">
-  <div style="font-size:3rem;">🏆</div>
-  <div class="et">ADVENTURE COMPLETE!</div>
-  <div class="es">SCORE: <span id="fscore">0</span>/<span id="ftot">0</span></div>
-  <div class="em">Jack escapes with the golden statue! You mastered AT, IN and ON — brilliant! 🎉</div>
-  <button class="go-btn" onclick="restart()">🔄 PLAY AGAIN</button>
+  <div class="end-trophy">🏆</div>
+  <div class="end-title">ADVENTURE<br>COMPLETE!</div>
+  <div class="end-score">SCORE: <span id="final-score">0</span> / <span id="final-total">0</span></div>
+  <div class="end-msg">Jack escapes with the golden statue! You mastered AT, IN and ON — brilliant work! 🎉</div>
+  <button class="btn-go" onclick="restartGame()">🔄 PLAY AGAIN</button>
 </div>
 
-<canvas id="fw"></canvas>
-<div id="wrong">
-  <div class="wm">❌ WRONG!</div>
-  <div class="ws">That's not right!</div>
-  <div class="wr">Starting again from the beginning...</div>
+<!-- ═══════════════ OVERLAYS ═══════════════ -->
+<canvas id="fw-canvas"></canvas>
+<div id="wrong-overlay">
+  <div class="wrong-msg">❌ WRONG!</div>
+  <div class="wrong-sub">That's not right!</div>
+  <div class="wrong-info">Starting again from the beginning...</div>
 </div>
-<div id="clone"></div>
+<div id="drag-ghost"></div>
 
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
 <script>
-const S=[
-  {label:"SCENE 1 · THE AIRPORT",bg:"scene01.jpg",text:"Jack arrives [on] Monday morning. His flight leaves [at] seven o'clock. He waits [at] the gate [in] the busy terminal."},
-  {label:"SCENE 2 · IN THE AIR",bg:"scene02.jpg",text:"[In] the afternoon the plane flies high. Jack looks down [at] the jungle far below. The pilot speaks [at] noon."},
-  {label:"SCENE 3 · THE AIRSTRIP",bg:"scene03.jpg",text:"The plane lands [at] six o'clock [in] the evening. Jack steps off [at] a small airstrip [in] Peru."},
-  {label:"SCENE 4 · THE VILLAGE",bg:"scene04.jpg",text:"Jack arrives [at] the village [at] night. He sits [in] a warm hut. 'Leave [in] the morning,' warns the old man."},
-  {label:"SCENE 5 · THE WARNING",bg:"scene05.jpg",text:"[In] the morning [on] Tuesday Jack sets off. He walks [on] the jungle path. [At] sunrise the birds sing."},
-  {label:"SCENE 6 · THE RIVER",bg:"scene06.jpg",text:"Jack reaches the river [at] midday. He sits [on] a small boat [on] the water. The sun burns hot [at] noon."},
-  {label:"SCENE 7 · THE CHASE",bg:"scene07.jpg",text:"[In] the afternoon warriors appear [in] the forest. Jack runs [on] the jungle path. Drums beat [in] the distance."},
-  {label:"SCENE 8 · THE CAVE",bg:"scene08.jpg",text:"[At] sunset Jack hides [in] a cave. He sits [in] the darkness. A huge snake hangs [on] the cave wall."},
-  {label:"SCENE 9 · THE TEMPLE",bg:"scene09.jpg",text:"[In] the morning [on] Wednesday Jack sees the temple. It stands [on] a cliff. Fire burns [at] the entrance."},
-  {label:"SCENE 10 · INSIDE",bg:"scene10.jpg",text:"Jack enters [at] midday. Gold sits [on] stone altars. A golden statue stands [on] a black pedestal [in] the centre."},
-  {label:"SCENE 11 · THE ESCAPE",bg:"scene11.jpg",text:"[At] six o'clock [in] the evening Jack grabs the statue. He runs [on] the stone stairs. Jack escapes [in] a tunnel."},
-  {label:"SCENE 12 · FREEDOM!",bg:"scene12.jpg",text:"[At] midnight Jack boards the plane. [In] the sky he looks down [at] the jungle. [At] dawn [on] Thursday — Jack is safe!"}
+
+// ─────────────────────────────────────
+// STORY DATA
+// 12 scenes, 48 gaps total
+// Only AT / IN / ON as answers
+// 60% time prepositions, 40% place prepositions
+// ─────────────────────────────────────
+const SCENES = [
+  {
+    label: "SCENE 1 · THE AIRPORT",
+    bg: "scene01.jpg",
+    text: "Jack arrives [on] Monday morning. His flight leaves [at] seven o'clock. He waits [at] the gate [in] the busy terminal."
+  },
+  {
+    label: "SCENE 2 · IN THE AIR",
+    bg: "scene02.jpg",
+    text: "[In] the afternoon the plane flies high. Jack looks down [at] the jungle far below. The pilot speaks [at] noon."
+  },
+  {
+    label: "SCENE 3 · THE AIRSTRIP",
+    bg: "scene03.jpg",
+    text: "The plane lands [at] six o'clock [in] the evening. Jack steps off [at] a small airstrip [in] Peru."
+  },
+  {
+    label: "SCENE 4 · THE VILLAGE",
+    bg: "scene04.jpg",
+    text: "Jack arrives [at] the village [at] night. He sits [in] a warm hut. 'Leave [in] the morning,' warns the old man."
+  },
+  {
+    label: "SCENE 5 · THE WARNING",
+    bg: "scene05.jpg",
+    text: "[In] the morning [on] Tuesday Jack sets off. He walks [on] the jungle path. [At] sunrise the birds sing."
+  },
+  {
+    label: "SCENE 6 · THE RIVER",
+    bg: "scene06.jpg",
+    text: "Jack reaches the river [at] midday. He sits [on] a small boat [on] the water. The sun burns hot [at] noon."
+  },
+  {
+    label: "SCENE 7 · THE CHASE",
+    bg: "scene07.jpg",
+    text: "[In] the afternoon warriors appear [in] the forest. Jack runs [on] the jungle path. Drums beat [in] the distance."
+  },
+  {
+    label: "SCENE 8 · THE CAVE",
+    bg: "scene08.jpg",
+    text: "[At] sunset Jack hides [in] a cave. He sits [in] the darkness. A huge snake hangs [on] the cave wall."
+  },
+  {
+    label: "SCENE 9 · THE TEMPLE",
+    bg: "scene09.jpg",
+    text: "[In] the morning [on] Wednesday Jack sees the temple. It stands [on] a cliff. Fire burns [at] the entrance."
+  },
+  {
+    label: "SCENE 10 · INSIDE THE TEMPLE",
+    bg: "scene10.jpg",
+    text: "Jack enters [at] midday. Gold sits [on] stone altars. A golden statue stands [on] a black pedestal [in] the centre."
+  },
+  {
+    label: "SCENE 11 · THE ESCAPE",
+    bg: "scene11.jpg",
+    text: "[At] six o'clock [in] the evening Jack grabs the statue. He runs [on] the stone stairs. Jack escapes [in] a tunnel."
+  },
+  {
+    label: "SCENE 12 · FREEDOM!",
+    bg: "scene12.jpg",
+    text: "[At] midnight Jack boards the plane. [In] the sky he looks down [at] the jungle. [At] dawn [on] Thursday — Jack is safe!"
+  }
 ];
 
-function buildHTML(){
-  let h='',gi=0;
-  S.forEach((sc,si)=>{
-    if(si>0) h+='<span class="sdiv">✦</span>';
-    sc.text.split(/\[([^\]]+)\]/).forEach((p,pi)=>{
-      if(pi%2===0){if(p)h+=`<span>${p}</span>`;}
-      else{h+=`<span class="gap" id="g${gi}" data-ans="${p}" data-si="${si}"></span>`;gi++;}
+// Pre-calculate gap counts and cumulative gap indexes per scene
+const gapsPerScene = SCENES.map(s => (s.text.match(/\[[^\]]+\]/g) || []).length);
+const cumGaps = [];
+let cumCount = 0;
+gapsPerScene.forEach(g => { cumGaps.push(cumCount); cumCount += g; });
+const TOTAL_GAPS = cumCount;
+
+// ─────────────────────────────────────
+// BUILD STORY HTML
+// Parses all scenes into scrolling HTML with gap slots
+// ─────────────────────────────────────
+function buildStoryHTML() {
+  let html = '';
+  let gapIndex = 0;
+  SCENES.forEach((scene, si) => {
+    if (si > 0) html += '<span class="sdiv">✦</span>';
+    const parts = scene.text.split(/\[([^\]]+)\]/);
+    parts.forEach((part, pi) => {
+      if (pi % 2 === 0) {
+        if (part) html += `<span>${part}</span>`;
+      } else {
+        html += `<span class="gap" id="gap-${gapIndex}" data-answer="${part.toLowerCase()}" data-scene="${si}"></span>`;
+        gapIndex++;
+      }
     });
   });
-  return h;
+  return html;
 }
 
-const GPS=S.map(s=>(s.text.match(/\[[^\]]+\]/g)||[]).length);
-const CUM=[];let cc=0;GPS.forEach(g=>{CUM.push(cc);cc+=g;});
-const TOTAL=cc;
-let score=0,cg=0,cs=0,on=false,dw=null,sx=0,raf=null;
-const SPEED=8,SLOW=0.5,STOP=60,SLZONE=260;
+// ─────────────────────────────────────
+// GAME STATE
+// ─────────────────────────────────────
+let gameOn       = false;
+let score        = 0;
+let currentGap   = 0;   // index of gap student must fill next
+let currentScene = 0;   // index of current background scene
+let scrollX      = 0;   // current scroll position (negative = scrolled left)
+let rafId        = null; // requestAnimationFrame ID
+let selectedWord = null; // word selected by tap/click (not drag)
 
-function go(){
-  score=0;cg=0;cs=0;sx=0;on=true;dw=null;
-  document.getElementById('sc').textContent=0;
-  document.getElementById('tot').textContent=TOTAL;
-  document.getElementById('fscore').textContent=0;
-  document.getElementById('ftot').textContent=TOTAL;
-  document.getElementById('prog-bar').style.width='0%';
-  show('game-screen');
+// Scroll speed constants — fixed pixels per frame (no delta time)
+const SCROLL_SPEED      = 2.5;  // normal reading speed for 12 year old
+const SCROLL_SLOW       = 0.3;  // slowing as gap approaches centre
+const SCROLL_STOP_PX    = 62;   // gap distance from centre at which scroll stops
+const SCROLL_SLOW_PX    = 280;  // gap distance from centre at which scroll slows
+
+// ─────────────────────────────────────
+// START GAME
+// ─────────────────────────────────────
+function startGame() {
+  // Reset state
+  gameOn       = true;
+  score        = 0;
+  currentGap   = 0;
+  currentScene = 0;
+  scrollX      = 0;
+  selectedWord = null;
+
+  // Reset UI
+  document.getElementById('score-display').textContent = '0';
+  document.getElementById('total-display').textContent = TOTAL_GAPS;
+  document.getElementById('final-total').textContent   = TOTAL_GAPS;
+  document.getElementById('prog-fill').style.width     = '0%';
+  document.getElementById('wrong-overlay').classList.remove('show');
+  document.getElementById('drag-ghost').style.display  = 'none';
+
+  // Build story
+  document.getElementById('story-words').innerHTML = buildStoryHTML();
+
+  // Attach listeners to gaps and chests
+  attachGapListeners();
+  attachChestListeners();
+
+  // Set first scene
   setScene(0);
-  document.getElementById('words').innerHTML=buildHTML();
-  addGaps();
-  addChests();
-  document.getElementById('track').style.transform='translateX(0)';
-  if(raf)cancelAnimationFrame(raf);
-  raf=requestAnimationFrame(scroll);
+
+  // Show game screen
+  showScreen('game-screen');
+
+  // Reset scroll position
+  document.getElementById('scroll-track').style.transform = 'translateX(0px)';
+
+  // Highlight first gap
+  highlightGap(0);
+
+  // Start scroll loop
+  if (rafId) cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(scrollLoop);
 }
 
-function restart(){
-  on=false;
-  if(raf){cancelAnimationFrame(raf);raf=null;}
-  document.getElementById('clone').style.display='none';
-  document.getElementById('wrong').classList.remove('show');
-  dw=null;stopFW();
-  setTimeout(go,80);
+// ─────────────────────────────────────
+// RESTART GAME
+// ─────────────────────────────────────
+function restartGame() {
+  gameOn = false;
+  if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  document.getElementById('wrong-overlay').classList.remove('show');
+  document.getElementById('drag-ghost').style.display = 'none';
+  document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
+  selectedWord = null;
+  stopFireworks();
+  setTimeout(startGame, 80);
 }
 
-function show(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+// ─────────────────────────────────────
+// SHOW SCREEN
+// ─────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-function setScene(i){
-  if(i>=S.length)return;
-  document.getElementById('bg').style.backgroundImage=`url('${S[i].bg}')`;
-  document.getElementById('scene-lbl').textContent=S[i].label;
+// ─────────────────────────────────────
+// SET SCENE BACKGROUND
+// ─────────────────────────────────────
+function setScene(index) {
+  if (index >= SCENES.length) return;
+  const scene = SCENES[index];
+  document.getElementById('bg').style.backgroundImage = `url('${scene.bg}')`;
+  document.getElementById('scene-lbl').textContent = scene.label;
+  currentScene = index;
 }
 
-function addChests(){
-  ['at','in','on'].forEach(w=>{
-    const cu=document.getElementById(`cu-${w}`);
-    cu.draggable=true;
-    cu.addEventListener('dragstart',e=>{dw=w;e.dataTransfer.setData('text',w);});
-    cu.addEventListener('touchstart',e=>touch(e,w,cu),{passive:false});
-    cu.addEventListener('click',()=>{
-      if(!on)return;
-      dw=(dw===w)?null:w;
-      document.querySelectorAll('.chest-unit').forEach(c=>c.style.filter='');
-      if(dw) cu.style.filter='drop-shadow(0 0 10px #FFD700) brightness(1.25)';
-      markGap();
+// ─────────────────────────────────────
+// HIGHLIGHT CURRENT GAP
+// ─────────────────────────────────────
+function highlightGap(index) {
+  document.querySelectorAll('.gap').forEach(g => g.classList.remove('active'));
+  const gap = document.getElementById(`gap-${index}`);
+  if (gap && !gap.classList.contains('correct')) {
+    gap.classList.add('active');
+  }
+}
+
+// ─────────────────────────────────────
+// ATTACH CHEST LISTENERS
+// Chests can be dragged (desktop) or tapped (mobile) to select
+// ─────────────────────────────────────
+function attachChestListeners() {
+  document.querySelectorAll('.chest').forEach(chest => {
+    const word = chest.dataset.word;
+
+    // Desktop drag
+    chest.draggable = true;
+    chest.addEventListener('dragstart', e => {
+      selectedWord = word;
+      e.dataTransfer.setData('text/plain', word);
+      setTimeout(() => chest.style.opacity = '0.4', 0);
+    });
+    chest.addEventListener('dragend', () => {
+      chest.style.opacity = '1';
+    });
+
+    // Touch drag
+    chest.addEventListener('touchstart', e => handleTouchStart(e, word, chest), { passive: false });
+
+    // Tap to select (then tap a gap to fill it)
+    chest.addEventListener('click', () => {
+      if (!gameOn) return;
+      if (selectedWord === word) {
+        // Deselect
+        selectedWord = null;
+        document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
+      } else {
+        selectedWord = word;
+        document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
+        chest.classList.add('selected');
+        highlightGap(currentGap);
+      }
     });
   });
 }
 
-function addGaps(){
-  document.querySelectorAll('.gap').forEach(g=>{
-    g.addEventListener('dragover',e=>{e.preventDefault();if(!g.classList.contains('correct'))g.classList.add('drop-ready');});
-    g.addEventListener('dragleave',()=>g.classList.remove('drop-ready'));
-    g.addEventListener('drop',e=>{
+// ─────────────────────────────────────
+// ATTACH GAP LISTENERS
+// Gaps accept drops (desktop) and taps (mobile)
+// ─────────────────────────────────────
+function attachGapListeners() {
+  document.querySelectorAll('.gap').forEach(gap => {
+
+    // Desktop: dragover
+    gap.addEventListener('dragover', e => {
       e.preventDefault();
-      g.classList.remove('drop-ready');
-      const w=e.dataTransfer.getData('text')||dw;
-      if(w)answer(g,w);
+      if (!gap.classList.contains('correct')) gap.classList.add('drag-over');
     });
-    g.addEventListener('click',()=>{if(!on||g.classList.contains('correct')||!dw)return;answer(g,dw);});
-    g.addEventListener('touchend',e=>{e.preventDefault();if(!on||g.classList.contains('correct')||!dw)return;answer(g,dw);},{passive:false});
+
+    // Desktop: dragleave
+    gap.addEventListener('dragleave', () => gap.classList.remove('drag-over'));
+
+    // Desktop: drop
+    gap.addEventListener('drop', e => {
+      e.preventDefault();
+      gap.classList.remove('drag-over');
+      const word = e.dataTransfer.getData('text/plain') || selectedWord;
+      if (word) processAnswer(gap, word);
+    });
+
+    // Tap to fill (after selecting a chest by tap)
+    gap.addEventListener('click', () => {
+      if (!gameOn || gap.classList.contains('correct')) return;
+      if (!selectedWord) return;
+      processAnswer(gap, selectedWord);
+    });
+
+    // Touch end on gap (touch drag)
+    gap.addEventListener('touchend', e => {
+      e.preventDefault();
+      if (!gameOn || gap.classList.contains('correct')) return;
+      if (!selectedWord) return;
+      processAnswer(gap, selectedWord);
+    }, { passive: false });
   });
 }
 
-function markGap(){
-  document.querySelectorAll('.gap').forEach(g=>g.classList.remove('active'));
-  const g=document.getElementById(`g${cg}`);
-  if(g&&!g.classList.contains('correct'))g.classList.add('active');
-}
+// ─────────────────────────────────────
+// PROCESS ANSWER
+// Check if the dropped/tapped word is correct
+// ─────────────────────────────────────
+function processAnswer(gap, word) {
+  if (!gameOn || gap.classList.contains('correct')) return;
 
-function answer(g,w){
-  if(!on||g.classList.contains('correct'))return;
-  const given=w.toLowerCase().trim();
-  const correct=g.dataset.ans.toLowerCase().trim();
-  if(given===correct){
-    g.classList.remove('active','drop-ready');
-    g.classList.add('correct');
-    g.textContent=given.toUpperCase();
-    score++;cg++;dw=null;
-    document.querySelectorAll('.chest-unit').forEach(c=>c.style.filter='');
-    document.getElementById('sc').textContent=score;
-    document.getElementById('prog-bar').style.width=(score/TOTAL*100)+'%';
-    mini();
-    for(let i=S.length-1;i>=0;i--){
-      if(cg>CUM[i]){if(i!==cs){cs=i;setScene(cs);}break;}
+  const given   = word.toLowerCase().trim();
+  const correct = gap.dataset.answer.toLowerCase().trim();
+
+  if (given === correct) {
+    // ✅ CORRECT
+    gap.classList.remove('active', 'drag-over');
+    gap.classList.add('correct');
+    gap.textContent = given.toUpperCase();
+
+    score++;
+    currentGap++;
+    selectedWord = null;
+    document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
+    document.getElementById('score-display').textContent = score;
+    document.getElementById('prog-fill').style.width = (score / TOTAL_GAPS * 100) + '%';
+
+    // Small firework burst
+    miniFirework();
+
+    // Check if we need to change scene
+    for (let i = SCENES.length - 1; i >= 0; i--) {
+      if (currentGap > cumGaps[i]) {
+        if (i !== currentScene) setScene(i);
+        break;
+      }
     }
-    if(cg>=TOTAL){
-      on=false;
-      setTimeout(()=>{big();setTimeout(()=>{stopFW();document.getElementById('fscore').textContent=score;show('end-screen');},3500);},400);
-    } else markGap();
+
+    // Check win
+    if (currentGap >= TOTAL_GAPS) {
+      gameOn = false;
+      setTimeout(() => {
+        bigFireworks();
+        setTimeout(() => {
+          stopFireworks();
+          document.getElementById('final-score').textContent = score;
+          showScreen('end-screen');
+        }, 3500);
+      }, 400);
+    } else {
+      highlightGap(currentGap);
+    }
+
   } else {
-    g.classList.add('wrong-flash');
-    document.getElementById('wrong').classList.add('show');
-    on=false;
-    if(raf){cancelAnimationFrame(raf);raf=null;}
-    setTimeout(restart,2200);
+    // ❌ WRONG
+    gap.classList.add('wrong');
+    document.getElementById('wrong-overlay').classList.add('show');
+    gameOn = false;
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    setTimeout(restartGame, 2200);
   }
 }
 
-function touch(e,w,el){
-  e.preventDefault();dw=w;
-  const cl=document.getElementById('clone');
-  cl.textContent=w.toUpperCase();
-  cl.style.color=el.querySelector('.prep-label').style.color;
-  cl.style.display='block';
-  mv(cl,e.touches[0].clientX,e.touches[0].clientY);
-  function onm(ev){
+// ─────────────────────────────────────
+// TOUCH DRAG HANDLING
+// Drag ghost follows finger, drops on gap
+// ─────────────────────────────────────
+function handleTouchStart(e, word, chestEl) {
+  e.preventDefault();
+  selectedWord = word;
+
+  const ghost = document.getElementById('drag-ghost');
+  ghost.textContent = word.toUpperCase();
+  ghost.style.color = chestEl.querySelector('.chest-word').style.color;
+  ghost.style.display = 'block';
+  moveGhost(e.touches[0].clientX, e.touches[0].clientY);
+
+  function onTouchMove(ev) {
     ev.preventDefault();
-    mv(cl,ev.touches[0].clientX,ev.touches[0].clientY);
-    document.querySelectorAll('.gap').forEach(g=>g.classList.remove('drop-ready'));
-    const t=document.elementFromPoint(ev.touches[0].clientX,ev.touches[0].clientY);
-    if(t&&t.classList.contains('gap')&&!t.classList.contains('correct'))t.classList.add('drop-ready');
+    const t = ev.touches[0];
+    moveGhost(t.clientX, t.clientY);
+    // Highlight gap under finger
+    document.querySelectorAll('.gap').forEach(g => g.classList.remove('drag-over'));
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    if (el && el.classList.contains('gap') && !el.classList.contains('correct')) {
+      el.classList.add('drag-over');
+    }
   }
-  function done(){
-    cl.style.display='none';dw=null;
-    document.querySelectorAll('.gap').forEach(g=>g.classList.remove('drop-ready'));
-    document.removeEventListener('touchmove',onm);
-    document.removeEventListener('touchend',one);
-    document.removeEventListener('touchcancel',done);
+
+  function onTouchEnd(ev) {
+    ghost.style.display = 'none';
+    document.querySelectorAll('.gap').forEach(g => g.classList.remove('drag-over'));
+    const t = ev.changedTouches[0];
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    const droppedWord = word;
+    selectedWord = null;
+    if (el && el.classList.contains('gap') && !el.classList.contains('correct')) {
+      processAnswer(el, droppedWord);
+    }
+    cleanup();
   }
-  function one(ev){
-    const t=document.elementFromPoint(ev.changedTouches[0].clientX,ev.changedTouches[0].clientY);
-    const wd=w;
-    cl.style.display='none';dw=null;
-    document.querySelectorAll('.gap').forEach(g=>g.classList.remove('drop-ready'));
-    if(t&&t.classList.contains('gap')&&!t.classList.contains('correct'))answer(t,wd);
-    document.removeEventListener('touchmove',onm);
-    document.removeEventListener('touchend',one);
-    document.removeEventListener('touchcancel',done);
+
+  function onTouchCancel() {
+    ghost.style.display = 'none';
+    document.querySelectorAll('.gap').forEach(g => g.classList.remove('drag-over'));
+    selectedWord = null;
+    cleanup();
   }
-  document.addEventListener('touchmove',onm,{passive:false});
-  document.addEventListener('touchend',one,{passive:false});
-  document.addEventListener('touchcancel',done,{passive:false});
+
+  function cleanup() {
+    document.removeEventListener('touchmove', onTouchMove);
+    document.removeEventListener('touchend', onTouchEnd);
+    document.removeEventListener('touchcancel', onTouchCancel);
+  }
+
+  document.addEventListener('touchmove', onTouchMove, { passive: false });
+  document.addEventListener('touchend', onTouchEnd, { passive: false });
+  document.addEventListener('touchcancel', onTouchCancel, { passive: false });
 }
 
-function mv(cl,x,y){cl.style.left=x+'px';cl.style.top=y+'px';}
-
-function scroll(){
-  if(!on)return;
-  const track=document.getElementById('track');
-  const story=document.getElementById('story');
-  const words=document.getElementById('words');
-  const sw=story.offsetWidth;
-  const cx=sw*0.38;
-  const g=document.getElementById(`g${cg}`);
-  let spd=SPEED;
-  if(g&&!g.classList.contains('correct')){
-    const gr=g.getBoundingClientRect();
-    const sr=story.getBoundingClientRect();
-    const gx=gr.left-sr.left;
-    if(gx<=cx+STOP&&gx>=-gr.width) spd=0;
-    else if(gx<=cx+SLZONE) spd=SLOW;
-  }
-  sx-=spd;
-  if(Math.abs(sx)>words.scrollWidth+sw) sx=0;
-  track.style.transform=`translateX(${sx}px)`;
-  raf=requestAnimationFrame(scroll);
+function moveGhost(x, y) {
+  const ghost = document.getElementById('drag-ghost');
+  ghost.style.left = x + 'px';
+  ghost.style.top  = y + 'px';
 }
 
-const fc=document.getElementById('fw');
-const ctx=fc.getContext('2d');
-let pts=[],fon=false,fr=null;
-function rsz(){fc.width=innerWidth;fc.height=innerHeight;}
-rsz();window.addEventListener('resize',rsz);
+// ─────────────────────────────────────
+// SCROLL LOOP
+// Fixed speed — no delta time for consistency
+// Story scrolls left continuously
+// Slows and stops when current gap is at centre
+// ─────────────────────────────────────
+function scrollLoop() {
+  if (!gameOn) return;
 
-function burst(x,y,n){
-  const c=['#FFD700','#FF6B6B','#4ECDC4','#96CEB4','#DDA0DD','#98FB98','#FF69B4'];
-  for(let i=0;i<n;i++){
-    const a=(Math.PI*2/n)*i,s=3+Math.random()*5;
-    pts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,col:c[i%c.length],l:1,d:0.025+Math.random()*0.02,sz:2+Math.random()*3});
+  const track  = document.getElementById('scroll-track');
+  const strip  = document.getElementById('story-strip');
+  const words  = document.getElementById('story-words');
+  const stripW = strip.offsetWidth;
+  const centreX = stripW * 0.38;
+
+  const currentGapEl = document.getElementById(`gap-${currentGap}`);
+  let speed = SCROLL_SPEED;
+
+  if (currentGapEl && !currentGapEl.classList.contains('correct')) {
+    const gapRect   = currentGapEl.getBoundingClientRect();
+    const stripRect = strip.getBoundingClientRect();
+    const gapLeft   = gapRect.left - stripRect.left;
+
+    if (gapLeft <= centreX + SCROLL_STOP_PX && gapLeft >= -gapRect.width) {
+      speed = 0; // STOP — waiting for answer
+    } else if (gapLeft <= centreX + SCROLL_SLOW_PX) {
+      speed = SCROLL_SLOW; // Slow down as gap approaches
+    }
+  }
+
+  scrollX -= speed;
+
+  // Loop back to start when fully scrolled
+  const totalWidth = words.scrollWidth + stripW;
+  if (Math.abs(scrollX) > totalWidth) scrollX = 0;
+
+  track.style.transform = `translateX(${scrollX}px)`;
+  rafId = requestAnimationFrame(scrollLoop);
+}
+
+// ─────────────────────────────────────
+// FIREWORKS
+// ─────────────────────────────────────
+const fwCanvas  = document.getElementById('fw-canvas');
+const fwCtx     = fwCanvas.getContext('2d');
+let fwParticles = [];
+let fwRunning   = false;
+let fwRaf       = null;
+
+function resizeFireworks() {
+  fwCanvas.width  = window.innerWidth;
+  fwCanvas.height = window.innerHeight;
+}
+resizeFireworks();
+window.addEventListener('resize', resizeFireworks);
+
+function createBurst(x, y, count) {
+  const colours = ['#FFD700','#FF6B6B','#4ECDC4','#96CEB4','#DDA0DD','#98FB98','#FF69B4'];
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 / count) * i + Math.random() * 0.3;
+    const speed = 3 + Math.random() * 5;
+    fwParticles.push({
+      x, y,
+      vx:    Math.cos(angle) * speed,
+      vy:    Math.sin(angle) * speed - 1,
+      color: colours[i % colours.length],
+      life:  1,
+      decay: 0.025 + Math.random() * 0.02,
+      size:  2 + Math.random() * 3
+    });
   }
 }
 
-function afw(){
-  ctx.clearRect(0,0,fc.width,fc.height);
-  pts=pts.filter(p=>p.l>0);
-  pts.forEach(p=>{
-    p.x+=p.vx;p.y+=p.vy;p.vy+=0.1;p.l-=p.d;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.sz*p.l,0,Math.PI*2);
-    ctx.fillStyle=p.col;ctx.shadowColor=p.col;ctx.shadowBlur=5;ctx.fill();ctx.shadowBlur=0;
+function animateFireworks() {
+  fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+  fwParticles = fwParticles.filter(p => p.life > 0);
+  fwParticles.forEach(p => {
+    p.x  += p.vx;
+    p.y  += p.vy;
+    p.vy += 0.1;
+    p.life -= p.decay;
+    fwCtx.beginPath();
+    fwCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+    fwCtx.fillStyle   = p.color;
+    fwCtx.shadowColor = p.color;
+    fwCtx.shadowBlur  = 5;
+    fwCtx.fill();
+    fwCtx.shadowBlur = 0;
   });
-  if(fon||pts.length>0)fr=requestAnimationFrame(afw);
-  else{fc.style.display='none';fr=null;}
+  if (fwRunning || fwParticles.length > 0) {
+    fwRaf = requestAnimationFrame(animateFireworks);
+  } else {
+    fwCanvas.style.display = 'none';
+    fwRaf = null;
+  }
 }
 
-function mini(){
-  fc.style.display='block';fon=true;
-  const r=document.getElementById('story').getBoundingClientRect();
-  burst(innerWidth*.5+(Math.random()-.5)*150,r.top-8,16);
-  if(!fr)afw();
-  setTimeout(()=>{fon=false;},450);
+function miniFirework() {
+  fwCanvas.style.display = 'block';
+  fwRunning = true;
+  const stripRect = document.getElementById('story-strip').getBoundingClientRect();
+  const x = window.innerWidth * 0.5 + (Math.random() - 0.5) * 160;
+  const y = stripRect.top - 10 + (Math.random() - 0.5) * 20;
+  createBurst(x, y, 16);
+  if (!fwRaf) animateFireworks();
+  setTimeout(() => { fwRunning = false; }, 460);
 }
 
-function big(){
-  fc.style.display='block';fon=true;
-  let n=0;
-  const iv=setInterval(()=>{burst(Math.random()*fc.width,Math.random()*fc.height*.65,50);if(++n>=6)clearInterval(iv);},350);
-  if(!fr)afw();
+function bigFireworks() {
+  fwCanvas.style.display = 'block';
+  fwRunning = true;
+  let n = 0;
+  const interval = setInterval(() => {
+    createBurst(
+      Math.random() * fwCanvas.width,
+      Math.random() * fwCanvas.height * 0.65,
+      52
+    );
+    if (++n >= 6) clearInterval(interval);
+  }, 340);
+  if (!fwRaf) animateFireworks();
 }
 
-function stopFW(){
-  fon=false;pts=[];
-  if(fr){cancelAnimationFrame(fr);fr=null;}
-  ctx.clearRect(0,0,fc.width,fc.height);
-  fc.style.display='none';
+function stopFireworks() {
+  fwRunning   = false;
+  fwParticles = [];
+  if (fwRaf) { cancelAnimationFrame(fwRaf); fwRaf = null; }
+  fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+  fwCanvas.style.display = 'none';
 }
+
 </script>
 </body>
 </html>
