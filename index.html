@@ -12,7 +12,7 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 .screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;}
 .screen.active{display:flex;}
 
-/* TITLE */
+/* ── TITLE ── */
 #title-screen{
   background:linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.55)),url('scene01.jpg') center/cover no-repeat;
   gap:0.8rem;padding:1.5rem;text-align:center;
@@ -27,12 +27,13 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 .go-btn{background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;font-family:'Bangers',cursive;font-size:clamp(1rem,3.5vw,1.5rem);letter-spacing:2px;border:none;padding:0.6rem 2rem;border-radius:40px;cursor:pointer;box-shadow:0 4px 0 #8B6914;}
 .go-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #8B6914;}
 
-/* GAME SCREEN */
+/* ── GAME SCREEN ── */
 #game-screen{justify-content:flex-start;}
 
-/* Scene image — 70% of screen */
+/* Scene image — 75% of screen */
 #scene-area{
-  width:100%;height:70%;
+  width:100%;
+  height:75%;
   position:relative;flex-shrink:0;overflow:hidden;
 }
 #scene-bg{
@@ -43,7 +44,7 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 }
 #scene-bg::after{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,rgba(0,0,0,0.2) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,0.15) 100%);
+  background:linear-gradient(to bottom,rgba(0,0,0,0.2) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,0.2) 100%);
 }
 #hud{
   position:absolute;top:0;left:0;right:0;z-index:20;
@@ -64,107 +65,131 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
   background:rgba(0,0,0,0.6);padding:0.12rem 0.6rem;border-radius:4px;white-space:nowrap;
 }
 
-/* BOTTOM PANEL — 30% */
+/* ── BOTTOM PANEL — 25% ── */
 #bottom-panel{
-  width:100%;height:30%;
-  background:rgba(10,5,1,0.88);
-  border-top:2px solid rgba(180,110,10,0.6);
+  width:100%;height:25%;
+  background:rgba(8,4,1,0.92);
+  border-top:2px solid rgba(180,110,10,0.5);
   display:flex;flex-direction:column;
   overflow:hidden;flex-shrink:0;
 }
 
-/* CHESTS ROW — compact */
+/* ── CHESTS ROW — compact, pushed together ── */
 #chests-row{
   width:100%;
   display:flex;align-items:flex-end;justify-content:space-around;
-  padding:0.2rem 0.8rem 0;
+  padding:0.1rem 1rem 0;
   flex-shrink:0;
 }
 
-/* Individual chest — small and elegant */
+/* Individual chest */
 .chest-outer{
   display:flex;flex-direction:column;align-items:center;
-  width:clamp(58px,16vw,80px);
+  width:clamp(52px,14vw,72px);
   position:relative;
 }
 
-/* Subtle gold spill above chest */
-.c-spill{
-  font-size:clamp(0.5rem,1.8vw,0.7rem);
-  line-height:1;text-align:center;
-  margin-bottom:-2px;position:relative;z-index:4;
-  opacity:0.85;
+/* Gold rays beaming up — like the pirate image */
+.c-rays{
+  position:relative;z-index:5;
+  width:120%;
+  height:clamp(8px,2.5vw,14px);
+  background:radial-gradient(ellipse at center bottom,
+    rgba(255,220,40,0.95) 0%,
+    rgba(255,180,0,0.6) 40%,
+    rgba(255,120,0,0.2) 70%,
+    transparent 100%);
+  filter:blur(1px);
+  margin-bottom:-3px;
 }
 
-/* Open lid */
+/* Gold spill emojis */
+.c-spill{
+  font-size:clamp(0.55rem,2vw,0.78rem);
+  line-height:1;text-align:center;
+  position:relative;z-index:4;
+  margin-bottom:-3px;
+  filter:drop-shadow(0 -2px 4px rgba(255,200,0,0.8));
+}
+
+/* Open lid — wide open like pirate image */
 .c-lid{
-  width:108%;height:clamp(10px,2.8vw,15px);
+  width:115%;
+  height:clamp(8px,2.5vw,13px);
   position:relative;z-index:3;
-  transform:perspective(100px) rotateX(-38deg) translateY(2px);
+  transform:perspective(60px) rotateX(-55deg) translateY(3px);
   transform-origin:bottom center;
   border-radius:3px 3px 0 0;
   overflow:hidden;
-  box-shadow:0 -3px 6px rgba(0,0,0,0.6);
-  opacity:0.82;
+  box-shadow:0 -4px 8px rgba(255,180,0,0.3),0 -2px 4px rgba(0,0,0,0.5);
 }
 .c-lid::before{
   content:'';position:absolute;inset:0;
   background:
-    repeating-linear-gradient(90deg,rgba(0,0,0,0.1) 0,rgba(0,0,0,0.1) 1px,transparent 1px,transparent 14px),
-    linear-gradient(180deg,rgba(190,110,20,0.85),rgba(120,70,8,0.85));
+    repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 12px),
+    linear-gradient(180deg,rgba(200,120,20,0.9),rgba(130,75,8,0.9));
 }
 .c-lid::after{
   content:'';position:absolute;top:45%;left:0;right:0;height:3px;
-  background:linear-gradient(180deg,rgba(220,150,20,0.8),rgba(140,90,8,0.8),rgba(220,150,20,0.8));
+  background:linear-gradient(180deg,rgba(230,160,20,0.9),rgba(150,95,8,0.9),rgba(230,160,20,0.9));
 }
 
-/* Inner glow */
+/* Strong inner glow */
 .c-glow{
-  width:85%;height:clamp(5px,1.5vw,8px);
-  background:radial-gradient(ellipse,rgba(255,210,40,0.8),rgba(255,150,0,0.3),transparent);
-  filter:blur(2px);position:relative;z-index:2;opacity:0.9;
+  width:90%;
+  height:clamp(6px,1.8vw,10px);
+  background:radial-gradient(ellipse,
+    rgba(255,225,50,1) 0%,
+    rgba(255,170,0,0.8) 40%,
+    rgba(255,100,0,0.3) 70%,
+    transparent 100%);
+  filter:blur(1.5px);
+  position:relative;z-index:2;
+  margin-top:-1px;
+  box-shadow:0 0 8px rgba(255,200,0,0.5);
 }
 
 /* Chest body */
 .c-body{
-  width:100%;position:relative;z-index:2;
-  border-radius:1px 1px 5px 5px;overflow:hidden;
-  box-shadow:0 3px 10px rgba(0,0,0,0.7);
-  opacity:0.82;
+  width:100%;
+  position:relative;z-index:2;
+  border-radius:1px 1px 4px 4px;overflow:hidden;
+  box-shadow:0 3px 8px rgba(0,0,0,0.8),inset 0 0 0 1px rgba(200,130,15,0.3);
 }
 .c-body::before{
   content:'';position:absolute;inset:0;
   background:
-    repeating-linear-gradient(90deg,rgba(0,0,0,0.08) 0,rgba(0,0,0,0.08) 1px,transparent 1px,transparent 14px),
-    linear-gradient(180deg,rgba(100,60,10,0.8),rgba(60,35,5,0.8),rgba(90,52,10,0.8));
+    repeating-linear-gradient(90deg,rgba(0,0,0,0.1) 0,rgba(0,0,0,0.1) 1px,transparent 1px,transparent 12px),
+    linear-gradient(180deg,rgba(110,65,10,0.85),rgba(65,38,5,0.9),rgba(95,55,8,0.85));
   z-index:0;
 }
 .c-body::after{
   content:'';position:absolute;
-  top:35%;left:0;right:0;height:3px;
-  background:linear-gradient(180deg,rgba(210,140,15,0.7),rgba(130,80,5,0.7),rgba(210,140,15,0.7));
+  top:38%;left:0;right:0;height:3px;
+  background:linear-gradient(180deg,rgba(215,145,15,0.8),rgba(135,82,5,0.8),rgba(215,145,15,0.8));
   z-index:1;
 }
 .c-inner{
   position:relative;z-index:2;
-  padding:0.2rem 0.12rem 0.18rem;
-  display:flex;flex-direction:column;align-items:center;gap:0.1rem;
+  padding:0.15rem 0.1rem 0.12rem;
+  display:flex;flex-direction:column;align-items:center;gap:0.08rem;
 }
 .c-clasp{
   position:absolute;top:-3px;left:50%;transform:translateX(-50%);
   width:clamp(10px,3vw,14px);height:clamp(5px,1.5vw,7px);
-  background:linear-gradient(180deg,rgba(255,215,0,0.9),rgba(180,130,10,0.9));
-  border-radius:2px;border:1px solid rgba(120,80,0,0.8);z-index:6;
+  background:linear-gradient(180deg,rgba(255,215,0,0.95),rgba(180,130,10,0.95));
+  border-radius:2px;border:1px solid rgba(120,80,0,0.9);z-index:6;
+  box-shadow:0 1px 3px rgba(0,0,0,0.5);
 }
 
-/* Preposition word — the draggable element */
+/* Preposition word */
 .prep-word{
   font-family:'Bangers',cursive;
-  font-size:clamp(0.95rem,4vw,1.3rem);
+  font-size:clamp(0.9rem,3.8vw,1.25rem);
   letter-spacing:2px;
   cursor:grab;touch-action:none;
   position:relative;z-index:10;
-  padding:0.02rem 0.25rem;
+  padding:0.02rem 0.2rem;
   text-shadow:2px 2px 4px rgba(0,0,0,0.95);
   transition:filter 0.15s,transform 0.1s;
   -webkit-tap-highlight-color:transparent;
@@ -172,15 +197,15 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 .prep-word:active{transform:scale(0.9);}
 .prep-word.dragging{opacity:0.2;}
 .c-hint{
-  font-size:clamp(0.28rem,1vw,0.4rem);
+  font-size:clamp(0.26rem,0.9vw,0.38rem);
   color:rgba(210,165,60,0.6);letter-spacing:1px;font-weight:700;
 }
 
-/* STORY STRIP */
+/* ── STORY STRIP ── */
 #story-strip{
   flex:1;min-height:0;overflow:hidden;
   position:relative;display:flex;align-items:center;
-  border-top:1px solid rgba(160,100,10,0.3);
+  border-top:1px solid rgba(150,90,8,0.3);
 }
 #scroll-track{
   display:flex;align-items:center;height:100%;
@@ -271,6 +296,7 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 
       <!-- AT -->
       <div class="chest-outer">
+        <div class="c-rays"></div>
         <div class="c-spill">🪙💎🪙</div>
         <div class="c-lid"></div>
         <div class="c-glow"></div>
@@ -285,6 +311,7 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 
       <!-- IN -->
       <div class="chest-outer">
+        <div class="c-rays"></div>
         <div class="c-spill">💎🪙💎</div>
         <div class="c-lid"></div>
         <div class="c-glow"></div>
@@ -299,6 +326,7 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 
       <!-- ON -->
       <div class="chest-outer">
+        <div class="c-rays"></div>
         <div class="c-spill">💍🪙💎</div>
         <div class="c-lid"></div>
         <div class="c-glow"></div>
@@ -383,7 +411,12 @@ const cumGaps=[];let cc=0;gapsPerScene.forEach(g=>{cumGaps.push(cc);cc+=g;});
 const TOTAL_GAPS=cc;
 
 let score=0,curGap=0,curScene=0,gameOn=false,dragWord=null,scrollX=0,rafId=null,lastTime=0;
-const SPD=0.9, SPD_SLOW=0.15, STOP_PX=65, SLOW_PX=300;
+
+// SCROLL SPEEDS — properly calibrated for 10-12 year old
+const SPD=1.4;         // fast normal reading pace
+const SPD_SLOW=0.18;   // slows as gap approaches
+const STOP_PX=65;      // stops here
+const SLOW_PX=300;     // starts slowing here — early enough to read context
 
 function startGame(){
   score=0;curGap=0;curScene=0;scrollX=0;gameOn=true;dragWord=null;lastTime=0;
@@ -486,8 +519,10 @@ function handleAnswer(slot,word){
     document.querySelectorAll('.prep-word').forEach(w=>w.style.filter='');
     updateHUD();miniFirework();
     for(let i=SCENES.length-1;i>=0;i--){if(curGap>cumGaps[i]){if(i!==curScene){curScene=i;setScene(curScene);}break;}}
-    if(curGap>=TOTAL_GAPS){gameOn=false;setTimeout(()=>{bigFW();setTimeout(()=>{stopFW();document.getElementById('final-score').textContent=score;showScreen('end-screen');},3500);},400);}
-    else highlightGap();
+    if(curGap>=TOTAL_GAPS){
+      gameOn=false;
+      setTimeout(()=>{bigFW();setTimeout(()=>{stopFW();document.getElementById('final-score').textContent=score;showScreen('end-screen');},3500);},400);
+    } else highlightGap();
   } else {
     slot.classList.add('wrong-flash');
     document.getElementById('wrong-overlay').classList.add('show');
@@ -496,6 +531,7 @@ function handleAnswer(slot,word){
   }
 }
 
+// Delta-time scroll — consistent on all devices
 function scrollLoop(timestamp){
   if(!gameOn) return;
   const delta=lastTime?Math.min((timestamp-lastTime)/16.67,3):1;lastTime=timestamp;
