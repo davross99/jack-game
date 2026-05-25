@@ -231,9 +231,7 @@ body {
 }
 
 /* ─────────────────────────────────────
-   TREASURE CHESTS
-   Three open pirate chests overlaid on the image
-   Each chest = gold rays + spilling coins + open lid + glowing interior + wooden body + preposition word
+   TREASURE CHESTS — canvas drawn
 ───────────────────────────────────── */
 #chests {
   position: relative;
@@ -243,182 +241,41 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
-  padding: 0 1rem 0.25rem;
+  padding: 0 0.5rem 0.25rem;
 }
 
 .chest {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: clamp(78px, 21vw, 100px);
+  width: clamp(90px, 26vw, 115px);
   cursor: grab;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
   position: relative;
 }
 
-/* Gold rays beaming upward from open chest */
-.chest-rays {
-  width: 150%;
-  height: clamp(16px, 4.5vw, 24px);
-  position: relative;
-  z-index: 1;
-  background: radial-gradient(
-    ellipse at center bottom,
-    rgba(255,235,40,0.95) 0%,
-    rgba(255,180,0,0.55) 45%,
-    rgba(255,120,0,0.15) 75%,
-    transparent 100%
-  );
-  filter: blur(2px);
-  margin-bottom: -8px;
-  pointer-events: none;
-}
-
-/* Coins and jewels spilling over the top */
-.chest-spill {
-  font-size: clamp(0.68rem, 2.3vw, 0.92rem);
-  line-height: 1;
-  text-align: center;
-  letter-spacing: -1px;
-  position: relative;
-  z-index: 5;
-  margin-bottom: -5px;
-  filter: drop-shadow(0 -2px 5px rgba(255,210,0,0.85));
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-/* Open lid — leaning back, showing gold inner face */
-.chest-lid {
-  width: 110%;
-  height: clamp(13px, 3.8vw, 19px);
-  position: relative;
-  z-index: 4;
-  /* Open lid leans back — rotated to look open */
-  transform: perspective(55px) rotateX(20deg);
-  transform-origin: bottom center;
-  border-radius: 4px 4px 0 0;
-  overflow: hidden;
-  box-shadow: 0 -4px 10px rgba(255,175,0,0.35);
-}
-/* Wood grain on lid */
-.chest-lid::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0,0,0,0.12) 0px,
-      rgba(0,0,0,0.12) 1px,
-      transparent 1px,
-      transparent 11px
-    ),
-    linear-gradient(180deg, #B8720E, #D49820, #8A5008, #C07818, #7A4A06);
-}
-/* Gold band on lid */
-.chest-lid::after {
-  content: '';
-  position: absolute;
-  top: 42%;
-  left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #C8920A, #FFD700, #C8920A);
-}
-
-/* Gold glow strip — the glowing interior peeking out */
-.chest-glow {
+.chest canvas {
   width: 100%;
-  height: clamp(8px, 2.2vw, 13px);
-  position: relative;
-  z-index: 3;
-  background: linear-gradient(
-    180deg,
-    rgba(255,230,40,1.0) 0%,
-    rgba(255,175,0,0.75) 50%,
-    rgba(200,100,0,0.2) 100%
-  );
-  box-shadow: 0 0 10px rgba(255,210,0,0.6);
-  pointer-events: none;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.7));
 }
 
-/* Wooden body of chest */
-.chest-body {
-  width: 100%;
-  height: clamp(32px, 8.5vw, 46px);
-  position: relative;
-  z-index: 2;
-  border-radius: 0 0 5px 5px;
-  overflow: hidden;
-  box-shadow: 0 5px 14px rgba(0,0,0,0.78);
-}
-/* Wood grain on body */
-.chest-body::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0,0,0,0.11) 0px,
-      rgba(0,0,0,0.11) 1px,
-      transparent 1px,
-      transparent 9px
-    ),
-    linear-gradient(180deg, #7C4C10, #4E2E06, #6A3A0C, #4A2A04, #7C4C10);
-}
-/* Top gold band */
-.chest-body::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #A07010, #FFD700, #A07010);
-  z-index: 1;
-}
-/* Middle gold band */
-.chest-mid-band {
-  position: absolute;
-  top: 42%;
-  left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #A07010, #E8B828, #A07010);
-  z-index: 2;
-  pointer-events: none;
-}
-/* Gold clasp in centre */
-.chest-clasp {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 13px;
-  height: 9px;
-  background: linear-gradient(180deg, #FFD700, #B8860B, #FFD700);
-  border-radius: 2px;
-  border: 1px solid #7a5500;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.55);
-  z-index: 3;
-  pointer-events: none;
-}
-
-/* The preposition word label on the front of the chest */
 .chest-word {
   font-family: 'Bangers', cursive;
   font-size: clamp(1rem, 4.2vw, 1.35rem);
   letter-spacing: 2px;
   font-weight: 900;
   text-shadow: 2px 2px 5px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.85);
-  margin-top: 4px;
+  margin-top: 2px;
   position: relative;
   z-index: 10;
   pointer-events: none;
 }
 
-/* Chest glows gold when selected */
 .chest.selected {
-  filter: drop-shadow(0 0 10px #FFD700) brightness(1.22);
+  filter: drop-shadow(0 0 12px #FFD700) brightness(1.25);
 }
 
 /* ─────────────────────────────────────
@@ -647,49 +504,21 @@ body {
   <!-- Flexible space — image shows through here -->
   <div id="scene-space"></div>
 
-  <!-- Three treasure chests -->
+  <!-- Three treasure chests — canvas drawn -->
   <div id="chests">
-
-    <!-- AT chest -->
     <div class="chest" id="chest-at" data-word="at">
-      <div class="chest-rays"></div>
-      <div class="chest-spill">🪙💎💍🪙💎</div>
-      <div class="chest-lid"></div>
-      <div class="chest-glow"></div>
-      <div class="chest-body" style="position:relative;">
-        <div class="chest-mid-band"></div>
-        <div class="chest-clasp"></div>
-      </div>
+      <canvas id="cv-at" width="110" height="100"></canvas>
       <div class="chest-word" style="color:#ffdd99;">AT</div>
     </div>
-
-    <!-- IN chest -->
     <div class="chest" id="chest-in" data-word="in">
-      <div class="chest-rays"></div>
-      <div class="chest-spill">💎🪙💍💎🪙</div>
-      <div class="chest-lid"></div>
-      <div class="chest-glow"></div>
-      <div class="chest-body" style="position:relative;">
-        <div class="chest-mid-band"></div>
-        <div class="chest-clasp"></div>
-      </div>
+      <canvas id="cv-in" width="110" height="100"></canvas>
       <div class="chest-word" style="color:#99ffbb;">IN</div>
     </div>
-
-    <!-- ON chest -->
     <div class="chest" id="chest-on" data-word="on">
-      <div class="chest-rays"></div>
-      <div class="chest-spill">💍🪙💎💍🪙</div>
-      <div class="chest-lid"></div>
-      <div class="chest-glow"></div>
-      <div class="chest-body" style="position:relative;">
-        <div class="chest-mid-band"></div>
-        <div class="chest-clasp"></div>
-      </div>
+      <canvas id="cv-on" width="110" height="100"></canvas>
       <div class="chest-word" style="color:#99bbff;">ON</div>
     </div>
-
-  </div><!-- end #chests -->
+  </div>
 
   <!-- Scrolling story strip -->
   <div id="story-strip">
@@ -1258,6 +1087,202 @@ function stopFireworks() {
   fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
   fwCanvas.style.display = 'none';
 }
+
+
+// ─────────────────────────────────────
+// DRAW TREASURE CHESTS ON CANVAS
+// Matches the reference pirate chest image:
+// - Dark brown wooden body with gold bands
+// - Wide open lid leaning back
+// - Bright gold glowing interior
+// - Coins, diamonds, jewels piled high and spilling
+// - Gold light rays beaming upward
+// ─────────────────────────────────────
+function drawChest(canvasId) {
+  const cv = document.getElementById(canvasId);
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width;
+  const H = cv.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // ── GOLD LIGHT RAYS beaming upward ──
+  const rayGrad = ctx.createRadialGradient(W/2, H*0.28, 2, W/2, H*0.28, W*0.85);
+  rayGrad.addColorStop(0,   'rgba(255,240,50,0.92)');
+  rayGrad.addColorStop(0.3, 'rgba(255,195,0,0.55)');
+  rayGrad.addColorStop(0.6, 'rgba(255,140,0,0.2)');
+  rayGrad.addColorStop(1,   'rgba(255,100,0,0)');
+  ctx.fillStyle = rayGrad;
+  ctx.fillRect(0, 0, W, H * 0.55);
+
+  // ── CHEST BODY — dark brown wood ──
+  const bodyX = 4;
+  const bodyY = H * 0.52;
+  const bodyW = W - 8;
+  const bodyH = H * 0.44;
+
+  // Wood gradient
+  const woodGrad = ctx.createLinearGradient(bodyX, bodyY, bodyX, bodyY + bodyH);
+  woodGrad.addColorStop(0,    '#8B5210');
+  woodGrad.addColorStop(0.25, '#5C3408');
+  woodGrad.addColorStop(0.5,  '#7A4A0E');
+  woodGrad.addColorStop(0.75, '#4E2E06');
+  woodGrad.addColorStop(1,    '#8B5210');
+  ctx.fillStyle = woodGrad;
+  ctx.beginPath();
+  ctx.roundRect(bodyX, bodyY, bodyW, bodyH, [0, 0, 5, 5]);
+  ctx.fill();
+
+  // Wood grain lines
+  ctx.strokeStyle = 'rgba(0,0,0,0.13)';
+  ctx.lineWidth = 1;
+  for (let x = bodyX + 8; x < bodyX + bodyW - 4; x += 9) {
+    ctx.beginPath();
+    ctx.moveTo(x, bodyY);
+    ctx.lineTo(x, bodyY + bodyH);
+    ctx.stroke();
+  }
+
+  // Body border — gold
+  ctx.strokeStyle = '#C8920A';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(bodyX, bodyY, bodyW, bodyH, [0, 0, 5, 5]);
+  ctx.stroke();
+
+  // Top gold band on body
+  const topBandGrad = ctx.createLinearGradient(0, bodyY, 0, bodyY + 5);
+  topBandGrad.addColorStop(0, '#FFD700');
+  topBandGrad.addColorStop(0.5, '#A07010');
+  topBandGrad.addColorStop(1, '#FFD700');
+  ctx.fillStyle = topBandGrad;
+  ctx.fillRect(bodyX, bodyY, bodyW, 5);
+
+  // Middle gold band on body
+  const midBandY = bodyY + bodyH * 0.42;
+  const midBandGrad = ctx.createLinearGradient(0, midBandY, 0, midBandY + 4);
+  midBandGrad.addColorStop(0, '#E8B828');
+  midBandGrad.addColorStop(0.5, '#A07010');
+  midBandGrad.addColorStop(1, '#E8B828');
+  ctx.fillStyle = midBandGrad;
+  ctx.fillRect(bodyX, midBandY, bodyW, 4);
+
+  // Bottom gold band on body
+  const botBandY = bodyY + bodyH - 6;
+  ctx.fillStyle = midBandGrad;
+  ctx.fillRect(bodyX, botBandY, bodyW, 4);
+
+  // Gold clasp in centre of body
+  const claspX = W / 2 - 7;
+  const claspY = bodyY + bodyH * 0.48;
+  const claspGrad = ctx.createLinearGradient(claspX, claspY, claspX, claspY + 10);
+  claspGrad.addColorStop(0, '#FFD700');
+  claspGrad.addColorStop(0.5, '#B8860B');
+  claspGrad.addColorStop(1, '#FFD700');
+  ctx.fillStyle = claspGrad;
+  ctx.strokeStyle = '#7a5500';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.roundRect(claspX, claspY, 14, 10, 2);
+  ctx.fill();
+  ctx.stroke();
+
+  // ── OPEN LID — leaning back, showing gold interior ──
+  const lidX = 2;
+  const lidY = H * 0.2;
+  const lidW = W - 4;
+  const lidH = H * 0.3;
+
+  // Gold interior of open lid (the inside face we can see)
+  const lidInGrad = ctx.createLinearGradient(lidX, lidY, lidX, lidY + lidH);
+  lidInGrad.addColorStop(0,   '#FFE528');
+  lidInGrad.addColorStop(0.3, '#FFB800');
+  lidInGrad.addColorStop(0.7, '#D4920A');
+  lidInGrad.addColorStop(1,   '#8B5E08');
+  ctx.fillStyle = lidInGrad;
+  ctx.beginPath();
+  ctx.roundRect(lidX, lidY, lidW, lidH, [4, 4, 0, 0]);
+  ctx.fill();
+
+  // Wood outer face — top strip of lid
+  const lidWoodGrad = ctx.createLinearGradient(lidX, lidY, lidX, lidY + 10);
+  lidWoodGrad.addColorStop(0, '#A06818');
+  lidWoodGrad.addColorStop(1, '#7A4A08');
+  ctx.fillStyle = lidWoodGrad;
+  ctx.fillRect(lidX, lidY, lidW, 9);
+
+  // Wood grain on lid outer face
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+  ctx.lineWidth = 1;
+  for (let x = lidX + 8; x < lidX + lidW - 4; x += 9) {
+    ctx.beginPath();
+    ctx.moveTo(x, lidY);
+    ctx.lineTo(x, lidY + 9);
+    ctx.stroke();
+  }
+
+  // Gold band on lid
+  const lidBandGrad = ctx.createLinearGradient(0, lidY + 11, 0, lidY + 15);
+  lidBandGrad.addColorStop(0, '#FFD700');
+  lidBandGrad.addColorStop(0.5, '#A07010');
+  lidBandGrad.addColorStop(1, '#FFD700');
+  ctx.fillStyle = lidBandGrad;
+  ctx.fillRect(lidX, lidY + 11, lidW, 4);
+
+  // Lid border
+  ctx.strokeStyle = '#C8920A';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(lidX, lidY, lidW, lidH, [4, 4, 0, 0]);
+  ctx.stroke();
+
+  // ── GOLD GLOW — between lid and body (the opening) ──
+  const glowGrad = ctx.createLinearGradient(0, bodyY - 12, 0, bodyY + 4);
+  glowGrad.addColorStop(0, 'rgba(255,235,40,0.98)');
+  glowGrad.addColorStop(0.5, 'rgba(255,180,0,0.7)');
+  glowGrad.addColorStop(1, 'rgba(255,120,0,0)');
+  ctx.fillStyle = glowGrad;
+  ctx.fillRect(bodyX + 2, bodyY - 12, bodyW - 4, 16);
+
+  // ── TREASURE INSIDE — coins, gems, jewels piled high ──
+  // Coin pile background
+  const coinPileGrad = ctx.createRadialGradient(W/2, bodyY + 8, 2, W/2, bodyY + 8, bodyW/2);
+  coinPileGrad.addColorStop(0, 'rgba(255,215,0,0.95)');
+  coinPileGrad.addColorStop(0.5, 'rgba(200,150,0,0.7)');
+  coinPileGrad.addColorStop(1, 'rgba(150,90,0,0)');
+  ctx.fillStyle = coinPileGrad;
+  ctx.beginPath();
+  ctx.ellipse(W/2, bodyY + 6, bodyW/2 - 4, 10, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Draw treasure emojis inside chest
+  ctx.font = `${Math.round(W * 0.13)}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // Row of coins and gems spilling over top of body
+  const treasureY = bodyY - 2;
+  const items = ['🪙','💎','💍','🪙','💎'];
+  const spacing = (bodyW - 8) / (items.length - 1);
+  items.forEach((item, i) => {
+    ctx.fillText(item, bodyX + 4 + i * spacing, treasureY);
+  });
+
+  // Second row slightly lower inside
+  const items2 = ['💎','🪙','💍','🪙'];
+  const spacing2 = (bodyW - 16) / (items2.length - 1);
+  items2.forEach((item, i) => {
+    ctx.fillText(item, bodyX + 8 + i * spacing2, treasureY + W * 0.14);
+  });
+}
+
+// Draw all three chests after DOM is ready
+function drawAllChests() {
+  drawChest('cv-at');
+  drawChest('cv-in');
+  drawChest('cv-on');
+}
+setTimeout(drawAllChests, 50);
 
 </script>
 </body>
