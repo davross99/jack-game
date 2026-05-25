@@ -234,98 +234,93 @@ body {
    TREASURE CHESTS
 ───────────────────────────────────── */
 #chests {
-  position: relative;
-  z-index: 40;
-  width: 100%;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-around;
-  padding: 0 0.8rem 0.2rem;
+  position:relative;z-index:40;width:100%;flex-shrink:0;
+  display:flex;flex-direction:row;align-items:flex-end;
+  justify-content:space-around;padding:0 0.5rem 0.2rem;
 }
 .chest {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: clamp(82px,23vw,108px);
-  cursor: grab;
-  touch-action: none;
-  -webkit-tap-highlight-color: transparent;
-  position: relative;
+  display:flex;flex-direction:column;align-items:center;
+  width:clamp(82px,23vw,106px);
+  cursor:grab;touch-action:none;
+  position:relative;-webkit-tap-highlight-color:transparent;
 }
-/* Gold rays above chest */
-.chest-rays {
-  width:140%;height:clamp(14px,4vw,20px);
-  background:radial-gradient(ellipse at center bottom,rgba(255,230,40,0.95) 0%,rgba(255,170,0,0.5) 50%,transparent 100%);
-  filter:blur(2px);margin-bottom:-6px;position:relative;z-index:1;pointer-events:none;
+/* Gold rays */
+.c-rays {
+  width:160%;height:clamp(16px,4.5vw,24px);
+  background:radial-gradient(ellipse at center bottom,
+    rgba(255,240,30,1) 0%,rgba(255,180,0,0.6) 45%,transparent 100%);
+  filter:blur(2px);margin-bottom:-8px;
+  position:relative;z-index:1;pointer-events:none;
 }
-/* Coins spilling out top */
-.chest-spill {
-  font-size:clamp(0.68rem,2.3vw,0.9rem);line-height:1;text-align:center;letter-spacing:-1px;
-  position:relative;z-index:6;margin-bottom:-4px;
-  filter:drop-shadow(0 -2px 5px rgba(255,210,0,0.85));pointer-events:none;white-space:nowrap;
-}
-/* Open lid — wide angle showing gold inside */
-.chest-lid {
-  width:112%;height:clamp(12px,3.5vw,18px);
+/* Open lid leaning back */
+.c-lid {
+  width:110%;height:clamp(16px,4.5vw,24px);
   position:relative;z-index:5;
-  transform:perspective(45px) rotateX(22deg);
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 10px),
+    linear-gradient(180deg,#D49820,#8A5008,#C07818,#7A4A06);
+  border:2px solid #C8920A;border-bottom:none;
+  border-radius:5px 5px 0 0;
+  /* Rotated back to show open */
+  transform:perspective(35px) rotateX(28deg);
   transform-origin:bottom center;
-  border-radius:4px 4px 0 0;overflow:hidden;
-  box-shadow:0 -3px 8px rgba(255,175,0,0.4);
+  box-shadow:0 -5px 12px rgba(255,190,0,0.5),inset 0 2px 5px rgba(255,230,50,0.4);
 }
-.chest-lid::before {
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0px,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 11px),
-    linear-gradient(180deg,#B8720E,#D49820,#8A5008,#C07818,#7A4A06);
+.c-lid::after {
+  content:'';position:absolute;top:44%;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#8B5010,#FFD700,#8B5010);
 }
-.chest-lid::after {
-  content:'';position:absolute;top:42%;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,#C8920A,#FFD700,#C8920A);
+/* Gold interior — packed with coins */
+.c-interior {
+  width:100%;
+  background:linear-gradient(180deg,
+    rgba(255,235,30,1) 0%,
+    rgba(255,195,0,0.98) 40%,
+    rgba(220,155,0,0.95) 80%,
+    rgba(180,110,0,0.9) 100%
+  );
+  border-left:2px solid #C8920A;border-right:2px solid #C8920A;
+  padding:0.18rem 0.05rem 0.12rem;
+  box-shadow:inset 0 0 15px rgba(255,210,0,0.6),0 0 8px rgba(255,200,0,0.4);
+  position:relative;z-index:4;
 }
-/* Glowing gold interior */
-.chest-glow {
-  width:100%;height:clamp(8px,2.2vw,13px);
-  background:linear-gradient(180deg,rgba(255,230,40,1) 0%,rgba(255,175,0,0.75) 50%,rgba(200,100,0,0.2) 100%);
-  box-shadow:0 0 10px rgba(255,210,0,0.6);
-  position:relative;z-index:4;pointer-events:none;
+.c-coins {
+  font-size:clamp(0.58rem,1.9vw,0.78rem);
+  line-height:1.25;text-align:center;letter-spacing:-2px;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+  pointer-events:none;
 }
-/* Wooden body */
-.chest-body {
-  width:100%;height:clamp(30px,8vw,44px);
+/* Chest body */
+.c-body {
+  width:100%;height:clamp(28px,7.5vw,40px);
   position:relative;z-index:3;border-radius:0 0 5px 5px;overflow:hidden;
-  box-shadow:0 5px 14px rgba(0,0,0,0.78);
+  box-shadow:0 5px 12px rgba(0,0,0,0.75);
 }
-.chest-body::before {
+.c-body::before {
   content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(90deg,rgba(0,0,0,0.11) 0px,rgba(0,0,0,0.11) 1px,transparent 1px,transparent 9px),
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,0.11) 0,rgba(0,0,0,0.11) 1px,transparent 1px,transparent 9px),
     linear-gradient(180deg,#7C4C10,#4E2E06,#6A3A0C,#4A2A04,#7C4C10);
 }
-.chest-body::after {
+.c-body::after {
   content:'';position:absolute;top:0;left:0;right:0;height:4px;
   background:linear-gradient(90deg,#A07010,#FFD700,#A07010);z-index:1;
 }
-.chest-mid-band {
-  position:absolute;top:42%;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,#A07010,#E8B828,#A07010);z-index:2;pointer-events:none;
-}
-.chest-clasp {
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:13px;height:9px;
+.c-clasp {
+  position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);
+  width:13px;height:9px;z-index:4;
   background:linear-gradient(180deg,#FFD700,#B8860B,#FFD700);
-  border-radius:2px;border:1px solid #7a5500;box-shadow:0 1px 3px rgba(0,0,0,0.55);
-  z-index:3;pointer-events:none;
+  border-radius:2px;border:1px solid #7a5500;
+  box-shadow:0 1px 3px rgba(0,0,0,0.55);pointer-events:none;
 }
 .chest-word {
-  font-family:'Bangers',cursive;font-size:clamp(1rem,4.2vw,1.35rem);
-  letter-spacing:2px;font-weight:900;
-  color:#FFD700;
-  text-shadow:2px 2px 0 rgba(0,0,0,1),0 0 10px rgba(0,0,0,0.85);
+  font-family:'Bangers',cursive;font-size:clamp(1rem,4vw,1.35rem);
+  letter-spacing:2px;font-weight:900;color:#FFD700;
+  text-shadow:2px 2px 0 rgba(0,0,0,1),0 0 10px rgba(0,0,0,0.9);
   margin-top:3px;position:relative;z-index:10;pointer-events:none;
 }
 .chest.selected {
-  filter:drop-shadow(0 0 12px #FFD700) brightness(1.22);
+  filter:drop-shadow(0 0 14px #FFD700) brightness(1.2);
 }
 
 /* ─────────────────────────────────────
@@ -544,7 +539,7 @@ body {
     <div class="hud-score">⭐ <span id="score-display">0</span>/<span id="total-display">0</span></div>
     <div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">
       <span style="font-size:0.7rem;">🐢</span>
-      <input type="range" id="spd" min="0.5" max="8" step="0.5" value="2.5"
+      <input type="range" id="spd" min="0.3" max="15" step="0.3" value="2.5"
         style="width:clamp(50px,11vw,80px);accent-color:#FFD700;">
       <span style="font-size:0.7rem;">🐇</span>
     </div>
@@ -562,48 +557,37 @@ body {
 
   <!-- Three treasure chests -->
   <div id="chests">
-
-    <!-- AT chest -->
-    <div class="chest" id="chest-at" data-word="at">
-      <div class="chest-rays"></div>
-      <div class="chest-spill">🪙💎💍🪙💎</div>
-      <div class="chest-lid"></div>
-      <div class="chest-glow"></div>
-      <div class="chest-body" style="position:relative;">
-        <div class="chest-mid-band"></div>
-        <div class="chest-clasp"></div>
+    <div class="chest" id="chest-at" data-word="at" tabindex="0" role="button" aria-label="Choose AT">
+      <div class="c-rays"></div>
+      <div class="c-lid"></div>
+      <div class="c-interior">
+        <div class="c-coins">🪙💎🪙💍🪙💎🪙</div>
+        <div class="c-coins">💎🪙💍🪙💎🪙💍</div>
       </div>
-      <div class="chest-word" style="color:#ffdd99;">AT</div>
+      <div class="c-body"><div class="c-clasp"></div></div>
+      <div class="chest-word">AT</div>
     </div>
-
-    <!-- IN chest -->
-    <div class="chest" id="chest-in" data-word="in">
-      <div class="chest-rays"></div>
-      <div class="chest-spill">💎🪙💍💎🪙</div>
-      <div class="chest-lid"></div>
-      <div class="chest-glow"></div>
-      <div class="chest-body" style="position:relative;">
-        <div class="chest-mid-band"></div>
-        <div class="chest-clasp"></div>
+    <div class="chest" id="chest-in" data-word="in" tabindex="0" role="button" aria-label="Choose IN">
+      <div class="c-rays"></div>
+      <div class="c-lid"></div>
+      <div class="c-interior">
+        <div class="c-coins">💎🪙💍🪙💎🪙💍</div>
+        <div class="c-coins">🪙💎🪙💎🪙💍🪙</div>
       </div>
-      <div class="chest-word" style="color:#99ffbb;">IN</div>
+      <div class="c-body"><div class="c-clasp"></div></div>
+      <div class="chest-word">IN</div>
     </div>
-
-    <!-- ON chest -->
-    <div class="chest" id="chest-on" data-word="on">
-      <div class="chest-rays"></div>
-      <div class="chest-spill">💍🪙💎💍🪙</div>
-      <div class="chest-lid"></div>
-      <div class="chest-glow"></div>
-      <div class="chest-body" style="position:relative;">
-        <div class="chest-mid-band"></div>
-        <div class="chest-clasp"></div>
+    <div class="chest" id="chest-on" data-word="on" tabindex="0" role="button" aria-label="Choose ON">
+      <div class="c-rays"></div>
+      <div class="c-lid"></div>
+      <div class="c-interior">
+        <div class="c-coins">💍🪙💎🪙💍💎🪙</div>
+        <div class="c-coins">🪙💍🪙💎🪙🪙💎</div>
       </div>
-      <div class="chest-word" style="color:#99bbff;">ON</div>
+      <div class="c-body"><div class="c-clasp"></div></div>
+      <div class="chest-word">ON</div>
     </div>
-
-  </div><!-- end #chests -->
-
+  </div>
   <!-- Scrolling story strip -->
   <div id="story-strip">
     <div id="scroll-track">
@@ -651,7 +635,7 @@ const SCENES = [
   {
     label: "SCENE 2 · IN THE AIR",
     bg: "scene02.jpg",
-    text: "[In] the afternoon the plane flies high. Jack looks down [at] the jungle far below. The pilot speaks [at] noon."
+    text: "[In] the afternoon the plane flies high. Jack looks down [at] the jungle far below. The pilot speaks [at] noon to the passengers."
   },
   {
     label: "SCENE 3 · THE AIRSTRIP",
@@ -661,7 +645,7 @@ const SCENES = [
   {
     label: "SCENE 4 · THE VILLAGE",
     bg: "scene04.jpg",
-    text: "Jack arrives [at] the village [at] night. He sits [in] a warm hut. 'Leave [in] the morning,' warns the old man."
+    text: "Jack arrives [at] the village [at] night. He sits [in] a warm hut. 'You must leave [in] the morning,' warns the old man."
   },
   {
     label: "SCENE 5 · THE WARNING",
@@ -676,7 +660,7 @@ const SCENES = [
   {
     label: "SCENE 7 · THE CHASE",
     bg: "scene07.jpg",
-    text: "[In] the afternoon warriors appear [in] the forest. Jack runs [on] the jungle path. Drums beat [in] the distance."
+    text: "[In] the afternoon warriors appear [in] the forest. Jack runs [on] the jungle path. Drums echo [in] the distance."
   },
   {
     label: "SCENE 8 · THE CAVE",
@@ -738,6 +722,7 @@ function buildStoryHTML() {
 // GAME STATE
 // ─────────────────────────────────────
 let gameOn       = false;
+let touchDragging = false;
 let score        = 0;
 let currentGap   = 0;   // index of gap student must fill next
 let currentScene = 0;   // index of current background scene
@@ -863,6 +848,7 @@ function attachChestListeners() {
 
     // Tap to select (then tap a gap to fill it)
     chest.addEventListener('click', () => {
+      if (touchDragging) return;
       if (!gameOn) return;
       if (selectedWord === word) {
         // Deselect
@@ -947,7 +933,7 @@ function processAnswer(gap, word) {
 
     // Check if we need to change scene
     for (let i = SCENES.length - 1; i >= 0; i--) {
-      if (currentGap > cumGaps[i]) {
+      if (currentGap >= cumGaps[i]) {
         if (i !== currentScene) setScene(i);
         break;
       }
@@ -971,6 +957,7 @@ function processAnswer(gap, word) {
   } else {
     // ❌ WRONG
     gap.classList.add('wrong');
+  gap.addEventListener('animationend', () => gap.classList.remove('wrong'), { once: true });
     document.getElementById('wrong-overlay').classList.add('show');
     gameOn = false;
     if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
@@ -983,6 +970,7 @@ function processAnswer(gap, word) {
 // Drag ghost follows finger, drops on gap
 // ─────────────────────────────────────
 function handleTouchStart(e, word, chestEl) {
+  touchDragging = true;
   e.preventDefault();
   selectedWord = word;
 
@@ -1075,7 +1063,7 @@ function scrollLoop() {
 
   // Loop back to start when fully scrolled
   const totalWidth = words.scrollWidth + stripW;
-  if (Math.abs(scrollX) > totalWidth) scrollX = 0;
+  if (Math.abs(scrollX) > totalWidth) { scrollX += totalWidth; }
 
   track.style.transform = `translateX(${scrollX}px)`;
   rafId = requestAnimationFrame(scrollLoop);
