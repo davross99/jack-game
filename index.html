@@ -31,10 +31,10 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 /* ══ GAME SCREEN ══ */
 #game-screen{justify-content:flex-start;}
 
-/* Scene image — top 68% of screen */
+/* Scene image — top 55% of screen */
 #scene-area{
   width:100%;
-  height:68%;
+  height:55%;
   position:relative;
   flex-shrink:0;
   overflow:hidden;
@@ -49,15 +49,15 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 }
 #scene-bg::after{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,rgba(0,0,0,0.25) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,0.15) 100%);
+  background:linear-gradient(to bottom,rgba(0,0,0,0.2) 0%,rgba(0,0,0,0) 50%,rgba(0,0,0,0.2) 100%);
 }
 
-/* HUD inside scene area at top */
+/* HUD */
 #hud{
   position:absolute;top:0;left:0;right:0;z-index:20;
   display:flex;align-items:center;justify-content:space-between;
   padding:0.28rem 0.6rem;
-  background:rgba(0,0,0,0.75);
+  background:rgba(0,0,0,0.78);
   border-bottom:2px solid rgba(255,215,0,0.5);
   gap:0.3rem;
 }
@@ -66,247 +66,234 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 .h-restart{font-family:'Bangers',cursive;font-size:clamp(0.58rem,1.8vw,0.8rem);background:rgba(180,0,0,0.9);color:#fff;border:none;border-radius:10px;padding:0.18rem 0.5rem;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .h-restart:active{transform:scale(0.93);}
 
-/* Progress inside scene */
 #prog{position:absolute;top:2.2rem;left:0;right:0;z-index:20;height:3px;background:rgba(255,255,255,0.12);}
 #prog-bar{height:100%;background:linear-gradient(90deg,#FFD700,#FFA500);width:0%;transition:width 0.4s;}
 
-/* Scene label */
 #scene-lbl{
-  position:absolute;bottom:0.4rem;left:50%;transform:translateX(-50%);
-  z-index:20;
+  position:absolute;bottom:0.35rem;left:50%;transform:translateX(-50%);z-index:20;
   font-family:'Bangers',cursive;font-size:clamp(0.5rem,1.8vw,0.72rem);
   color:rgba(255,215,0,0.85);letter-spacing:2px;
-  background:rgba(0,0,0,0.6);
-  padding:0.12rem 0.6rem;border-radius:4px;
-  white-space:nowrap;
+  background:rgba(0,0,0,0.6);padding:0.12rem 0.6rem;border-radius:4px;white-space:nowrap;
 }
 
-/* ══ PIRATE CHESTS — bottom 32% ══ */
+/* ══ BOTTOM PANEL — 45% ══ */
 #bottom-panel{
-  width:100%;
-  flex:1;
-  background:linear-gradient(180deg,#1a0e05,#0d0803);
-  border-top:3px solid rgba(180,120,20,0.8);
-  display:flex;
-  flex-direction:column;
+  width:100%;height:45%;
+  background:linear-gradient(180deg,#1c0f04,#0e0702);
+  border-top:3px solid #C8860A;
+  display:flex;flex-direction:column;
   overflow:hidden;
-  position:relative;
+  flex-shrink:0;
 }
 
-/* Chests row */
+/* ══ TREASURE CHESTS ROW ══ */
 #chests-row{
   width:100%;
   display:flex;
-  align-items:center;
+  align-items:flex-end;
   justify-content:space-around;
-  padding:0.3rem 0.5rem 0.2rem;
+  padding:0.25rem 0.4rem 0;
   flex-shrink:0;
-  background:rgba(0,0,0,0.3);
-  border-bottom:1px solid rgba(180,120,20,0.4);
+  background:linear-gradient(180deg,rgba(30,15,3,0.9),rgba(20,10,2,0.9));
+  border-bottom:2px solid rgba(180,100,10,0.5);
 }
 
-/* Individual chest — CSS drawn */
-.chest{
+/* Each treasure chest — detailed CSS */
+.chest-outer{
   display:flex;flex-direction:column;align-items:center;
+  width:clamp(85px,26vw,118px);
+  cursor:default;
   position:relative;
-  width:clamp(72px,21vw,98px);
 }
 
-/* Chest body — wooden look */
-.chest-body{
-  width:100%;
+/* Lid — open, rotated back */
+.c-lid{
+  width:94%;
+  height:clamp(14px,3.5vw,20px);
+  position:relative;
+  transform:perspective(120px) rotateX(-40deg) translateY(2px);
+  transform-origin:bottom center;
+  z-index:3;
+  border-radius:4px 4px 0 0;
+  overflow:hidden;
+  box-shadow:0 -3px 8px rgba(0,0,0,0.6);
+}
+/* Wood planks on lid */
+.c-lid::before{
+  content:'';
+  position:absolute;inset:0;
   background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0,0,0,0.08) 0px,
-      rgba(0,0,0,0.08) 2px,
-      transparent 2px,
-      transparent 18px
-    ),
-    linear-gradient(180deg,#8B5A1A,#5C3A0A,#8B5A1A);
-  border:2px solid #C8860A;
-  border-radius:3px 3px 5px 5px;
-  padding:0.35rem 0.25rem 0.3rem;
-  display:flex;flex-direction:column;align-items:center;
-  gap:0.15rem;
-  box-shadow:
-    0 3px 8px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,200,80,0.25),
-    inset 0 -1px 0 rgba(0,0,0,0.3);
-  position:relative;
-  z-index:2;
+    repeating-linear-gradient(90deg,rgba(0,0,0,0.15) 0,rgba(0,0,0,0.15) 1px,transparent 1px,transparent 20px),
+    linear-gradient(180deg,#C47A1E,#8B5510,#A06515);
 }
-/* Metal bands on chest */
-.chest-body::before{
+/* Metal band on lid */
+.c-lid::after{
   content:'';
   position:absolute;
-  top:40%;left:0;right:0;height:5px;
-  background:linear-gradient(180deg,rgba(200,134,10,0.7),rgba(140,94,7,0.7));
-  border-top:1px solid rgba(255,200,50,0.4);
-  border-bottom:1px solid rgba(80,50,0,0.4);
-}
-/* Gold lock */
-.chest-body::after{
-  content:'🔐';
-  position:absolute;
-  bottom:0.1rem;left:50%;transform:translateX(-50%);
-  font-size:clamp(0.55rem,2vw,0.75rem);
-  opacity:0.7;
+  top:50%;left:0;right:0;height:4px;
+  transform:translateY(-50%);
+  background:linear-gradient(180deg,#E8A020,#A06810,#E8A020);
+  box-shadow:0 1px 3px rgba(0,0,0,0.5);
 }
 
-/* Chest lid — open, hinged at back */
-.chest-lid{
-  width:108%;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0,0,0,0.08) 0px,
-      rgba(0,0,0,0.08) 2px,
-      transparent 2px,
-      transparent 18px
-    ),
-    linear-gradient(180deg,#A06820,#6B4410);
-  border:2px solid #C8860A;
-  border-radius:4px 4px 2px 2px;
-  height:clamp(16px,4vw,24px);
-  transform:perspective(100px) rotateX(-35deg);
-  transform-origin:bottom center;
-  margin-bottom:-2px;
-  box-shadow:0 -2px 6px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,200,80,0.3);
-  position:relative;z-index:3;
-}
 /* Gold glow from inside open chest */
-.chest-glow{
-  position:absolute;
-  bottom:100%;left:10%;right:10%;
-  height:8px;
-  background:radial-gradient(ellipse,rgba(255,200,50,0.6),transparent);
-  z-index:1;
+.c-glow{
+  width:88%;
+  height:clamp(6px,1.5vw,10px);
+  background:radial-gradient(ellipse,rgba(255,210,40,0.85) 0%,rgba(255,160,0,0.4) 60%,transparent 100%);
+  position:relative;z-index:2;
+  filter:blur(2px);
 }
 
-/* The DRAGGABLE preposition word */
+/* Chest body */
+.c-body{
+  width:100%;
+  position:relative;z-index:2;
+  border-radius:0 0 6px 6px;
+  overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,0.7),inset 0 0 0 1px rgba(220,150,20,0.3);
+}
+/* Wood texture */
+.c-body::before{
+  content:'';
+  position:absolute;inset:0;
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,0.1) 0,rgba(0,0,0,0.1) 1px,transparent 1px,transparent 20px),
+    linear-gradient(180deg,#8B5510,#5C3608,#7A4A10,#5C3608,#8B5510);
+  z-index:0;
+}
+/* Metal bands */
+.c-body::after{
+  content:'';
+  position:absolute;
+  top:30%;left:0;right:0;height:5px;
+  background:linear-gradient(180deg,rgba(220,150,20,0.8),rgba(160,100,10,0.8),rgba(220,150,20,0.8));
+  z-index:1;
+  box-shadow:0 1px 3px rgba(0,0,0,0.4);
+}
+.c-body-inner{
+  position:relative;z-index:2;
+  padding:0.3rem 0.2rem 0.25rem;
+  display:flex;flex-direction:column;align-items:center;gap:0.15rem;
+}
+
+/* Coins inside chest */
+.c-coins{
+  font-size:clamp(0.55rem,2vw,0.75rem);
+  line-height:1;
+  text-align:center;
+  margin-bottom:0.05rem;
+}
+
+/* Gold lock/clasp */
+.c-clasp{
+  position:absolute;
+  top:-3px;left:50%;transform:translateX(-50%);
+  width:clamp(14px,4vw,20px);height:clamp(7px,2vw,10px);
+  background:linear-gradient(180deg,#FFD700,#B8860B,#FFD700);
+  border-radius:3px 3px 2px 2px;
+  border:1px solid #8B6914;
+  z-index:5;
+  box-shadow:0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* The DRAGGABLE preposition word on front of chest */
 .prep-word{
   font-family:'Bangers',cursive;
-  font-size:clamp(1.05rem,4.5vw,1.5rem);
-  color:#fff;
-  text-shadow:1px 1px 3px rgba(0,0,0,0.8);
+  font-size:clamp(1.1rem,4.8vw,1.6rem);
   letter-spacing:2px;
-  padding:0.1rem 0.4rem;
   cursor:grab;
   touch-action:none;
-  position:relative;z-index:5;
+  position:relative;z-index:10;
+  padding:0.05rem 0.3rem;
   border-radius:3px;
-  transition:filter 0.15s,transform 0.15s;
+  text-shadow:1px 1px 3px rgba(0,0,0,0.9);
+  transition:filter 0.15s,transform 0.1s;
   -webkit-tap-highlight-color:transparent;
+  border-bottom:2px solid rgba(255,255,255,0.2);
 }
-.prep-word:active{cursor:grabbing;}
-.prep-word.dragging{opacity:0.3;}
+.prep-word:active{transform:scale(0.92);}
+.prep-word.dragging{opacity:0.25;}
 
-.chest-hint{
-  font-size:clamp(0.38rem,1.3vw,0.52rem);
-  color:rgba(255,200,80,0.6);
-  letter-spacing:1px;
-  font-weight:700;
-  margin-top:0.1rem;
+.c-subtext{
+  font-size:clamp(0.36rem,1.2vw,0.5rem);
+  color:rgba(220,180,80,0.65);
+  letter-spacing:1px;font-weight:700;
 }
 
-/* ══ SCROLLING STORY STRIP ══ */
+/* ══ STORY STRIP ══ */
 #story-strip{
-  flex:1;
+  flex:1;min-height:0;
   overflow:hidden;
   position:relative;
-  display:flex;
-  align-items:center;
-  min-height:0;
+  display:flex;align-items:center;
 }
-
-/* Subtle gold top border line */
 #story-strip::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(180,120,20,0.5),transparent);
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(180,120,20,0.4),transparent);
 }
-
 #scroll-track{
   display:flex;align-items:center;
-  height:100%;
-  white-space:nowrap;
+  height:100%;white-space:nowrap;
   will-change:transform;
 }
-
 #story-content{
   display:inline-flex;align-items:center;
-  font-size:clamp(0.92rem,3.8vw,1.15rem);
+  font-size:clamp(0.95rem,4vw,1.18rem);
   font-weight:800;
   color:#f5e8c0;
   text-shadow:1px 1px 2px rgba(0,0,0,0.8);
-  padding:0 110vw 0 20px;
-  line-height:1;
-  gap:0;
+  padding:0 112vw 0 20px;
+  line-height:1;gap:0;
 }
 
-/* Gap slot in story */
+/* Gap slots */
 .gap-slot{
   display:inline-flex;align-items:center;justify-content:center;
   min-width:clamp(46px,11vw,70px);
   height:clamp(26px,6vw,36px);
-  margin:0 5px;
-  flex-shrink:0;
+  margin:0 5px;flex-shrink:0;
   font-family:'Bangers',cursive;
   font-size:clamp(0.88rem,3.5vw,1.1rem);
-  letter-spacing:2px;
-  cursor:pointer;
+  letter-spacing:2px;cursor:pointer;
   transition:all 0.15s;
-  /* Dotted underline style */
   color:rgba(255,215,0,0.85);
   border-bottom:2px dotted rgba(255,215,0,0.6);
   padding:0 4px;
-  position:relative;
 }
 .gap-slot::before{content:'···';}
 .gap-slot.active{
-  border-bottom:2px solid #FFD700;
-  color:#FFD700;
+  border-bottom:2px solid #FFD700;color:#FFD700;
   animation:glow 0.9s ease-in-out infinite;
 }
 .gap-slot.active::before{content:'___';}
-@keyframes glow{0%,100%{opacity:1}50%{opacity:0.45}}
+@keyframes glow{0%,100%{opacity:1}50%{opacity:0.4}}
 .gap-slot.correct{
-  color:#7fff7f;
-  border-bottom:2px solid #50c850;
-  cursor:default;animation:none;
-  font-weight:800;
+  color:#7fff7f;border-bottom:2px solid #50c850;
+  cursor:default;animation:none;font-weight:800;
 }
 .gap-slot.correct::before{content:'';}
 .gap-slot.drop-ready{
-  background:rgba(255,215,0,0.2);
-  border-radius:4px;
-  border-bottom:2px solid #FFD700;
-  transform:scale(1.12);
+  background:rgba(255,215,0,0.18);border-radius:4px;
+  border-bottom:2px solid #FFD700;transform:scale(1.1);
 }
 .gap-slot.wrong-flash{
-  color:#ff5555;
-  border-bottom:2px solid #e63232;
+  color:#ff5555;border-bottom:2px solid #e63232;
   animation:shk 0.4s ease;
 }
 @keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-
-.scene-div{display:inline-block;padding:0 1.5rem;color:rgba(255,215,0,0.35);font-size:0.75rem;}
+.scene-div{display:inline-block;padding:0 1.5rem;color:rgba(255,215,0,0.3);font-size:0.75rem;}
 
 /* ══ DRAG CLONE ══ */
 #drag-clone{
-  position:fixed;z-index:9999;
-  pointer-events:none;display:none;
-  font-family:'Bangers',cursive;
-  font-size:clamp(1.2rem,5vw,1.8rem);
-  color:#FFD700;
-  text-shadow:0 0 12px rgba(255,215,0,0.8),1px 1px 3px rgba(0,0,0,0.9);
+  position:fixed;z-index:9999;pointer-events:none;display:none;
+  font-family:'Bangers',cursive;font-size:clamp(1.3rem,5.5vw,2rem);
   letter-spacing:2px;
-  transform:translate(-50%,-50%) scale(1.3);
-  background:rgba(0,0,0,0.6);
-  padding:0.2rem 0.5rem;
-  border-radius:6px;
-  border:2px solid rgba(255,215,0,0.6);
+  transform:translate(-50%,-50%) scale(1.25);
+  text-shadow:0 0 15px currentColor,1px 1px 3px rgba(0,0,0,0.9);
+  background:rgba(0,0,0,0.65);
+  padding:0.2rem 0.5rem;border-radius:6px;
+  border:2px solid rgba(255,215,0,0.5);
 }
 
 /* ══ OVERLAYS ══ */
@@ -344,7 +331,7 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
   <div class="t-pills"><span class="pill">AT</span><span class="pill">IN</span><span class="pill">ON</span></div>
   <div class="t-hint">
     🎁 Drag the preposition word<br>
-    down into the gap in the story<br>
+    down into the gap ···<br>
     <strong style="color:#FFD700">Wrong = start again!</strong>
   </div>
   <button class="go-btn" onclick="startGame()">▶ START ADVENTURE</button>
@@ -353,7 +340,7 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 <!-- GAME -->
 <div class="screen" id="game-screen">
 
-  <!-- TOP 68% — scene image -->
+  <!-- Scene image — top 55% -->
   <div id="scene-area">
     <div id="scene-bg"></div>
     <div id="hud">
@@ -365,47 +352,57 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
     <div id="scene-lbl">SCENE 1 · THE AIRPORT</div>
   </div>
 
-  <!-- BOTTOM 32% — chests + scrolling story -->
+  <!-- Bottom panel — 45% -->
   <div id="bottom-panel">
 
-    <!-- Three pirate chests -->
+    <!-- Three treasure chests -->
     <div id="chests-row">
+
       <!-- AT chest -->
-      <div class="chest" id="chest-at">
-        <div class="chest-glow"></div>
-        <div class="chest-lid"></div>
-        <div class="chest-body">
-          <div class="prep-word" id="word-at" data-word="at"
-            draggable="true"
-            style="color:#ffaaaa;"
-            >AT</div>
-          <div class="chest-hint">time &amp; place</div>
+      <div class="chest-outer">
+        <div class="c-lid"></div>
+        <div class="c-glow"></div>
+        <div class="c-body">
+          <div class="c-clasp"></div>
+          <div class="c-body-inner">
+            <div class="c-coins">🪙🪙🪙</div>
+            <div class="prep-word" id="word-at" data-word="at"
+              style="color:#ff9999;" draggable="true">AT</div>
+            <div class="c-subtext">time &amp; place</div>
+          </div>
         </div>
       </div>
+
       <!-- IN chest -->
-      <div class="chest" id="chest-in">
-        <div class="chest-glow"></div>
-        <div class="chest-lid"></div>
-        <div class="chest-body">
-          <div class="prep-word" id="word-in" data-word="in"
-            draggable="true"
-            style="color:#aaffaa;"
-            >IN</div>
-          <div class="chest-hint">time &amp; place</div>
+      <div class="chest-outer">
+        <div class="c-lid"></div>
+        <div class="c-glow"></div>
+        <div class="c-body">
+          <div class="c-clasp"></div>
+          <div class="c-body-inner">
+            <div class="c-coins">💎💎💎</div>
+            <div class="prep-word" id="word-in" data-word="in"
+              style="color:#99ff99;" draggable="true">IN</div>
+            <div class="c-subtext">time &amp; place</div>
+          </div>
         </div>
       </div>
+
       <!-- ON chest -->
-      <div class="chest" id="chest-on">
-        <div class="chest-glow"></div>
-        <div class="chest-lid"></div>
-        <div class="chest-body">
-          <div class="prep-word" id="word-on" data-word="on"
-            draggable="true"
-            style="color:#aaaaff;"
-            >ON</div>
-          <div class="chest-hint">time &amp; place</div>
+      <div class="chest-outer">
+        <div class="c-lid"></div>
+        <div class="c-glow"></div>
+        <div class="c-body">
+          <div class="c-clasp"></div>
+          <div class="c-body-inner">
+            <div class="c-coins">💍💍💍</div>
+            <div class="prep-word" id="word-on" data-word="on"
+              style="color:#9999ff;" draggable="true">ON</div>
+            <div class="c-subtext">time &amp; place</div>
+          </div>
         </div>
       </div>
+
     </div>
 
     <!-- Scrolling story -->
@@ -437,10 +434,10 @@ body{font-family:'Nunito',sans-serif;user-select:none;-webkit-user-select:none;}
 <div id="drag-clone"></div>
 
 <script>
-// ═══════════════════════════════════════════
-// STORY — 12 scenes, scrolling, 60% time / 40% place
-// ═══════════════════════════════════════════
-const SCENES = [
+// ═══════════════════════════════════════
+// STORY DATA
+// ═══════════════════════════════════════
+const SCENES=[
   {id:1,label:"SCENE 1 · THE AIRPORT",bg:"scene01.jpg",
    text:"Jack arrives [on] Monday morning. His flight leaves [at] seven o'clock. He waits [at] the gate [in] the busy terminal."},
   {id:2,label:"SCENE 2 · IN THE AIR",bg:"scene02.jpg",
@@ -467,54 +464,52 @@ const SCENES = [
    text:"[At] midnight Jack boards the plane. [In] the sky he looks down [at] the jungle. [At] dawn [on] Thursday — Jack is safe!"}
 ];
 
-// Build full story HTML
 function buildStoryHTML(){
-  let html='', gIdx=0;
+  let html='',gi=0;
   SCENES.forEach((sc,si)=>{
     if(si>0) html+='<span class="scene-div"> ✦ </span>';
     sc.text.split(/\[([^\]]+)\]/).forEach((p,pi)=>{
       if(pi%2===0){if(p) html+=`<span>${p}</span>`;}
       else{
-        html+=`<span class="gap-slot" id="gap-${gIdx}" data-answer="${p}" data-idx="${gIdx}" data-scene="${si}"></span>`;
-        gIdx++;
+        html+=`<span class="gap-slot" id="gap-${gi}" data-answer="${p}" data-idx="${gi}" data-scene="${si}"></span>`;
+        gi++;
       }
     });
   });
   return html;
 }
 
-const gapsPerScene = SCENES.map(s=>(s.text.match(/\[[^\]]+\]/g)||[]).length);
+const gapsPerScene=SCENES.map(s=>(s.text.match(/\[[^\]]+\]/g)||[]).length);
 const cumGaps=[];let cc=0;
 gapsPerScene.forEach(g=>{cumGaps.push(cc);cc+=g;});
 const TOTAL_GAPS=cc;
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
 // STATE
-// ═══════════════════════════════════════════
-let score=0, curGap=0, curScene=0, gameOn=false;
-let dragWord=null;
-let scrollX=0, rafId=null;
-const SPD=0.55, SPD_SLOW=0.1, STOP_PX=55, SLOW_PX=210;
+// ═══════════════════════════════════════
+let score=0,curGap=0,curScene=0,gameOn=false;
+let dragWord=null,scrollX=0,rafId=null;
 
-// ═══════════════════════════════════════════
+// Scroll speeds — faster than before
+const SPD=1.0;        // normal speed (was 0.55)
+const SPD_SLOW=0.2;   // approaching gap (was 0.1)
+const STOP_PX=60;
+const SLOW_PX=220;
+
+// ═══════════════════════════════════════
 // START / RESTART
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
 function startGame(){
-  score=0;curGap=0;curScene=0;scrollX=0;
-  gameOn=true;dragWord=null;
+  score=0;curGap=0;curScene=0;scrollX=0;gameOn=true;dragWord=null;
   document.getElementById('total-val').textContent=TOTAL_GAPS;
   document.getElementById('final-total').textContent=TOTAL_GAPS;
   updateHUD();
   showScreen('game-screen');
   setScene(0);
-
-  const content=document.getElementById('story-content');
-  content.innerHTML=buildStoryHTML();
+  document.getElementById('story-content').innerHTML=buildStoryHTML();
   addGapListeners();
-  document.getElementById('scroll-track').style.transform='translateX(0px)';
-
   setupDragWords();
-
+  document.getElementById('scroll-track').style.transform='translateX(0px)';
   if(rafId) cancelAnimationFrame(rafId);
   rafId=requestAnimationFrame(scrollLoop);
 }
@@ -522,10 +517,12 @@ function startGame(){
 function restartGame(){
   gameOn=false;
   if(rafId){cancelAnimationFrame(rafId);rafId=null;}
-  document.getElementById('wrong-overlay').classList.remove('show');
-  document.getElementById('drag-clone').style.display='none';
-  stopFW();
+  // FIX: Clear drag clone on restart
+  const clone=document.getElementById('drag-clone');
+  clone.style.display='none';
   dragWord=null;
+  document.getElementById('wrong-overlay').classList.remove('show');
+  stopFW();
   setTimeout(startGame,80);
 }
 
@@ -533,84 +530,47 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-
 function setScene(idx){
   if(idx>=SCENES.length) return;
   document.getElementById('scene-bg').style.backgroundImage=`url('${SCENES[idx].bg}')`;
   document.getElementById('scene-lbl').textContent=SCENES[idx].label;
 }
 
-// ═══════════════════════════════════════════
-// DRAG WORDS SETUP
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
+// DRAG WORDS
+// ═══════════════════════════════════════
 function setupDragWords(){
   document.querySelectorAll('.prep-word').forEach(el=>{
     const word=el.dataset.word;
-
     // Desktop drag
     el.addEventListener('dragstart',e=>{
       dragWord=word;
       e.dataTransfer.setData('text',word);
       setTimeout(()=>el.classList.add('dragging'),0);
     });
-    el.addEventListener('dragend',()=>{
-      el.classList.remove('dragging');
-    });
-
-    // Touch drag
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    // Touch drag — with touchcancel fix (Gemini fix #1)
     el.addEventListener('touchstart',e=>onTouchStart(e,word,el),{passive:false});
-
     // Click fallback
     el.addEventListener('click',()=>{
       if(!gameOn) return;
       dragWord=(dragWord===word)?null:word;
       document.querySelectorAll('.prep-word').forEach(w=>w.style.filter='');
       if(dragWord) el.style.filter='drop-shadow(0 0 8px #FFD700) brightness(1.3)';
-      highlightCurrentGap();
+      highlightGap();
     });
   });
 }
 
-// ═══════════════════════════════════════════
-// GAP LISTENERS
-// ═══════════════════════════════════════════
-function addGapListeners(){
-  document.querySelectorAll('.gap-slot').forEach(slot=>{
-    slot.addEventListener('dragover',e=>{e.preventDefault();if(!slot.classList.contains('correct'))slot.classList.add('drop-ready');});
-    slot.addEventListener('dragleave',()=>slot.classList.remove('drop-ready'));
-    slot.addEventListener('drop',e=>{
-      e.preventDefault();slot.classList.remove('drop-ready');
-      const w=e.dataTransfer.getData('text')||dragWord;
-      if(w) handleAnswer(slot,w);
-    });
-    slot.addEventListener('click',()=>{
-      if(!gameOn||slot.classList.contains('correct')) return;
-      if(!dragWord) return;
-      handleAnswer(slot,dragWord);
-    });
-    slot.addEventListener('touchend',e=>{
-      e.preventDefault();
-      if(!gameOn||slot.classList.contains('correct')) return;
-      if(!dragWord) return;
-      handleAnswer(slot,dragWord);
-    },{passive:false});
-  });
-}
-
-function highlightCurrentGap(){
-  document.querySelectorAll('.gap-slot').forEach(s=>s.classList.remove('active'));
-  const g=document.getElementById(`gap-${curGap}`);
-  if(g&&!g.classList.contains('correct')) g.classList.add('active');
-}
-
-// ═══════════════════════════════════════════
-// TOUCH DRAG
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
+// TOUCH DRAG — with all Gemini fixes
+// ═══════════════════════════════════════
 function onTouchStart(e,word,srcEl){
   e.preventDefault();
   dragWord=word;
   const clone=document.getElementById('drag-clone');
   clone.textContent=word.toUpperCase();
+  clone.style.color=srcEl.style.color;
   clone.style.display='block';
   const t=e.touches[0];
   posClone(t.clientX,t.clientY);
@@ -624,21 +584,41 @@ function onTouchStart(e,word,srcEl){
     if(el&&el.classList.contains('gap-slot')&&!el.classList.contains('correct'))
       el.classList.add('drop-ready');
   }
+
   function onEnd(ev){
-    clone.style.display='none';
+    clone.style.display='none'; // FIX: Always hide clone
+    dragWord=null;
     document.querySelectorAll('.gap-slot').forEach(s=>s.classList.remove('drop-ready'));
+    document.querySelectorAll('.prep-word').forEach(w=>w.classList.remove('dragging'));
     const t2=ev.changedTouches[0];
     const el=document.elementFromPoint(t2.clientX,t2.clientY);
     if(el&&el.classList.contains('gap-slot')&&!el.classList.contains('correct')){
-      handleAnswer(el,dragWord);
-    } else {
-      dragWord=null;
+      // Re-set dragWord temporarily for the answer
+      const answerWord=word;
+      handleAnswer(el,answerWord);
     }
+    cleanup();
+  }
+
+  // FIX (Gemini #1): Handle touchcancel to always clear clone
+  function onCancel(){
+    clone.style.display='none';
+    dragWord=null;
+    document.querySelectorAll('.gap-slot').forEach(s=>s.classList.remove('drop-ready'));
+    document.querySelectorAll('.prep-word').forEach(w=>w.classList.remove('dragging'));
+    cleanup();
+  }
+
+  function cleanup(){
     document.removeEventListener('touchmove',onMove);
     document.removeEventListener('touchend',onEnd);
+    document.removeEventListener('touchcancel',onCancel);
   }
+
+  // FIX (Gemini #4): Ensure passive:false on all touch listeners
   document.addEventListener('touchmove',onMove,{passive:false});
-  document.addEventListener('touchend',onEnd);
+  document.addEventListener('touchend',onEnd,{passive:false});
+  document.addEventListener('touchcancel',onCancel,{passive:false}); // Gemini fix #1
 }
 
 function posClone(x,y){
@@ -646,9 +626,41 @@ function posClone(x,y){
   c.style.left=x+'px';c.style.top=y+'px';
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
+// GAP LISTENERS
+// ═══════════════════════════════════════
+function addGapListeners(){
+  document.querySelectorAll('.gap-slot').forEach(slot=>{
+    // Desktop drop
+    slot.addEventListener('dragover',e=>{e.preventDefault();if(!slot.classList.contains('correct'))slot.classList.add('drop-ready');});
+    slot.addEventListener('dragleave',()=>slot.classList.remove('drop-ready'));
+    slot.addEventListener('drop',e=>{
+      e.preventDefault();slot.classList.remove('drop-ready');
+      const w=e.dataTransfer.getData('text')||dragWord;
+      if(w) handleAnswer(slot,w);
+    });
+    // Click / tap
+    slot.addEventListener('click',()=>{
+      if(!gameOn||slot.classList.contains('correct')||!dragWord) return;
+      handleAnswer(slot,dragWord);
+    });
+    slot.addEventListener('touchend',e=>{
+      e.preventDefault();
+      if(!gameOn||slot.classList.contains('correct')||!dragWord) return;
+      handleAnswer(slot,dragWord);
+    },{passive:false});
+  });
+}
+
+function highlightGap(){
+  document.querySelectorAll('.gap-slot').forEach(s=>s.classList.remove('active'));
+  const g=document.getElementById(`gap-${curGap}`);
+  if(g&&!g.classList.contains('correct')) g.classList.add('active');
+}
+
+// ═══════════════════════════════════════
 // ANSWER HANDLER
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
 function handleAnswer(slot,word){
   if(!gameOn||slot.classList.contains('correct')) return;
   const given=word.toLowerCase().trim();
@@ -672,12 +684,12 @@ function handleAnswer(slot,word){
       }
     }
 
-    // WIN
+    // Win check
     if(curGap>=TOTAL_GAPS){
       gameOn=false;
       setTimeout(()=>{bigFW();setTimeout(()=>{stopFW();document.getElementById('final-score').textContent=score;showScreen('end-screen');},3500);},400);
     } else {
-      highlightCurrentGap();
+      highlightGap();
     }
   } else {
     slot.classList.add('wrong-flash');
@@ -688,11 +700,17 @@ function handleAnswer(slot,word){
   }
 }
 
-// ═══════════════════════════════════════════
-// SCROLL LOOP
-// ═══════════════════════════════════════════
-function scrollLoop(){
+// ═══════════════════════════════════════
+// SCROLL LOOP — FIX (Gemini #2): delta-time based for consistency
+// ═══════════════════════════════════════
+let lastTime=0;
+function scrollLoop(timestamp){
   if(!gameOn) return;
+
+  // Delta time fix — consistent speed regardless of frame rate
+  const delta=lastTime?Math.min((timestamp-lastTime)/16.67,3):1;
+  lastTime=timestamp;
+
   const track=document.getElementById('scroll-track');
   const strip=document.getElementById('story-strip');
   const sw=strip.offsetWidth;
@@ -710,25 +728,25 @@ function scrollLoop(){
     else if(gx<=cx+SLOW_PX) spd=SPD_SLOW;
   }
 
-  scrollX-=spd;
+  scrollX-=spd*delta;
   const total=content.scrollWidth+sw;
   if(Math.abs(scrollX)>total) scrollX=0;
   track.style.transform=`translateX(${scrollX}px)`;
   rafId=requestAnimationFrame(scrollLoop);
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
 // HUD
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
 function updateHUD(){
   document.getElementById('score-val').textContent=score;
   if(TOTAL_GAPS>0)
     document.getElementById('prog-bar').style.width=(score/TOTAL_GAPS*100)+'%';
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
 // FIREWORKS
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
 const fwc=document.getElementById('fw-canvas');
 const fc=fwc.getContext('2d');
 let parts=[],fwOn=false,fwR=null;
@@ -737,7 +755,7 @@ rsz();window.addEventListener('resize',rsz);
 function burst(x,y,n){
   const cols=['#FFD700','#FF6B6B','#4ECDC4','#96CEB4','#DDA0DD','#98FB98','#FF69B4'];
   for(let i=0;i<n;i++){
-    const a=(Math.PI*2/n)*i,s=3+Math.random()*5;
+    const a=(Math.PI*2/n)*i+Math.random()*0.3,s=3+Math.random()*5;
     parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,color:cols[i%cols.length],life:1,decay:0.025+Math.random()*0.02,size:2+Math.random()*3});
   }
 }
@@ -755,7 +773,7 @@ function animFW(){
 function miniFirework(){
   fwc.style.display='block';fwOn=true;
   const sr=document.getElementById('story-strip').getBoundingClientRect();
-  burst(innerWidth*.5+(Math.random()-.5)*180,sr.top+(Math.random()-.5)*20,16);
+  burst(innerWidth*.5+(Math.random()-.5)*160,sr.top-10+(Math.random()-.5)*20,16);
   if(!fwR)animFW();
   setTimeout(()=>{fwOn=false;},480);
 }
