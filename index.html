@@ -5,31 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jack & The Temple of Shadows</title>
 <style>
-    /* Full screen container */
+    /* 1. Full Screen Layout */
     body { 
         background: #000; color: #FFD700; font-family: 'Nunito', sans-serif; 
-        display: flex; flex-direction: column; align-items: center; justify-content: center; 
-        height: 100vh; margin: 0; padding: 20px;
+        margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        height: 100vh; overflow: hidden;
     }
 
-    /* Static sentence area - fully visible */
+    /* 2. Full Context Sentence - Large and Wrapping */
     #sentence-area { 
-        font-size: 2.2rem; text-align: center; max-width: 90%; 
-        line-height: 1.8; color: #fff; margin-bottom: 60px;
+        font-size: 2.8rem; /* Large font size */
+        text-align: center; 
+        max-width: 90%; /* Forces text to wrap to new lines if long */
+        line-height: 1.8; 
+        color: #fff; 
+        margin-bottom: 80px;
     }
     .gap { 
-        border-bottom: 4px dotted #FFD700; color: #FFD700; 
-        min-width: 140px; display: inline-block; padding: 0 5px;
+        border-bottom: 5px dotted #FFD700; color: #FFD700; 
+        min-width: 150px; display: inline-block; padding: 0 10px;
     }
 
-    /* New Pirate Chest Styling */
-    #chest-container { display: flex; gap: 40px; }
+    /* 3. New Pirate Chest Styling - Matches your uploaded photo */
+    #chest-container { display: flex; gap: 50px; }
     .chest { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
-    .lid { width: 90px; height: 35px; background: #5d3a1a; border: 3px solid #D4AF37; border-radius: 6px 6px 0 0; transform: perspective(100px) rotateX(-50deg); }
-    .body { width: 80px; height: 60px; background: #8B4513; border: 3px solid #D4AF37; border-radius: 0 0 6px 6px; display: flex; align-items: center; justify-content: center; position: relative; }
-    .body::before { content: ''; position: absolute; width: 90%; height: 60%; background: #D4AF37; opacity: 0.3; }
-    .body::after { content: '💰'; font-size: 1.8rem; }
-    .label { font-family: 'Bangers'; font-size: 1.6rem; margin-top: 10px; color: #FFD700; }
+    .lid { width: 100px; height: 35px; background: #6b4423; border: 4px solid #D4AF37; border-radius: 8px 8px 0 0; transform: perspective(100px) rotateX(-45deg); }
+    .body { width: 90px; height: 70px; background: #8B4513; border: 4px solid #D4AF37; border-radius: 0 0 8px 8px; display: flex; align-items: center; justify-content: center; position: relative; }
+    .body::before { content: '✨'; position: absolute; top: 10px; font-size: 1.5rem; }
+    .label { font-family: 'Bangers'; font-size: 2.2rem; margin-top: 15px; color: #FFD700; }
 </style>
 </head>
 <body>
