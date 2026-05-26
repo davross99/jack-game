@@ -330,12 +330,12 @@ body {
   z-index: 40;
   width: 100%;
   flex-shrink: 0;
-  height: clamp(58px, 13vh, 80px);
+  height: clamp(80px, 15vh, 120px);
   overflow: hidden;
   display: flex;
   align-items: center;
   background: rgba(4,2,0,0.93);
-  border-top: 1px solid rgba(160,100,8,0.45);
+  border-top: 4px solid #D4AF37;
 }
 #scroll-track {
   display: flex;
@@ -347,7 +347,7 @@ body {
 #story-words {
   display: inline-flex;
   align-items: center;
-  font-size: clamp(1.5rem, 6vw, 2.2rem);
+  font-size: clamp(1.6rem, 6.5vw, 2.4rem);
   font-weight: 800;
   color: #f5e8c0;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.9);
@@ -363,7 +363,7 @@ body {
   justify-content: center;
   min-width: clamp(60px, 15vw, 100px);
   height: clamp(36px, 8vw, 52px);
-  margin: 0 5px;
+  margin: 0 10px;
   flex-shrink: 0;
   font-family: 'Bangers', cursive;
   font-size: clamp(1.4rem, 5.5vw, 1.8rem);
@@ -371,7 +371,7 @@ body {
   cursor: pointer;
   transition: transform 0.12s, background 0.12s;
   color: rgba(255,215,0,0.88);
-  border-bottom: 2px dotted rgba(255,215,0,0.62);
+  border-bottom: 4px dotted #FFD700;
   padding: 0 4px;
 }
 .gap::before { content: '···'; }
@@ -537,7 +537,7 @@ body {
     <div class="hud-score">⭐ <span id="score-display">0</span>/<span id="total-display">0</span></div>
     <div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">
       <span style="font-size:0.7rem;">🐢</span>
-      <input type="range" id="spd" min="0.1" max="100" step="0.1" value="2.5"
+      <input type="range" id="spd" min="0.5" max="50" step="0.5" value="2.5"
         oninput="gameSpeed=parseFloat(this.value)"
         style="width:clamp(100px,40vw,300px);accent-color:#FFD700;">
       <span style="font-size:0.7rem;">🐇</span>
@@ -564,7 +564,7 @@ body {
         <div class="c-coins">💎🪙💍🪙💎🪙💍</div>
       </div>
       <div class="c-body"><div class="c-clasp"></div></div>
-      <div class="chest-word">AT</div>
+      <div class="chest-word" style="color:#ffdd99;">AT</div>
     </div>
     <div class="chest" id="chest-in" data-word="in" tabindex="0" role="button" aria-label="Choose IN">
       <div class="c-rays"></div>
@@ -574,7 +574,7 @@ body {
         <div class="c-coins">🪙💎🪙💎🪙💍🪙</div>
       </div>
       <div class="c-body"><div class="c-clasp"></div></div>
-      <div class="chest-word">IN</div>
+      <div class="chest-word" style="color:#99ffbb;">IN</div>
     </div>
     <div class="chest" id="chest-on" data-word="on" tabindex="0" role="button" aria-label="Choose ON">
       <div class="c-rays"></div>
@@ -584,7 +584,7 @@ body {
         <div class="c-coins">🪙💍🪙💎🪙🪙💎</div>
       </div>
       <div class="c-body"><div class="c-clasp"></div></div>
-      <div class="chest-word">ON</div>
+      <div class="chest-word" style="color:#99bbff;">ON</div>
     </div>
   </div>
   <!-- Scrolling story strip -->
