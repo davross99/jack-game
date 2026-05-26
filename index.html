@@ -1,47 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jack & The Temple of Shadows</title>
-    <style>
-        body { background: #000; color: #FFD700; font-family: 'Nunito', sans-serif; height: 100vh; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
-        
-        /* Sentence Display */
-        #story-container { font-size: 2.5rem; text-align: center; padding: 40px; line-height: 1.6; color: #fff; }
-        .gap { border-bottom: 4px dotted #FFD700; color: #FFD700; min-width: 150px; display: inline-block; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jack & The Temple of Shadows</title>
+<style>
+    /* Full screen container */
+    body { 
+        background: #000; color: #FFD700; font-family: 'Nunito', sans-serif; 
+        display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        height: 100vh; margin: 0; padding: 20px;
+    }
 
-        /* Pirate Chest Design */
-        #chest-row { display: flex; gap: 60px; margin-top: 50px; }
-        .chest { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
-        .lid { width: 80px; height: 30px; background: #6b4423; border: 3px solid #D4AF37; border-radius: 5px 5px 0 0; transform: perspective(100px) rotateX(-50deg); }
-        .body { width: 70px; height: 50px; background: #8B4513; border: 3px solid #D4AF37; border-radius: 0 0 5px 5px; display: flex; align-items: center; justify-content: center; }
-        .body::after { content: '💰'; font-size: 1.5rem; }
-        .label { font-family: 'Bangers'; font-size: 1.8rem; margin-top: 10px; }
-    </style>
+    /* Static sentence area - fully visible */
+    #sentence-area { 
+        font-size: 2.2rem; text-align: center; max-width: 90%; 
+        line-height: 1.8; color: #fff; margin-bottom: 60px;
+    }
+    .gap { 
+        border-bottom: 4px dotted #FFD700; color: #FFD700; 
+        min-width: 140px; display: inline-block; padding: 0 5px;
+    }
+
+    /* New Pirate Chest Styling */
+    #chest-container { display: flex; gap: 40px; }
+    .chest { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+    .lid { width: 90px; height: 35px; background: #5d3a1a; border: 3px solid #D4AF37; border-radius: 6px 6px 0 0; transform: perspective(100px) rotateX(-50deg); }
+    .body { width: 80px; height: 60px; background: #8B4513; border: 3px solid #D4AF37; border-radius: 0 0 6px 6px; display: flex; align-items: center; justify-content: center; position: relative; }
+    .body::before { content: ''; position: absolute; width: 90%; height: 60%; background: #D4AF37; opacity: 0.3; }
+    .body::after { content: '💰'; font-size: 1.8rem; }
+    .label { font-family: 'Bangers'; font-size: 1.6rem; margin-top: 10px; color: #FFD700; }
+</style>
 </head>
 <body>
 
-    <div id="story-container">
-        Jack arrives <span class="gap" id="current-gap" data-ans="on">...</span> Monday morning.
+    <div id="sentence-area">
+        Jack arrives <span class="gap" id="active-gap" data-ans="on">...</span> Monday morning.
     </div>
 
-    <div id="chest-row">
+    <div id="chest-container">
         <div class="chest" onclick="check('at')"><div class="lid"></div><div class="body"></div><div class="label">AT</div></div>
         <div class="chest" onclick="check('in')"><div class="lid"></div><div class="body"></div><div class="label">IN</div></div>
         <div class="chest" onclick="check('on')"><div class="lid"></div><div class="body"></div><div class="label">ON</div></div>
     </div>
 
     <script>
-        const gap = document.getElementById('current-gap');
-        
         function check(choice) {
+            const gap = document.getElementById('active-gap');
             if (choice === gap.dataset.ans) {
                 gap.textContent = choice.toUpperCase();
-                gap.style.borderBottom = "none";
+                gap.style.border = "none";
             } else {
                 gap.style.borderColor = "red";
-                setTimeout(() => gap.style.borderColor = "#FFD700", 800);
+                setTimeout(() => { gap.style.borderColor = "#FFD700"; }, 800);
             }
         }
     </script>
