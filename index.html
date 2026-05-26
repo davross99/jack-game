@@ -5,47 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jack & The Temple of Shadows</title>
     <style>
-        body { margin: 0; background: #000; color: #FFD700; font-family: 'Nunito', sans-serif; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        body { margin: 0; background: #000; color: #FFD700; font-family: 'Nunito', sans-serif; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
         
-        /* 1. Sentence Area - Full Context, Readable, Wrapping */
-        #story-panel { font-size: 2.8rem; text-align: center; max-width: 85%; line-height: 1.8; color: #fff; margin-bottom: 60px; }
-        .gap { border-bottom: 5px dotted #FFD700; color: #FFD700; min-width: 150px; display: inline-block; padding: 0 10px; cursor: pointer; transition: 0.3s; }
-        
-        /* 2. Pirate Chests - Matches Uploaded Reference */
-        #chest-row { display: flex; gap: 50px; }
-        .chest { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s; }
-        .chest:hover { transform: scale(1.05); }
-        .lid { width: 100px; height: 35px; background: #6b4423; border: 4px solid #D4AF37; border-radius: 8px 8px 0 0; transform: perspective(100px) rotateX(-45deg); }
-        .body { width: 90px; height: 70px; background: #8B4513; border: 4px solid #D4AF37; border-radius: 0 0 8px 8px; display: flex; align-items: center; justify-content: center; position: relative; }
-        .body::after { content: '💰'; font-size: 2rem; }
-        .label { font-family: 'Bangers'; font-size: 2.2rem; margin-top: 15px; color: #FFD700; }
+        /* The Text Container */
+        #display-area { 
+            font-size: clamp(1.5rem, 5vw, 2.5rem); 
+            text-align: center; max-width: 90%; 
+            line-height: 1.6; color: #fff; margin-bottom: 50px;
+        }
+        .gap { border-bottom: 4px dotted #FFD700; color: #FFD700; min-width: 120px; display: inline-block; padding: 0 10px; }
+
+        /* The Treasure Chests */
+        #chest-row { display: flex; gap: 40px; }
+        .chest { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .lid { width: 90px; height: 30px; background: #6b4423; border: 4px solid #D4AF37; border-radius: 8px 8px 0 0; transform: perspective(100px) rotateX(-45deg); }
+        .body { width: 80px; height: 60px; background: #8B4513; border: 4px solid #D4AF37; border-radius: 0 0 8px 8px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .body::after { content: '💰'; font-size: 1.8rem; }
+        .label { font-family: 'Bangers'; font-size: 1.8rem; margin-top: 10px; color: #FFD700; }
     </style>
 </head>
 <body>
 
-    <div id="story-panel">
-        Jack arrives <span class="gap" id="gap" data-ans="on">...</span> Monday morning.
+    <div id="display-area">
+        Jack arrives <span class="gap" id="active-gap" data-ans="on">...</span> Monday morning.
     </div>
 
     <div id="chest-row">
-        <div class="chest" onclick="checkAnswer('at')"><div class="lid"></div><div class="body"></div><div class="label">AT</div></div>
-        <div class="chest" onclick="checkAnswer('in')"><div class="lid"></div><div class="body"></div><div class="label">IN</div></div>
-        <div class="chest" onclick="checkAnswer('on')"><div class="lid"></div><div class="body"></div><div class="label">ON</div></div>
+        <div class="chest" onclick="check('at')"><div class="lid"></div><div class="body"></div><div class="label">AT</div></div>
+        <div class="chest" onclick="check('in')"><div class="lid"></div><div class="body"></div><div class="label">IN</div></div>
+        <div class="chest" onclick="check('on')"><div class="lid"></div><div class="body"></div><div class="label">ON</div></div>
     </div>
 
     <script>
-        const gap = document.getElementById('gap');
-
-        function checkAnswer(choice) {
+        function check(choice) {
+            const gap = document.getElementById('active-gap');
             if (choice === gap.dataset.ans) {
-                // Success: Fill gap
                 gap.textContent = choice.toUpperCase();
                 gap.style.border = "none";
             } else {
-                // Wrong: Flash Red (No restart)
+                // Wrong answer visual feedback only
                 gap.style.borderColor = "red";
                 setTimeout(() => { gap.style.borderColor = "#FFD700"; }, 800);
             }
         }
     </script>
 </body>
+</html>
