@@ -330,49 +330,41 @@ body {
   z-index: 40;
   width: 100%;
   flex-shrink: 0;
-  height: clamp(80px, 15vh, 120px);
-  overflow: hidden;
+  min-height: clamp(90px, 20vh, 150px);
   display: flex;
   align-items: center;
+  justify-content: center;
   background: rgba(4,2,0,0.93);
   border-top: 4px solid #D4AF37;
+  padding: 0.6rem 1rem;
 }
-#scroll-track {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  white-space: nowrap;
-  will-change: transform;
-}
-#story-words {
-  display: inline-flex;
-  align-items: center;
-  font-size: clamp(1.6rem, 6.5vw, 2.4rem);
+#sentence-display {
+  font-size: clamp(1.15rem, 4.8vw, 1.7rem);
   font-weight: 800;
   color: #f5e8c0;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.9);
-  padding: 0 115vw 0 22px;
-  line-height: 1;
-  gap: 0;
+  text-align: center;
+  line-height: 1.7;
+  width: 100%;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: block;
+  padding: 0 0.5rem;
 }
 
 /* Gap slots in the story — the drop targets */
 .gap {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: clamp(60px, 15vw, 100px);
-  height: clamp(36px, 8vw, 52px);
-  margin: 0 10px;
-  flex-shrink: 0;
+  display: inline;
   font-family: 'Bangers', cursive;
-  font-size: clamp(1.4rem, 5.5vw, 1.8rem);
+  font-size: clamp(1.15rem, 4.8vw, 1.7rem);
   letter-spacing: 2px;
   cursor: pointer;
-  transition: transform 0.12s, background 0.12s;
-  color: rgba(255,215,0,0.88);
+  color: #FFD700;
   border-bottom: 4px dotted #FFD700;
-  padding: 0 4px;
+  padding: 0 6px;
+  margin: 0 4px;
+  white-space: nowrap;
 }
 .gap::before { content: '···'; }
 
@@ -535,13 +527,7 @@ body {
   <div id="hud">
     <div class="hud-title">🗺️ JACK'S QUEST</div>
     <div class="hud-score">⭐ <span id="score-display">0</span>/<span id="total-display">0</span></div>
-    <div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">
-      <span style="font-size:0.7rem;">🐢</span>
-      <input type="range" id="spd" min="0.5" max="50" step="0.5" value="2.5"
-        oninput="gameSpeed=parseFloat(this.value)"
-        style="width:clamp(100px,40vw,300px);accent-color:#FFD700;">
-      <span style="font-size:0.7rem;">🐇</span>
-    </div>
+
     <button class="btn-restart" onclick="restartGame()">↩ RESTART</button>
   </div>
 
@@ -587,11 +573,9 @@ body {
       <div class="chest-word" style="color:#99bbff;">ON</div>
     </div>
   </div>
-  <!-- Scrolling story strip -->
+  <!-- Static sentence display -->
   <div id="story-strip">
-    <div id="scroll-track">
-      <div id="story-words"></div>
-    </div>
+    <div id="sentence-display"></div>
   </div>
 
 </div><!-- end #game-screen -->
@@ -625,97 +609,66 @@ body {
 // Only AT / IN / ON as answers
 // 60% time prepositions, 40% place prepositions
 // ─────────────────────────────────────
-const SCENES = [
-  {
-    label: "SCENE 1 · THE AIRPORT",
-    bg: "scene01.jpg",
-    text: "Jack arrives [on] Monday morning. His flight leaves [at] seven o'clock. He waits [at] the gate [in] the busy terminal."
-  },
-  {
-    label: "SCENE 2 · IN THE AIR",
-    bg: "scene02.jpg",
-    text: "[In] the afternoon the plane flies high. Jack looks down [at] the jungle far below. The pilot speaks [at] noon to the passengers."
-  },
-  {
-    label: "SCENE 3 · THE AIRSTRIP",
-    bg: "scene03.jpg",
-    text: "The plane lands [at] six o'clock [in] the evening. Jack steps off [at] a small airstrip [in] Peru."
-  },
-  {
-    label: "SCENE 4 · THE VILLAGE",
-    bg: "scene04.jpg",
-    text: "Jack arrives [at] the village [at] night. He sits [in] a warm hut. 'You must leave [in] the morning,' warns the old man."
-  },
-  {
-    label: "SCENE 5 · THE WARNING",
-    bg: "scene05.jpg",
-    text: "[In] the morning [on] Tuesday Jack sets off. He walks [on] the jungle path. [At] sunrise the birds sing."
-  },
-  {
-    label: "SCENE 6 · THE RIVER",
-    bg: "scene06.jpg",
-    text: "Jack reaches the river [at] midday. He sits [on] a small boat [on] the water. The sun burns hot [at] noon."
-  },
-  {
-    label: "SCENE 7 · THE CHASE",
-    bg: "scene07.jpg",
-    text: "[In] the afternoon warriors appear [in] the forest. Jack runs [on] the jungle path. Drums echo [in] the distance."
-  },
-  {
-    label: "SCENE 8 · THE CAVE",
-    bg: "scene08.jpg",
-    text: "[At] sunset Jack hides [in] a cave. He sits [in] the darkness. A huge snake hangs [on] the cave wall."
-  },
-  {
-    label: "SCENE 9 · THE TEMPLE",
-    bg: "scene09.jpg",
-    text: "[In] the morning [on] Wednesday Jack sees the temple. It stands [on] a cliff. Fire burns [at] the entrance."
-  },
-  {
-    label: "SCENE 10 · INSIDE THE TEMPLE",
-    bg: "scene10.jpg",
-    text: "Jack enters [at] midday. Gold sits [on] stone altars. A golden statue stands [on] a black pedestal [in] the centre."
-  },
-  {
-    label: "SCENE 11 · THE ESCAPE",
-    bg: "scene11.jpg",
-    text: "[At] six o'clock [in] the evening Jack grabs the statue. He runs [on] the stone stairs. Jack escapes [in] a tunnel."
-  },
-  {
-    label: "SCENE 12 · FREEDOM!",
-    bg: "scene12.jpg",
-    text: "[At] midnight Jack boards the plane. [In] the sky he looks down [at] the jungle. [At] dawn [on] Thursday — Jack is safe!"
-  }
+// Each SENTENCE is one card — student sees the full sentence with gap
+const SENTENCES = [
+  // SCENE 1
+  {label:"SCENE 1 · THE AIRPORT", bg:"scene01.jpg", text:"Jack arrives [on] Monday morning."},
+  {label:"SCENE 1 · THE AIRPORT", bg:"scene01.jpg", text:"His flight leaves [at] seven o'clock."},
+  {label:"SCENE 1 · THE AIRPORT", bg:"scene01.jpg", text:"He waits [at] the gate [in] the busy terminal."},
+  // SCENE 2
+  {label:"SCENE 2 · IN THE AIR", bg:"scene02.jpg", text:"[In] the afternoon the plane flies high."},
+  {label:"SCENE 2 · IN THE AIR", bg:"scene02.jpg", text:"Jack looks down [at] the jungle far below."},
+  {label:"SCENE 2 · IN THE AIR", bg:"scene02.jpg", text:"The pilot speaks [at] noon to the passengers."},
+  // SCENE 3
+  {label:"SCENE 3 · THE AIRSTRIP", bg:"scene03.jpg", text:"The plane lands [at] six o'clock [in] the evening."},
+  {label:"SCENE 3 · THE AIRSTRIP", bg:"scene03.jpg", text:"Jack steps off [at] a small airstrip [in] Peru."},
+  // SCENE 4
+  {label:"SCENE 4 · THE VILLAGE", bg:"scene04.jpg", text:"Jack arrives [at] the village [at] night."},
+  {label:"SCENE 4 · THE VILLAGE", bg:"scene04.jpg", text:"He sits [in] a warm hut."},
+  {label:"SCENE 4 · THE VILLAGE", bg:"scene04.jpg", text:"'You must leave [in] the morning,' warns the old man."},
+  // SCENE 5
+  {label:"SCENE 5 · THE WARNING", bg:"scene05.jpg", text:"[In] the morning [on] Tuesday Jack sets off."},
+  {label:"SCENE 5 · THE WARNING", bg:"scene05.jpg", text:"He walks [on] the jungle path."},
+  {label:"SCENE 5 · THE WARNING", bg:"scene05.jpg", text:"[At] sunrise the birds sing."},
+  // SCENE 6
+  {label:"SCENE 6 · THE RIVER", bg:"scene06.jpg", text:"Jack reaches the river [at] midday."},
+  {label:"SCENE 6 · THE RIVER", bg:"scene06.jpg", text:"He sits [on] a small boat [on] the water."},
+  {label:"SCENE 6 · THE RIVER", bg:"scene06.jpg", text:"The sun burns hot [at] noon."},
+  // SCENE 7
+  {label:"SCENE 7 · THE CHASE", bg:"scene07.jpg", text:"[In] the afternoon warriors appear [in] the forest."},
+  {label:"SCENE 7 · THE CHASE", bg:"scene07.jpg", text:"Jack runs [on] the jungle path."},
+  {label:"SCENE 7 · THE CHASE", bg:"scene07.jpg", text:"Drums echo [in] the distance."},
+  // SCENE 8
+  {label:"SCENE 8 · THE CAVE", bg:"scene08.jpg", text:"[At] sunset Jack hides [in] a cave."},
+  {label:"SCENE 8 · THE CAVE", bg:"scene08.jpg", text:"He sits [in] the darkness."},
+  {label:"SCENE 8 · THE CAVE", bg:"scene08.jpg", text:"A huge snake hangs [on] the cave wall."},
+  // SCENE 9
+  {label:"SCENE 9 · THE TEMPLE", bg:"scene09.jpg", text:"[In] the morning [on] Wednesday Jack sees the temple."},
+  {label:"SCENE 9 · THE TEMPLE", bg:"scene09.jpg", text:"It stands [on] a high cliff."},
+  {label:"SCENE 9 · THE TEMPLE", bg:"scene09.jpg", text:"Fire burns [at] the entrance."},
+  // SCENE 10
+  {label:"SCENE 10 · INSIDE THE TEMPLE", bg:"scene10.jpg", text:"Jack enters [at] midday."},
+  {label:"SCENE 10 · INSIDE THE TEMPLE", bg:"scene10.jpg", text:"Gold sits [on] stone altars."},
+  {label:"SCENE 10 · INSIDE THE TEMPLE", bg:"scene10.jpg", text:"A golden statue stands [on] a black pedestal [in] the centre."},
+  // SCENE 11
+  {label:"SCENE 11 · THE ESCAPE", bg:"scene11.jpg", text:"[At] six o'clock [in] the evening Jack grabs the statue."},
+  {label:"SCENE 11 · THE ESCAPE", bg:"scene11.jpg", text:"He runs [on] the stone stairs."},
+  {label:"SCENE 11 · THE ESCAPE", bg:"scene11.jpg", text:"Jack escapes [in] a secret tunnel."},
+  // SCENE 12
+  {label:"SCENE 12 · FREEDOM!", bg:"scene12.jpg", text:"[At] midnight Jack boards the plane."},
+  {label:"SCENE 12 · FREEDOM!", bg:"scene12.jpg", text:"[In] the sky he looks down [at] the jungle."},
+  {label:"SCENE 12 · FREEDOM!", bg:"scene12.jpg", text:"[At] dawn [on] Thursday — Jack is safe!"}
 ];
 
-// Pre-calculate gap counts and cumulative gap indexes per scene
-const gapsPerScene = SCENES.map(s => (s.text.match(/\[[^\]]+\]/g) || []).length);
-const cumGaps = [];
-let cumCount = 0;
-gapsPerScene.forEach(g => { cumGaps.push(cumCount); cumCount += g; });
-const TOTAL_GAPS = cumCount;
+// Total gaps = count all [word] in all sentences
+const TOTAL_GAPS = SENTENCES.reduce((total, s) => {
+  return total + (s.text.match(/\[[^\]]+\]/g) || []).length;
+}, 0);
 
-// ─────────────────────────────────────
-// BUILD STORY HTML
-// Parses all scenes into scrolling HTML with gap slots
-// ─────────────────────────────────────
-function buildStoryHTML() {
-  let html = '';
-  let gapIndex = 0;
-  SCENES.forEach((scene, si) => {
-    if (si > 0) html += '<span class="sdiv">✦</span>';
-    const parts = scene.text.split(/\[([^\]]+)\]/);
-    parts.forEach((part, pi) => {
-      if (pi % 2 === 0) {
-        if (part) html += `<span>${part}</span>`;
-      } else {
-        html += `<span class="gap" id="gap-${gapIndex}" data-answer="${part.toLowerCase()}" data-scene="${si}"></span>`;
-        gapIndex++;
-      }
-    });
-  });
-  return html;
-}
+// Current sentence index
+let sentenceIndex = 0;
+// Current gap index within sentence (for multi-gap sentences)
+let gapWithinSentence = 0;
 
 // ─────────────────────────────────────
 // GAME STATE
@@ -756,28 +709,18 @@ function startGame() {
   document.getElementById('wrong-overlay').classList.remove('show');
   document.getElementById('drag-ghost').style.display  = 'none';
 
-  // Build story
-  document.getElementById('story-words').innerHTML = buildStoryHTML();
+  // Reset sentence tracking
+  sentenceIndex = 0;
+  gapWithinSentence = 0;
 
-  // Attach listeners to gaps and chests
-  attachGapListeners();
+  // Attach chest listeners
   attachChestListeners();
 
-  // Set first scene
-  setScene(0);
+  // Set first scene and load first sentence
+  loadSentence(0);
 
   // Show game screen
   showScreen('game-screen');
-
-  // Reset scroll position
-  document.getElementById('scroll-track').style.transform = 'translateX(0px)';
-
-  // Highlight first gap
-  highlightGap(0);
-
-  // Start scroll loop
-  if (rafId) cancelAnimationFrame(rafId);
-  rafId = requestAnimationFrame(scrollLoop);
 }
 
 // ─────────────────────────────────────
@@ -791,6 +734,8 @@ function restartGame() {
   document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
   selectedWord = null;
   stopFireworks();
+  sentenceIndex = 0;
+  gapWithinSentence = 0;
   setTimeout(startGame, 80);
 }
 
@@ -813,14 +758,115 @@ function setScene(index) {
   currentScene = index;
 }
 
+// highlightGap replaced by loadSentence logic
+
 // ─────────────────────────────────────
-// HIGHLIGHT CURRENT GAP
+// LOAD SENTENCE — show one full sentence at a time
 // ─────────────────────────────────────
-function highlightGap(index) {
-  document.querySelectorAll('.gap').forEach(g => g.classList.remove('active'));
-  const gap = document.getElementById(`gap-${index}`);
-  if (gap && !gap.classList.contains('correct')) {
-    gap.classList.add('active');
+function loadSentence(idx) {
+  if (idx >= SENTENCES.length) {
+    // All sentences done — WIN
+    gameOn = false;
+    setTimeout(() => {
+      bigFireworks();
+      setTimeout(() => {
+        stopFireworks();
+        document.getElementById('final-score').textContent = score;
+        showScreen('end-screen');
+      }, 3500);
+    }, 400);
+    return;
+  }
+
+  const s = SENTENCES[idx];
+  gapWithinSentence = 0;
+  selectedWord = null;
+  document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
+
+  // Update scene background and label
+  document.getElementById('bg').style.backgroundImage = `url('${s.bg}')`;
+  document.getElementById('scene-lbl').textContent = s.label;
+
+  // Render the sentence with gap slots
+  const display = document.getElementById('sentence-display');
+  display.innerHTML = '';
+  let gapCount = 0;
+  const parts = s.text.split(/\[([^\]]+)\]/);
+  parts.forEach((part, pi) => {
+    if (pi % 2 === 0) {
+      if (part) {
+        display.appendChild(document.createTextNode(part));
+      }
+    } else {
+      const gc = gapCount;
+      const gap = document.createElement('span');
+      gap.className = 'gap active';
+      gap.id = `gap-${gc}`;
+      gap.dataset.answer = part.toLowerCase();
+      gap.textContent = '___';
+
+      gap.addEventListener('click', () => {
+        if (!gameOn || gap.classList.contains('correct')) return;
+        if (!selectedWord) return;
+        processGap(gap, selectedWord, gc);
+      });
+      gap.addEventListener('touchend', e => {
+        e.preventDefault();
+        if (!gameOn || gap.classList.contains('correct')) return;
+        if (!selectedWord) return;
+        processGap(gap, selectedWord, gc);
+      }, { passive: false });
+      gap.addEventListener('dragover', e => { e.preventDefault(); gap.classList.add('drag-over'); });
+      gap.addEventListener('dragleave', () => gap.classList.remove('drag-over'));
+      gap.addEventListener('drop', e => {
+        e.preventDefault();
+        gap.classList.remove('drag-over');
+        const w = e.dataTransfer.getData('text/plain') || selectedWord;
+        if (w) processGap(gap, w, gc);
+      });
+      display.appendChild(gap);
+      gapCount++;
+    }
+  });
+}
+
+function processGap(gap, word, gapIdx) {
+  if (!gameOn || gap.classList.contains('correct')) return;
+  const given = word.toLowerCase().trim();
+  const correct = gap.dataset.answer.toLowerCase().trim();
+
+  if (given === correct) {
+    gap.classList.remove('active', 'drag-over', 'wrong');
+    gap.classList.add('correct');
+    gap.textContent = given.toUpperCase();
+    score++;
+    selectedWord = null;
+    document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
+    document.getElementById('score-display').textContent = score;
+    document.getElementById('prog-fill').style.width = (score / TOTAL_GAPS * 100) + '%';
+    miniFirework();
+
+    // Check if more gaps in this sentence
+    const allGaps = document.querySelectorAll('#sentence-display .gap');
+    const allCorrect = [...allGaps].every(g => g.classList.contains('correct'));
+    if (allCorrect) {
+      // Move to next sentence after short delay
+      setTimeout(() => {
+        sentenceIndex++;
+        loadSentence(sentenceIndex);
+      }, 600);
+    } else {
+      // Highlight next unfilled gap
+      const nextGap = [...allGaps].find(g => !g.classList.contains('correct'));
+      if (nextGap) nextGap.classList.add('active');
+    }
+  } else {
+    gap.classList.add('wrong');
+    document.getElementById('wrong-overlay').classList.add('show');
+    setTimeout(() => {
+      gap.classList.remove('wrong');
+      document.getElementById('wrong-overlay').classList.remove('show');
+    }, 1000);
   }
 }
 
@@ -868,106 +914,9 @@ function attachChestListeners() {
   });
 }
 
-// ─────────────────────────────────────
-// ATTACH GAP LISTENERS
-// Gaps accept drops (desktop) and taps (mobile)
-// ─────────────────────────────────────
-function attachGapListeners() {
-  document.querySelectorAll('.gap').forEach(gap => {
+// attachGapListeners replaced by loadSentence — gaps built dynamically per sentence
 
-    // Desktop: dragover
-    gap.addEventListener('dragover', e => {
-      e.preventDefault();
-      if (!gap.classList.contains('correct')) gap.classList.add('drag-over');
-    });
-
-    // Desktop: dragleave
-    gap.addEventListener('dragleave', () => gap.classList.remove('drag-over'));
-
-    // Desktop: drop
-    gap.addEventListener('drop', e => {
-      e.preventDefault();
-      gap.classList.remove('drag-over');
-      const word = e.dataTransfer.getData('text/plain') || selectedWord;
-      if (word) processAnswer(gap, word);
-    });
-
-    // Tap to fill (after selecting a chest by tap)
-    gap.addEventListener('click', () => {
-      if (!gameOn || gap.classList.contains('correct')) return;
-      if (!selectedWord) return;
-      processAnswer(gap, selectedWord);
-    });
-
-    // Touch end on gap (touch drag)
-    gap.addEventListener('touchend', e => {
-      e.preventDefault();
-      if (!gameOn || gap.classList.contains('correct')) return;
-      if (!selectedWord) return;
-      processAnswer(gap, selectedWord);
-    }, { passive: false });
-  });
-}
-
-// ─────────────────────────────────────
-// PROCESS ANSWER
-// Check if the dropped/tapped word is correct
-// ─────────────────────────────────────
-function processAnswer(gap, word) {
-  if (!gameOn || gap.classList.contains('correct')) return;
-
-  const given   = word.toLowerCase().trim();
-  const correct = gap.dataset.answer.toLowerCase().trim();
-
-  if (given === correct) {
-    // ✅ CORRECT
-    gap.classList.remove('active', 'drag-over');
-    gap.classList.add('correct');
-    gap.textContent = given.toUpperCase();
-
-    score++;
-    currentGap++;
-    selectedWord = null;
-    document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
-    document.getElementById('score-display').textContent = score;
-    document.getElementById('prog-fill').style.width = (score / TOTAL_GAPS * 100) + '%';
-
-    // Small firework burst
-    miniFirework();
-
-    // Check if we need to change scene
-    for (let i = SCENES.length - 1; i >= 0; i--) {
-      if (currentGap >= cumGaps[i]) {
-        if (i !== currentScene) setScene(i);
-        break;
-      }
-    }
-
-    // Check win
-    if (currentGap >= TOTAL_GAPS) {
-      gameOn = false;
-      setTimeout(() => {
-        bigFireworks();
-        setTimeout(() => {
-          stopFireworks();
-          document.getElementById('final-score').textContent = score;
-          showScreen('end-screen');
-        }, 3500);
-      }, 400);
-    } else {
-      highlightGap(currentGap);
-    }
-
-  } else {
-    // ❌ WRONG — flash and let student try again
-    gap.classList.add('wrong');
-    document.getElementById('wrong-overlay').classList.add('show');
-    setTimeout(() => {
-      gap.classList.remove('wrong');
-      document.getElementById('wrong-overlay').classList.remove('show');
-    }, 1000);
-  }
-}
+// processGap() handles all answer logic — see loadSentence() above
 
 // ─────────────────────────────────────
 // TOUCH DRAG HANDLING
@@ -1005,7 +954,8 @@ function handleTouchStart(e, word, chestEl) {
     const droppedWord = word;
     selectedWord = null;
     if (el && el.classList.contains('gap') && !el.classList.contains('correct')) {
-      processAnswer(el, droppedWord);
+      const gapIdx = parseInt(el.id.replace('gap-', '')) || 0;
+      processGap(el, droppedWord, gapIdx);
     }
     cleanup();
   }
@@ -1035,45 +985,7 @@ function moveGhost(x, y) {
   ghost.style.top  = y + 'px';
 }
 
-// ─────────────────────────────────────
-// SCROLL LOOP
-// Fixed speed — no delta time for consistency
-// Story scrolls left continuously
-// Slows and stops when current gap is at centre
-// ─────────────────────────────────────
-function scrollLoop() {
-  if (!gameOn) return;
-
-  const track  = document.getElementById('scroll-track');
-  const strip  = document.getElementById('story-strip');
-  const words  = document.getElementById('story-words');
-  const stripW = strip.offsetWidth;
-  const centreX = stripW * 0.38;
-
-  const currentGapEl = document.getElementById(`gap-${currentGap}`);
-  let speed = gameSpeed;
-
-  if (currentGapEl && !currentGapEl.classList.contains('correct')) {
-    const gapRect   = currentGapEl.getBoundingClientRect();
-    const stripRect = strip.getBoundingClientRect();
-    const gapLeft   = gapRect.left - stripRect.left;
-
-    if (gapLeft <= centreX + SCROLL_STOP_PX && gapLeft >= -gapRect.width) {
-      speed = 0; // STOP — waiting for answer
-    } else if (gapLeft <= centreX + SCROLL_SLOW_PX) {
-      speed = Math.max(0.1, gameSpeed * 0.12); // Slow = 12% of current speed
-    }
-  }
-
-  scrollX -= speed;
-
-  // Loop back to start when fully scrolled
-  const totalWidth = words.scrollWidth + stripW;
-  if (Math.abs(scrollX) > totalWidth) { scrollX += totalWidth; }
-
-  track.style.transform = `translateX(${scrollX}px)`;
-  rafId = requestAnimationFrame(scrollLoop);
-}
+// Scroll loop removed — static sentence display used instead
 
 // ─────────────────────────────────────
 // FIREWORKS
