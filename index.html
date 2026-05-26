@@ -240,7 +240,7 @@ body {
 }
 .chest {
   display:flex;flex-direction:column;align-items:center;
-  width:clamp(82px,23vw,106px);
+  width:clamp(45px,12vw,65px);
   cursor:grab;touch-action:none;
   position:relative;-webkit-tap-highlight-color:transparent;
 }
@@ -312,7 +312,7 @@ body {
   box-shadow:0 1px 3px rgba(0,0,0,0.55);pointer-events:none;
 }
 .chest-word {
-  font-family:'Bangers',cursive;font-size:clamp(1.2rem,5vw,1.6rem);
+  font-family:'Bangers',cursive;font-size:clamp(0.9rem,3.5vw,1.1rem);
   letter-spacing:2px;font-weight:900;color:#FFD700;
   text-shadow:2px 2px 0 rgba(0,0,0,1),0 0 10px rgba(0,0,0,0.9);
   margin-top:3px;position:relative;z-index:10;pointer-events:none;
@@ -330,7 +330,7 @@ body {
   z-index: 40;
   width: 100%;
   flex-shrink: 0;
-  height: clamp(46px, 10vh, 62px);
+  height: clamp(58px, 13vh, 80px);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -347,7 +347,7 @@ body {
 #story-words {
   display: inline-flex;
   align-items: center;
-  font-size: clamp(0.96rem, 4vw, 1.2rem);
+  font-size: clamp(1.5rem, 6vw, 2.2rem);
   font-weight: 800;
   color: #f5e8c0;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.9);
@@ -361,12 +361,12 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: clamp(44px, 10.5vw, 68px);
-  height: clamp(25px, 5.8vw, 36px);
+  min-width: clamp(60px, 15vw, 100px);
+  height: clamp(36px, 8vw, 52px);
   margin: 0 5px;
   flex-shrink: 0;
   font-family: 'Bangers', cursive;
-  font-size: clamp(0.84rem, 3.5vw, 1.08rem);
+  font-size: clamp(1.4rem, 5.5vw, 1.8rem);
   letter-spacing: 2px;
   cursor: pointer;
   transition: transform 0.12s, background 0.12s;
@@ -520,7 +520,7 @@ body {
   </div>
   <div class="th">
     🎁 Drag the preposition into the gap ···<br>
-    <strong style="color:#FFD700">Wrong answer = start again!</strong>
+    <strong style="color:#FFD700">Wrong answer = try again!</strong>
   </div>
   <button class="btn-go" onclick="startGame()">▶ START ADVENTURE</button>
 </div>
@@ -537,9 +537,9 @@ body {
     <div class="hud-score">⭐ <span id="score-display">0</span>/<span id="total-display">0</span></div>
     <div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">
       <span style="font-size:0.7rem;">🐢</span>
-      <input type="range" id="spd" min="0.5" max="25" step="0.5" value="2.5"
+      <input type="range" id="spd" min="0.1" max="100" step="0.1" value="2.5"
         oninput="gameSpeed=parseFloat(this.value)"
-        style="width:clamp(50px,11vw,80px);accent-color:#FFD700;">
+        style="width:clamp(100px,40vw,300px);accent-color:#FFD700;">
       <span style="font-size:0.7rem;">🐇</span>
     </div>
     <button class="btn-restart" onclick="restartGame()">↩ RESTART</button>
@@ -610,7 +610,7 @@ body {
 <div id="wrong-overlay">
   <div class="wrong-msg">❌ WRONG!</div>
   <div class="wrong-sub">That's not right!</div>
-  <div class="wrong-info">Starting again from the beginning...</div>
+  <div class="wrong-info">Try again!</div>
 </div>
 <div id="drag-ghost"></div>
 
@@ -847,11 +847,10 @@ function attachChestListeners() {
     chest.addEventListener('touchstart', e => handleTouchStart(e, word, chest), { passive: false });
 
     // Tap to select (then tap a gap to fill it)
-    chest.addEventListener('click', () => {
+    const selectChest = () => {
       if (touchDragging) return;
       if (!gameOn) return;
       if (selectedWord === word) {
-        // Deselect
         selectedWord = null;
         document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
       } else {
@@ -860,6 +859,11 @@ function attachChestListeners() {
         chest.classList.add('selected');
         highlightGap(currentGap);
       }
+    };
+    chest.addEventListener('click', selectChest);
+    // Keyboard support (Enter or Space)
+    chest.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectChest(); }
     });
   });
 }
@@ -955,13 +959,13 @@ function processAnswer(gap, word) {
     }
 
   } else {
-    // ❌ WRONG
+    // ❌ WRONG — flash and let student try again
     gap.classList.add('wrong');
-  gap.addEventListener('animationend', () => gap.classList.remove('wrong'), { once: true });
     document.getElementById('wrong-overlay').classList.add('show');
-    gameOn = false;
-    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-    setTimeout(restartGame, 2200);
+    setTimeout(() => {
+      gap.classList.remove('wrong');
+      document.getElementById('wrong-overlay').classList.remove('show');
+    }, 1000);
   }
 }
 
@@ -976,7 +980,8 @@ function handleTouchStart(e, word, chestEl) {
 
   const ghost = document.getElementById('drag-ghost');
   ghost.textContent = word.toUpperCase();
-  ghost.style.color = chestEl.querySelector('.chest-word').style.color;
+  const wordColors = {at:'#ffdd99', in:'#99ffbb', on:'#99bbff'};
+  ghost.style.color = wordColors[word] || '#FFD700';
   ghost.style.display = 'block';
   moveGhost(e.touches[0].clientX, e.touches[0].clientY);
 
@@ -1013,6 +1018,7 @@ function handleTouchStart(e, word, chestEl) {
   }
 
   function cleanup() {
+    setTimeout(() => { touchDragging = false; }, 50);
     document.removeEventListener('touchmove', onTouchMove);
     document.removeEventListener('touchend', onTouchEnd);
     document.removeEventListener('touchcancel', onTouchCancel);
@@ -1055,7 +1061,7 @@ function scrollLoop() {
     if (gapLeft <= centreX + SCROLL_STOP_PX && gapLeft >= -gapRect.width) {
       speed = 0; // STOP — waiting for answer
     } else if (gapLeft <= centreX + SCROLL_SLOW_PX) {
-      speed = SCROLL_SLOW; // Slow down as gap approaches
+      speed = Math.max(0.1, gameSpeed * 0.12); // Slow = 12% of current speed
     }
   }
 
