@@ -44,7 +44,7 @@ body {
   background:
     linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.58)),
     url('scene01.jpg') center / cover no-repeat;
-  gap: 1rem;
+  gap: 0.9rem;
   padding: 2rem 1.5rem;
   text-align: center;
 }
@@ -58,7 +58,7 @@ body {
 }
 .t-sub {
   font-family: 'Bangers', cursive;
-  font-size: clamp(0.9rem, 3vw, 1.3rem);
+  font-size: clamp(0.85rem, 3vw, 1.2rem);
   color: #90ee90;
   letter-spacing: 4px;
 }
@@ -86,7 +86,7 @@ body {
   padding: 0.5rem 0.8rem;
   border-radius: 8px;
 }
-.btn-start {
+.btn-gold {
   background: linear-gradient(135deg, #FFD700, #FFA500);
   color: #1a1a00;
   font-family: 'Bangers', cursive;
@@ -98,27 +98,27 @@ body {
   cursor: pointer;
   box-shadow: 0 5px 0 #8B6914;
 }
-.btn-start:active {
+.btn-gold:active {
   transform: translateY(4px);
   box-shadow: 0 1px 0 #8B6914;
+}
+.btn-chart-title {
+  background: rgba(0,100,0,0.7);
+  color: #90ee90;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+  letter-spacing: 2px;
+  border: 2px solid #90ee90;
+  padding: 0.4rem 1.2rem;
+  border-radius: 40px;
+  cursor: pointer;
 }
 
 /* ══════════════════════════════════
    GAME SCREEN
-   Layout (top to bottom):
-   1. HUD bar
-   2. Progress bar
-   3. Scene label
-   4. Scene image (fills remaining space)
-   5. Three treasure chests
-   6. Full sentence with gap
 ══════════════════════════════════ */
-#game-screen {
-  justify-content: flex-start;
-  background: #000;
-}
+#game-screen { justify-content: flex-start; background: #000; }
 
-/* Scene image — behind everything */
 #bg {
   position: fixed;
   inset: 0;
@@ -153,45 +153,42 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.4rem;
-  padding: 0.35rem 0.7rem;
+  gap: 0.3rem;
+  padding: 0.32rem 0.6rem;
   background: rgba(0,0,0,0.85);
   border-bottom: 2px solid rgba(255,215,0,0.45);
 }
 .hud-title {
   font-family: 'Bangers', cursive;
   color: #FFD700;
-  font-size: clamp(0.65rem, 2.2vw, 0.92rem);
+  font-size: clamp(0.6rem, 2vw, 0.88rem);
   letter-spacing: 2px;
   white-space: nowrap;
 }
 .hud-score {
   font-family: 'Bangers', cursive;
   color: #90ee90;
-  font-size: clamp(0.65rem, 2.2vw, 0.92rem);
+  font-size: clamp(0.6rem, 2vw, 0.88rem);
   white-space: nowrap;
 }
-.btn-restart {
+.btn-hud {
   font-family: 'Bangers', cursive;
-  font-size: clamp(0.6rem, 1.8vw, 0.82rem);
-  background: rgba(180,0,0,0.92);
-  color: #fff;
+  font-size: clamp(0.55rem, 1.8vw, 0.78rem);
   border: none;
   border-radius: 10px;
-  padding: 0.2rem 0.55rem;
+  padding: 0.18rem 0.5rem;
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
 }
-.btn-restart:active { transform: scale(0.92); }
+.btn-hud-red   { background: rgba(180,0,0,0.92); color: #fff; }
+.btn-hud-green { background: rgba(0,120,0,0.85); color: #90ee90; }
+.btn-hud-red:active, .btn-hud-green:active { transform: scale(0.92); }
 
-/* Progress bar */
+/* Progress */
 #prog {
-  position: relative;
-  z-index: 40;
-  width: 100%;
-  height: 4px;
-  flex-shrink: 0;
+  position: relative; z-index: 40;
+  width: 100%; height: 4px; flex-shrink: 0;
   background: rgba(255,255,255,0.1);
 }
 #prog-fill {
@@ -203,371 +200,320 @@ body {
 
 /* Scene label */
 #scene-lbl {
-  position: relative;
-  z-index: 40;
-  width: 100%;
-  flex-shrink: 0;
-  text-align: center;
-  padding: 0.15rem 0;
+  position: relative; z-index: 40;
+  width: 100%; flex-shrink: 0;
+  text-align: center; padding: 0.14rem 0;
   font-family: 'Bangers', cursive;
-  font-size: clamp(0.5rem, 1.8vw, 0.74rem);
-  color: rgba(255,215,0,0.82);
-  letter-spacing: 2px;
+  font-size: clamp(0.5rem, 1.8vw, 0.72rem);
+  color: rgba(255,215,0,0.82); letter-spacing: 2px;
   background: rgba(0,0,0,0.52);
 }
 
-/* Flexible space — scene shows through here */
-#scene-space {
-  flex: 1;
-  min-height: 0;
-  position: relative;
-  z-index: 1;
-}
+/* Scene space */
+#scene-space { flex: 1; min-height: 0; position: relative; z-index: 1; }
 
 /* ══════════════════════════════════
    TREASURE CHESTS
-   Three separate open pirate chests
-   horizontally across screen
 ══════════════════════════════════ */
 #chests {
-  position: relative;
-  z-index: 40;
-  width: 100%;
-  flex-shrink: 0;
+  position: relative; z-index: 40;
+  width: 100%; flex-shrink: 0;
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
   padding: 0 1rem 0.3rem;
 }
-
 .chest {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: flex; flex-direction: column; align-items: center;
   width: clamp(68px, 19vw, 90px);
-  cursor: grab;
-  touch-action: none;
+  cursor: grab; touch-action: none;
   -webkit-tap-highlight-color: transparent;
   position: relative;
   transition: filter 0.15s;
 }
-.chest.selected {
-  filter: drop-shadow(0 0 12px #FFD700) brightness(1.25);
-}
-
-/* Gold rays from open chest */
+.chest.selected { filter: drop-shadow(0 0 12px #FFD700) brightness(1.25); }
 .c-rays {
-  width: 160%;
-  height: clamp(14px, 4vw, 22px);
+  width: 160%; height: clamp(14px, 4vw, 22px);
   background: radial-gradient(ellipse at center bottom,
-    rgba(255,238,30,0.96) 0%,
-    rgba(255,175,0,0.52) 48%,
-    transparent 100%);
-  filter: blur(2px);
-  margin-bottom: -7px;
-  pointer-events: none;
+    rgba(255,238,30,0.96) 0%, rgba(255,175,0,0.52) 48%, transparent 100%);
+  filter: blur(2px); margin-bottom: -7px; pointer-events: none;
 }
-
-/* Coins spilling over top */
 .c-spill {
   font-size: clamp(0.62rem, 2.1vw, 0.85rem);
-  line-height: 1;
-  text-align: center;
-  letter-spacing: -1px;
+  line-height: 1; text-align: center; letter-spacing: -1px;
   filter: drop-shadow(0 -2px 4px rgba(255,210,0,0.85));
-  pointer-events: none;
-  white-space: nowrap;
-  margin-bottom: -4px;
-  position: relative;
-  z-index: 6;
+  pointer-events: none; white-space: nowrap;
+  margin-bottom: -4px; position: relative; z-index: 6;
 }
-
-/* Open lid — rotated back */
 .c-lid {
-  width: 112%;
-  height: clamp(13px, 3.8vw, 19px);
-  position: relative;
-  z-index: 5;
+  width: 112%; height: clamp(13px, 3.8vw, 19px);
+  position: relative; z-index: 5;
   transform: perspective(40px) rotateX(-48deg);
   transform-origin: bottom center;
-  border-radius: 4px 4px 0 0;
-  overflow: hidden;
+  border-radius: 4px 4px 0 0; overflow: hidden;
   box-shadow: 0 -4px 10px rgba(255,175,0,0.38);
 }
 .c-lid::before {
-  content: '';
-  position: absolute;
-  inset: 0;
+  content: ''; position: absolute; inset: 0;
   background:
-    repeating-linear-gradient(90deg,
-      rgba(0,0,0,0.12) 0, rgba(0,0,0,0.12) 1px,
-      transparent 1px, transparent 11px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.12) 0, rgba(0,0,0,0.12) 1px, transparent 1px, transparent 11px),
     linear-gradient(180deg, #C8801A, #8A5008, #D09018, #7A4A06);
 }
 .c-lid::after {
-  content: '';
-  position: absolute;
-  top: 44%; left: 0; right: 0;
-  height: 3px;
+  content: ''; position: absolute; top: 44%; left: 0; right: 0; height: 3px;
   background: linear-gradient(90deg, #9A6008, #FFD700, #9A6008);
 }
-
-/* Gold glow strip */
 .c-glow {
-  width: 100%;
-  height: clamp(7px, 2vw, 11px);
-  background: linear-gradient(180deg,
-    rgba(255,232,38,1) 0%,
-    rgba(255,172,0,0.72) 55%,
-    rgba(200,98,0,0.18) 100%);
+  width: 100%; height: clamp(7px, 2vw, 11px);
+  background: linear-gradient(180deg, rgba(255,232,38,1) 0%, rgba(255,172,0,0.72) 55%, rgba(200,98,0,0.18) 100%);
   box-shadow: 0 0 10px rgba(255,210,0,0.55);
-  position: relative;
-  z-index: 4;
-  pointer-events: none;
+  position: relative; z-index: 4; pointer-events: none;
 }
-
-/* Chest body */
 .c-body {
-  width: 100%;
-  position: relative;
-  z-index: 3;
-  border-radius: 0 0 5px 5px;
-  overflow: hidden;
+  width: 100%; position: relative; z-index: 3;
+  border-radius: 0 0 5px 5px; overflow: hidden;
   box-shadow: 0 5px 14px rgba(0,0,0,0.78);
 }
 .c-body::before {
-  content: '';
-  position: absolute;
-  inset: 0;
+  content: ''; position: absolute; inset: 0;
   background:
-    repeating-linear-gradient(90deg,
-      rgba(0,0,0,0.11) 0, rgba(0,0,0,0.11) 1px,
-      transparent 1px, transparent 9px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.11) 0, rgba(0,0,0,0.11) 1px, transparent 1px, transparent 9px),
     linear-gradient(180deg, #7C4C10, #4E2E06, #6A3A0C, #4A2A04, #7C4C10);
 }
 .c-body::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #A07010, #FFD700, #A07010);
-  z-index: 1;
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #A07010, #FFD700, #A07010); z-index: 1;
 }
 .c-inner {
-  position: relative;
-  z-index: 2;
+  position: relative; z-index: 2;
   padding: 0.22rem 0.1rem 0.2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.1rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.1rem;
 }
 .c-mid-band {
-  position: absolute;
-  top: 44%; left: 0; right: 0;
-  height: 3px;
+  position: absolute; top: 44%; left: 0; right: 0; height: 3px;
   background: linear-gradient(90deg, #A07010, #E8B828, #A07010);
-  z-index: 3;
-  pointer-events: none;
+  z-index: 3; pointer-events: none;
 }
 .c-clasp {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   width: 12px; height: 8px;
   background: linear-gradient(180deg, #FFD700, #B8860B, #FFD700);
-  border-radius: 2px;
-  border: 1px solid #7a5500;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.55);
-  z-index: 4;
-  pointer-events: none;
+  border-radius: 2px; border: 1px solid #7a5500;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.55); z-index: 4; pointer-events: none;
 }
-/* Preposition word on front of chest */
 .c-word {
   font-family: 'Bangers', cursive;
   font-size: clamp(1rem, 4.2vw, 1.35rem);
-  letter-spacing: 2px;
-  font-weight: 900;
+  letter-spacing: 2px; font-weight: 900;
   text-shadow: 2px 2px 0 rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.88);
-  margin-top: 3px;
-  position: relative;
-  z-index: 10;
-  pointer-events: none;
+  margin-top: 3px; position: relative; z-index: 10; pointer-events: none;
 }
 
 /* ══════════════════════════════════
-   SENTENCE PANEL
-   Full sentence always visible
-   Text wraps — student reads whole context
+   SENTENCE PANEL — full sentence always visible
 ══════════════════════════════════ */
 #sentence-panel {
-  position: relative;
-  z-index: 40;
-  width: 100%;
-  flex-shrink: 0;
+  position: relative; z-index: 40;
+  width: 100%; flex-shrink: 0;
   background: rgba(4,2,0,0.94);
   border-top: 3px solid #D4AF37;
-  padding: 0.65rem 1rem 0.7rem;
+  padding: 0.7rem 1rem 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: clamp(70px, 16vh, 110px);
+  min-height: clamp(80px, 18vh, 120px);
 }
-
-/* The sentence text — wraps naturally */
 #sentence-text {
   font-family: 'Nunito', sans-serif;
-  font-size: clamp(1.05rem, 4.5vw, 1.5rem);
+  font-size: clamp(1.15rem, 5vw, 1.65rem);
   font-weight: 800;
   color: #f5e8c0;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.9);
   text-align: center;
-  line-height: 1.65;
+  line-height: 1.7;
   width: 100%;
-  /* Wrap fully — never truncate */
   white-space: normal;
   word-break: normal;
   overflow-wrap: break-word;
 }
-
-/* Gap — inline element inside sentence */
 .gap {
   display: inline;
   font-family: 'Bangers', cursive;
-  font-size: clamp(1.05rem, 4.5vw, 1.5rem);
+  font-size: clamp(1.15rem, 5vw, 1.65rem);
   font-weight: 900;
   letter-spacing: 2px;
   color: #FFD700;
   border-bottom: 3px dotted #FFD700;
-  padding: 0 5px;
+  padding: 0 6px;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s;
+  transition: background 0.12s;
 }
-.gap.correct {
-  color: #80ff80;
-  border-bottom: 3px solid #50c850;
-  cursor: default;
-}
-.gap.wrong {
-  color: #ff5555;
-  border-bottom: 3px solid #e63232;
-  animation: shk 0.4s ease;
-}
-@keyframes shk {
-  0%,100% { padding-left: 5px; }
-  25%      { padding-left: 10px; }
-  75%      { padding-left: 0px; }
-}
-.gap.drag-over {
-  background: rgba(255,215,0,0.22);
-  border-radius: 4px;
-}
+.gap.correct { color: #80ff80; border-bottom: 3px solid #50c850; cursor: default; }
+.gap.wrong   { color: #ff5555; border-bottom: 3px solid #e63232; animation: shk 0.4s ease; }
+@keyframes shk { 0%,100%{padding-left:6px} 25%{padding-left:12px} 75%{padding-left:2px} }
+.gap.drag-over { background: rgba(255,215,0,0.22); border-radius: 4px; }
 
 /* ══════════════════════════════════
-   DRAG GHOST
+   CHART SCREEN — AT/IN/ON reference
 ══════════════════════════════════ */
-#drag-ghost {
-  position: fixed;
-  z-index: 9999;
-  pointer-events: none;
-  display: none;
-  font-family: 'Bangers', cursive;
-  font-size: clamp(1.4rem, 6vw, 2.2rem);
-  letter-spacing: 2px;
-  transform: translate(-50%, -50%) scale(1.3);
-  text-shadow: 0 0 14px currentColor, 1px 1px 3px rgba(0,0,0,0.9);
-  background: rgba(0,0,0,0.72);
-  padding: 0.2rem 0.65rem;
-  border-radius: 8px;
-  border: 2px solid rgba(255,215,0,0.62);
-}
-
-/* ══════════════════════════════════
-   WRONG OVERLAY — brief flash
-══════════════════════════════════ */
-#wrong-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(130,0,0,0.48);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-#wrong-overlay.show {
-  display: flex;
-  animation: wFlash 0.3s ease;
-}
-@keyframes wFlash {
-  0%   { background: rgba(220,0,0,0.75); }
-  100% { background: rgba(130,0,0,0.48); }
-}
-.w-msg {
-  font-family: 'Bangers', cursive;
-  font-size: clamp(2.2rem, 9vw, 4.2rem);
-  color: #ff5555;
-  letter-spacing: 4px;
-  text-shadow: 0 0 22px rgba(255,0,0,0.82);
-  animation: popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
-}
-@keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
-.w-sub {
-  color: #ffcccc;
-  font-size: clamp(0.9rem, 3vw, 1.1rem);
-  font-weight: 700;
-}
-
-/* ══════════════════════════════════
-   FIREWORKS
-══════════════════════════════════ */
-#fw-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 150;
-  pointer-events: none;
-  display: none;
-}
-
-/* ══════════════════════════════════
-   END SCREEN
-══════════════════════════════════ */
-#end-screen {
+#chart-screen {
   background:
-    linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)),
-    url('scene12.jpg') center / cover no-repeat;
-  gap: 1rem;
-  text-align: center;
-  padding: 2rem 1.5rem;
+    linear-gradient(rgba(0,40,0,0.88), rgba(0,30,0,0.92)),
+    url('scene09.jpg') center / cover no-repeat;
+  justify-content: flex-start;
+  overflow: hidden;
 }
-.end-trophy {
-  font-size: clamp(3rem, 10vw, 5rem);
+#chart-inner {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 0 1rem 0;
+}
+.chart-hud {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(0,0,0,0.9);
+  border-bottom: 2px solid #FFD700;
+  padding: 0.4rem 0.8rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.chart-hud-title {
+  font-family: 'Bangers', cursive;
+  color: #FFD700; font-size: clamp(0.9rem, 3.5vw, 1.3rem);
+  letter-spacing: 2px;
+}
+.chart-close {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.7rem, 2.5vw, 1rem);
+  background: rgba(180,0,0,0.85); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 0.2rem 0.6rem; cursor: pointer;
+}
+.chart-jack {
+  text-align: center;
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  padding: 0.5rem 0 0.2rem;
   animation: bounce 2s ease-in-out infinite;
 }
-@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-.end-title {
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.chart-main-title {
   font-family: 'Bangers', cursive;
-  font-size: clamp(2rem, 8vw, 3.8rem);
+  text-align: center;
+  font-size: clamp(1.4rem, 6vw, 2.2rem);
   color: #FFD700;
-  text-shadow: 3px 3px 0 #8B6914;
+  text-shadow: 2px 2px 0 #5a3800;
   letter-spacing: 3px;
+  padding: 0 0 0.3rem;
 }
-.end-score {
+.chart-sub {
   font-family: 'Bangers', cursive;
-  font-size: clamp(1.3rem, 5vw, 2.4rem);
-  color: #90ff90;
+  text-align: center;
+  font-size: clamp(0.8rem, 3vw, 1.1rem);
+  color: #90ee90; letter-spacing: 3px;
+  padding-bottom: 0.8rem;
 }
-.end-msg {
-  color: #ddd;
-  font-size: clamp(0.85rem, 2.8vw, 1rem);
-  max-width: 340px;
-  line-height: 1.6;
-  background: rgba(0,0,0,0.58);
-  padding: 0.5rem 0.8rem;
+
+/* Chart sections */
+.chart-section {
+  margin: 0 0.7rem 0.7rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+}
+.chart-section-header {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+  letter-spacing: 2px;
+}
+.chart-at .chart-section-header { background: #D4A574; color: #3a1a00; }
+.chart-on .chart-section-header { background: #82B4D4; color: #001a30; }
+.chart-in .chart-section-header { background: #90C878; color: #0a2800; }
+.chart-badge {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  width: clamp(32px, 9vw, 44px); height: clamp(32px, 9vw, 44px);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset -2px -2px 5px rgba(0,0,0,0.25);
+  flex-shrink: 0;
+}
+.chart-at .chart-badge { background: #B8843A; color: #fff; }
+.chart-on .chart-badge { background: #4A7AAA; color: #fff; }
+.chart-in .chart-badge { background: #5A9840; color: #fff; }
+.chart-examples {
+  background: rgba(0,0,0,0.55);
+  padding: 0.45rem 0.8rem 0.5rem;
+}
+.chart-rule {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(0.72rem, 2.8vw, 0.95rem);
+  color: #f5e8c0;
+  font-weight: 700;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid rgba(255,215,0,0.15);
+  margin-bottom: 0.1rem;
+}
+.chart-rule:last-child { border-bottom: none; }
+.chart-rule em {
+  font-style: normal;
+  color: #FFD700;
+  font-weight: 900;
+}
+.chart-tip {
+  margin: 0.4rem 0.7rem;
+  background: rgba(255,215,0,0.1);
+  border: 1px solid rgba(255,215,0,0.3);
   border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: clamp(0.7rem, 2.5vw, 0.88rem);
+  color: #f5e8c0;
+  font-weight: 700;
+  text-align: center;
 }
+.chart-tip span { color: #FFD700; }
+
+/* ══════════════════════════════════
+   OVERLAYS & FIREWORKS
+══════════════════════════════════ */
+#drag-ghost {
+  position: fixed; z-index: 9999; pointer-events: none; display: none;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1.4rem, 6vw, 2.2rem); letter-spacing: 2px;
+  transform: translate(-50%, -50%) scale(1.3);
+  text-shadow: 0 0 14px currentColor, 1px 1px 3px rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.72); padding: 0.2rem 0.65rem;
+  border-radius: 8px; border: 2px solid rgba(255,215,0,0.62);
+}
+#wrong-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(130,0,0,0.48);
+  display: none; align-items: center; justify-content: center;
+  flex-direction: column; gap: 0.5rem;
+}
+#wrong-overlay.show { display: flex; animation: wFlash 0.3s ease; }
+@keyframes wFlash { 0%{background:rgba(220,0,0,0.75)} 100%{background:rgba(130,0,0,0.48)} }
+.w-msg {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2.2rem, 9vw, 4.2rem); color: #ff5555;
+  letter-spacing: 4px; text-shadow: 0 0 22px rgba(255,0,0,0.82);
+  animation: popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+@keyframes popIn { 0%{transform:scale(0)} 100%{transform:scale(1)} }
+.w-sub { color: #ffcccc; font-size: clamp(0.9rem, 3vw, 1.1rem); font-weight: 700; }
+#fw-canvas { position: fixed; inset: 0; z-index: 150; pointer-events: none; display: none; }
+
+/* END SCREEN */
+#end-screen {
+  background: linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)), url('scene12.jpg') center/cover no-repeat;
+  gap: 1rem; text-align: center; padding: 2rem 1.5rem;
+}
+.end-trophy { font-size: clamp(3rem,10vw,5rem); animation: bounce 2s ease-in-out infinite; }
+.end-title  { font-family:'Bangers',cursive; font-size:clamp(2rem,8vw,3.8rem); color:#FFD700; text-shadow:3px 3px 0 #8B6914; letter-spacing:3px; }
+.end-score  { font-family:'Bangers',cursive; font-size:clamp(1.3rem,5vw,2.4rem); color:#90ff90; }
+.end-msg    { color:#ddd; font-size:clamp(0.85rem,2.8vw,1rem); max-width:340px; line-height:1.6; background:rgba(0,0,0,0.58); padding:0.5rem 0.8rem; border-radius:8px; }
 
 </style>
 </head>
@@ -583,87 +529,149 @@ body {
     <span class="t-pill">ON</span>
   </div>
   <div class="t-hint">
-    🎁 Tap a chest to select a preposition<br>
-    Then tap the <strong style="color:#FFD700">___</strong> gap in the sentence<br>
-    Or drag the chest word into the gap
+    🎁 Tap a chest then tap the <strong style="color:#FFD700">___</strong> gap<br>
+    Or drag the word into the gap
   </div>
-  <button class="btn-start" onclick="startGame()">▶ START ADVENTURE</button>
+  <button class="btn-gold" onclick="startGame()">▶ START ADVENTURE</button>
+  <button class="btn-chart-title" onclick="showChart('title-screen')">📋 VIEW GRAMMAR CHART</button>
 </div>
 
 <!-- ══════════ GAME ══════════ -->
 <div class="screen" id="game-screen">
-
-  <!-- Background image -->
   <div id="bg"></div>
-
-  <!-- HUD -->
   <div id="hud">
     <div class="hud-title">🗺️ JACK'S QUEST</div>
-    <div class="hud-score">⭐ <span id="score-val">0</span> / <span id="total-val">0</span></div>
-    <button class="btn-restart" onclick="restartGame()">↩ RESTART</button>
+    <div class="hud-score">⭐ <span id="score-val">0</span>/<span id="total-val">0</span></div>
+    <button class="btn-hud btn-hud-green" onclick="showChart('game-screen')">📋</button>
+    <button class="btn-hud btn-hud-red"   onclick="restartGame()">↩ RESTART</button>
   </div>
-
-  <!-- Progress -->
   <div id="prog"><div id="prog-fill"></div></div>
-
-  <!-- Scene label -->
   <div id="scene-lbl">SCENE 1 · THE AIRPORT</div>
-
-  <!-- Image visible through here -->
   <div id="scene-space"></div>
 
-  <!-- Three treasure chests -->
   <div id="chests">
-
-    <div class="chest" id="chest-at" data-word="at"
-         tabindex="0" role="button" aria-label="Choose AT">
+    <div class="chest" id="chest-at" data-word="at" tabindex="0" role="button" aria-label="Choose AT">
       <div class="c-rays"></div>
       <div class="c-spill">🪙💎💍🪙💎</div>
       <div class="c-lid"></div>
       <div class="c-glow"></div>
       <div class="c-body" style="position:relative;">
-        <div class="c-mid-band"></div>
-        <div class="c-clasp"></div>
+        <div class="c-mid-band"></div><div class="c-clasp"></div>
         <div class="c-inner"></div>
       </div>
       <div class="c-word" style="color:#ffdd99;">AT</div>
     </div>
-
-    <div class="chest" id="chest-in" data-word="in"
-         tabindex="0" role="button" aria-label="Choose IN">
+    <div class="chest" id="chest-in" data-word="in" tabindex="0" role="button" aria-label="Choose IN">
       <div class="c-rays"></div>
       <div class="c-spill">💎🪙💍💎🪙</div>
       <div class="c-lid"></div>
       <div class="c-glow"></div>
       <div class="c-body" style="position:relative;">
-        <div class="c-mid-band"></div>
-        <div class="c-clasp"></div>
+        <div class="c-mid-band"></div><div class="c-clasp"></div>
         <div class="c-inner"></div>
       </div>
       <div class="c-word" style="color:#99ffbb;">IN</div>
     </div>
-
-    <div class="chest" id="chest-on" data-word="on"
-         tabindex="0" role="button" aria-label="Choose ON">
+    <div class="chest" id="chest-on" data-word="on" tabindex="0" role="button" aria-label="Choose ON">
       <div class="c-rays"></div>
       <div class="c-spill">💍🪙💎💍🪙</div>
       <div class="c-lid"></div>
       <div class="c-glow"></div>
       <div class="c-body" style="position:relative;">
-        <div class="c-mid-band"></div>
-        <div class="c-clasp"></div>
+        <div class="c-mid-band"></div><div class="c-clasp"></div>
         <div class="c-inner"></div>
       </div>
       <div class="c-word" style="color:#99bbff;">ON</div>
     </div>
-
   </div>
 
-  <!-- Full sentence — always completely visible -->
   <div id="sentence-panel">
     <div id="sentence-text"></div>
   </div>
+</div>
 
+<!-- ══════════ CHART ══════════ -->
+<div class="screen" id="chart-screen">
+  <div id="chart-inner">
+    <div class="chart-hud">
+      <div class="chart-hud-title">📋 AT · IN · ON — GRAMMAR CHART</div>
+      <button class="chart-close" onclick="closeChart()">✕ BACK</button>
+    </div>
+
+    <div class="chart-jack">🗺️🌿</div>
+    <div class="chart-main-title">AT — IN — ON</div>
+    <div class="chart-sub">PREPOSITIONS OF TIME</div>
+
+    <!-- AT section -->
+    <div class="chart-section chart-at">
+      <div class="chart-section-header">
+        <div class="chart-badge">AT</div>
+        <div>
+          <div>AT + Specific Time</div>
+          <div style="font-size:0.75em;opacity:0.8;">AT + Holiday Period</div>
+        </div>
+      </div>
+      <div class="chart-examples">
+        <div class="chart-rule">Jack wakes up <em>at</em> 6 o'clock.</div>
+        <div class="chart-rule">The plane leaves <em>at</em> 8.30.</div>
+        <div class="chart-rule">They meet <em>at</em> noon / <em>at</em> midnight.</div>
+        <div class="chart-rule">Jack arrives <em>at</em> night / <em>at</em> sunset.</div>
+        <div class="chart-rule">Schools close <em>at</em> Christmas.</div>
+        <div class="chart-rule">"Meet me <em>at</em> the gate <em>at</em> ten o'clock!"</div>
+      </div>
+    </div>
+
+    <!-- ON section -->
+    <div class="chart-section chart-on">
+      <div class="chart-section-header">
+        <div class="chart-badge">ON</div>
+        <div>
+          <div>ON + Days of the Week</div>
+          <div style="font-size:0.75em;opacity:0.8;">ON + Dates</div>
+        </div>
+      </div>
+      <div class="chart-examples">
+        <div class="chart-rule">Jack sets off <em>on</em> Monday.</div>
+        <div class="chart-rule">The guide arrives <em>on</em> Friday.</div>
+        <div class="chart-rule">They rest <em>on</em> Sunday.</div>
+        <div class="chart-rule">The temple was found <em>on</em> March 3rd.</div>
+        <div class="chart-rule">The festival is <em>on</em> the 25th of September.</div>
+        <div class="chart-rule">"We celebrate <em>on</em> Christmas Day!"</div>
+      </div>
+    </div>
+
+    <!-- IN section -->
+    <div class="chart-section chart-in">
+      <div class="chart-section-header">
+        <div class="chart-badge">IN</div>
+        <div>
+          <div>IN + Morning / Afternoon / Evening</div>
+          <div style="font-size:0.75em;opacity:0.8;">IN + Months · Seasons · Years · Decades</div>
+        </div>
+      </div>
+      <div class="chart-examples">
+        <div class="chart-rule">Jack leaves <em>in</em> the morning.</div>
+        <div class="chart-rule">They travel <em>in</em> the afternoon.</div>
+        <div class="chart-rule">Stars appear <em>in</em> the evening.</div>
+        <div class="chart-rule">Peru is hot <em>in</em> July / <em>in</em> summer.</div>
+        <div class="chart-rule">"It rains <em>in</em> September," says the chief.</div>
+        <div class="chart-rule">The temple was built <em>in</em> the 6th century.</div>
+        <div class="chart-rule">Explorers came <em>in</em> the 1920s.</div>
+        <div class="chart-rule">"I will be back <em>in</em> three hours."</div>
+      </div>
+    </div>
+
+    <div class="chart-tip">
+      💡 Jack says: <span>"I fly ON Monday, IN July, AT 9 o'clock!"</span>
+    </div>
+    <div class="chart-tip">
+      🌿 <span>Days &amp; Dates → ON &nbsp;|&nbsp; Months, Seasons, Years → IN &nbsp;|&nbsp; Times &amp; Holidays → AT</span>
+    </div>
+
+    <div style="text-align:center;padding:0.5rem;font-family:'Bangers',cursive;color:rgba(255,215,0,0.5);font-size:0.8rem;letter-spacing:2px;">
+      GOOD LUCK ON YOUR ADVENTURE! 🗺️
+    </div>
+  </div>
 </div>
 
 <!-- ══════════ END ══════════ -->
@@ -672,10 +680,9 @@ body {
   <div class="end-title">ADVENTURE<br>COMPLETE!</div>
   <div class="end-score">⭐ <span id="final-score">0</span> / <span id="final-total">0</span></div>
   <div class="end-msg">Jack escapes with the golden statue! You mastered AT, IN and ON — brilliant work! 🎉</div>
-  <button class="btn-start" onclick="restartGame()">🔄 PLAY AGAIN</button>
+  <button class="btn-gold" onclick="restartGame()">🔄 PLAY AGAIN</button>
 </div>
 
-<!-- ══════════ OVERLAYS ══════════ -->
 <canvas id="fw-canvas"></canvas>
 <div id="wrong-overlay">
   <div class="w-msg">❌ WRONG!</div>
@@ -686,138 +693,168 @@ body {
 <script>
 
 // ════════════════════════════════════════
-// SENTENCES
-// One sentence per card
-// Full sentence always shown — student has complete context
-// 60% time prepositions (AT+clock/noon/night/dawn/sunrise/sunset, IN+morning/afternoon/evening, ON+days)
-// 40% place prepositions (AT+locations, IN+enclosed spaces, ON+surfaces/transport)
+// SENTENCES — rewritten story
+// Heavy repetition of all AT/IN/ON patterns
+// Dynamic dialogue, no ambiguity
+// Matches 12 existing scene images
 // ════════════════════════════════════════
 const SENTENCES = [
-  // SCENE 1 — THE AIRPORT
-  { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
-    text:'Jack arrives [on] Monday morning.' },
-  { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
-    text:'His flight leaves [at] seven o\'clock.' },
-  { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
-    text:'He waits [at] the gate [in] the busy terminal.' },
 
-  // SCENE 2 — IN THE AIR
-  { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
-    text:'[In] the afternoon the plane flies high.' },
-  { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
-    text:'Jack looks down [at] the jungle far below.' },
-  { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
-    text:'The pilot speaks [at] noon to the passengers.' },
+  // ── SCENE 1: THE AIRPORT ──
+  // Jack departs — clock times, days, months
+  { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
+    text:'It is Monday [in] June and Jack is ready for adventure.' },
+  { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
+    text:'His flight to Peru leaves [at] nine o\'clock [in] the morning.' },
+  { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
+    text:'He waits [at] the check-in desk [in] the busy terminal.' },
+  { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
+    text:'The pilot says, "We arrive [at] Lima [at] three o\'clock."' },
 
-  // SCENE 3 — THE AIRSTRIP
+  // ── SCENE 2: IN THE AIR ──
+  // Time periods, seasons
+  { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
+    text:'[In] the afternoon the plane flies high over the jungle.' },
+  { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
+    text:'Jack thinks, "Peru is very hot [in] summer."' },
+  { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
+    text:'The pilot says, "We land [at] six o\'clock [in] the evening."' },
+
+  // ── SCENE 3: THE AIRSTRIP ──
+  // Specific times, place
   { bg:'scene03.jpg', label:'SCENE 3 · THE AIRSTRIP',
-    text:'The plane lands [at] six o\'clock [in] the evening.' },
+    text:'The plane lands [at] a small airstrip [in] the jungle.' },
   { bg:'scene03.jpg', label:'SCENE 3 · THE AIRSTRIP',
-    text:'Jack steps off [at] a small airstrip [in] Peru.' },
+    text:'Jack steps off the plane [at] exactly half past six.' },
+  { bg:'scene03.jpg', label:'SCENE 3 · THE AIRSTRIP',
+    text:'"The last explorer came here [in] the 1920s," says the pilot.' },
 
-  // SCENE 4 — THE VILLAGE
+  // ── SCENE 4: THE VILLAGE ──
+  // Night, morning, dialogue, months, dates
   { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
     text:'Jack arrives [at] the village [at] night.' },
   { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
-    text:'He sits [in] a warm hut.' },
+    text:'He sits [in] a warm hut with the village chief.' },
   { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
-    text:'\'You must leave [in] the morning,\' warns the old man.' },
+    text:'The chief says, "It rains every day [in] September."' },
+  { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
+    text:'"Our big festival is [on] the 25th of September," he adds.' },
+  { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
+    text:'"You must leave [in] the morning," warns the chief.' },
 
-  // SCENE 5 — THE WARNING
+  // ── SCENE 5: THE WARNING ──
+  // Days of week, sunrise, repetition
   { bg:'scene05.jpg', label:'SCENE 5 · THE WARNING',
-    text:'[In] the morning [on] Tuesday Jack sets off.' },
+    text:'[In] the morning [on] Tuesday Jack and the guide set off.' },
   { bg:'scene05.jpg', label:'SCENE 5 · THE WARNING',
-    text:'He walks [on] the narrow jungle path.' },
+    text:'Jack says, "We must arrive [at] the river [at] noon."' },
   { bg:'scene05.jpg', label:'SCENE 5 · THE WARNING',
-    text:'[At] sunrise the birds begin to sing.' },
+    text:'[At] sunrise the birds sing loudly [in] the trees.' },
+  { bg:'scene05.jpg', label:'SCENE 5 · THE WARNING',
+    text:'The guide says, "We rest [on] Wednesday and walk [on] Thursday."' },
 
-  // SCENE 6 — THE RIVER
+  // ── SCENE 6: THE RIVER ──
+  // IN canoe (not ON — correct!), midday, noon
   { bg:'scene06.jpg', label:'SCENE 6 · THE RIVER',
-    text:'Jack reaches the river [at] midday.' },
+    text:'Jack and the guide sit [in] a small canoe on the river.' },
   { bg:'scene06.jpg', label:'SCENE 6 · THE RIVER',
-    text:'He sits [on] a small boat [on] the water.' },
+    text:'They reach the waterfall [at] midday.' },
   { bg:'scene06.jpg', label:'SCENE 6 · THE RIVER',
-    text:'The sun burns very hot [at] noon.' },
+    text:'The guide says, "We stop here [at] noon to eat."' },
+  { bg:'scene06.jpg', label:'SCENE 6 · THE RIVER',
+    text:'"[In] the dry season [in] July this river is very low."' },
 
-  // SCENE 7 — THE CHASE
+  // ── SCENE 7: THE CHASE ──
+  // Afternoon, distance, days
   { bg:'scene07.jpg', label:'SCENE 7 · THE CHASE',
     text:'[In] the afternoon warriors appear [in] the forest.' },
   { bg:'scene07.jpg', label:'SCENE 7 · THE CHASE',
-    text:'Jack runs [on] the jungle path.' },
+    text:'Jack runs along the path [at] full speed.' },
   { bg:'scene07.jpg', label:'SCENE 7 · THE CHASE',
-    text:'Drums echo [in] the distance.' },
+    text:'The guide shouts, "We were here [on] Friday — they remember us!"' },
+  { bg:'scene07.jpg', label:'SCENE 7 · THE CHASE',
+    text:'Drums echo [in] the distance [in] the dark jungle.' },
 
-  // SCENE 8 — THE CAVE
+  // ── SCENE 8: THE CAVE ──
+  // Sunset, darkness, decades
   { bg:'scene08.jpg', label:'SCENE 8 · THE CAVE',
-    text:'[At] sunset Jack hides [in] a cave.' },
+    text:'[At] sunset Jack hides [in] a cave [in] the cliff.' },
   { bg:'scene08.jpg', label:'SCENE 8 · THE CAVE',
-    text:'He sits quietly [in] the darkness.' },
+    text:'He reads his map [in] the darkness.' },
   { bg:'scene08.jpg', label:'SCENE 8 · THE CAVE',
-    text:'A huge snake hangs [on] the cave wall.' },
+    text:'"This cave was used [in] the 1940s by explorers," he reads.' },
+  { bg:'scene08.jpg', label:'SCENE 8 · THE CAVE',
+    text:'A large snake hangs [on] the cave wall above him.' },
 
-  // SCENE 9 — THE TEMPLE
+  // ── SCENE 9: THE TEMPLE ──
+  // Morning, days, century, dates
   { bg:'scene09.jpg', label:'SCENE 9 · THE TEMPLE',
-    text:'[In] the morning [on] Wednesday Jack sees the temple.' },
+    text:'[In] the morning [on] Wednesday Jack finally sees the temple.' },
   { bg:'scene09.jpg', label:'SCENE 9 · THE TEMPLE',
-    text:'It stands [on] a high cliff.' },
+    text:'It stands [on] a high cliff above the jungle.' },
   { bg:'scene09.jpg', label:'SCENE 9 · THE TEMPLE',
-    text:'Ancient fire burns [at] the entrance.' },
+    text:'"It was built [in] the sixth century," Jack says quietly.' },
+  { bg:'scene09.jpg', label:'SCENE 9 · THE TEMPLE',
+    text:'Ancient fire burns [at] the entrance [in] the early light.' },
 
-  // SCENE 10 — INSIDE THE TEMPLE
+  // ── SCENE 10: INSIDE THE TEMPLE ──
+  // Midday, seasons, centuries
   { bg:'scene10.jpg', label:'SCENE 10 · INSIDE THE TEMPLE',
-    text:'Jack enters the temple [at] midday.' },
+    text:'Jack enters the temple [at] midday [on] Thursday.' },
   { bg:'scene10.jpg', label:'SCENE 10 · INSIDE THE TEMPLE',
-    text:'Gold sits [on] stone altars.' },
+    text:'Gold sits [on] the stone altars [in] the great hall.' },
   { bg:'scene10.jpg', label:'SCENE 10 · INSIDE THE TEMPLE',
     text:'A golden statue stands [on] a black pedestal [in] the centre.' },
+  { bg:'scene10.jpg', label:'SCENE 10 · INSIDE THE TEMPLE',
+    text:'"This temple was last opened [in] 1987," Jack reads [on] the wall.' },
 
-  // SCENE 11 — THE ESCAPE
+  // ── SCENE 11: THE ESCAPE ──
+  // Evening, clock time, days
   { bg:'scene11.jpg', label:'SCENE 11 · THE ESCAPE',
     text:'[At] six o\'clock [in] the evening Jack grabs the statue.' },
   { bg:'scene11.jpg', label:'SCENE 11 · THE ESCAPE',
-    text:'He runs [on] the stone stairs.' },
+    text:'He runs [on] the stone stairs [at] great speed.' },
   { bg:'scene11.jpg', label:'SCENE 11 · THE ESCAPE',
-    text:'Jack escapes [in] a secret tunnel.' },
+    text:'Jack escapes [in] a secret tunnel [in] the rock.' },
+  { bg:'scene11.jpg', label:'SCENE 11 · THE ESCAPE',
+    text:'He thinks, "I must be [at] the airstrip [on] Friday morning!"' },
 
-  // SCENE 12 — FREEDOM!
+  // ── SCENE 12: FREEDOM! ──
+  // Midnight, dawn, days, months — grand finale
   { bg:'scene12.jpg', label:'SCENE 12 · FREEDOM!',
-    text:'[At] midnight Jack boards the plane.' },
+    text:'[At] midnight Jack boards the small plane.' },
   { bg:'scene12.jpg', label:'SCENE 12 · FREEDOM!',
-    text:'[In] the sky he looks down [at] the jungle.' },
+    text:'[In] the sky he looks down [at] the jungle below.' },
   { bg:'scene12.jpg', label:'SCENE 12 · FREEDOM!',
-    text:'[At] dawn [on] Thursday — Jack is safe!' }
+    text:'[At] dawn [on] Saturday — Jack is finally safe!' },
+  { bg:'scene12.jpg', label:'SCENE 12 · FREEDOM!',
+    text:'He smiles and says, "I will be home [in] July — [at] Christmas I will tell this story!"' }
 ];
 
-// Count total gaps
-const TOTAL_GAPS = SENTENCES.reduce((n, s) =>
-  n + (s.text.match(/\[[^\]]+\]/g) || []).length, 0);
+const TOTAL_GAPS = SENTENCES.reduce((n,s) =>
+  n + (s.text.match(/\[[^\]]+\]/g)||[]).length, 0);
 
 // ════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════
 let gameOn        = false;
 let score         = 0;
-let sentIdx       = 0;   // current sentence index
-let selectedWord  = null; // word chosen by tap
+let sentIdx       = 0;
+let selectedWord  = null;
 let touchDragging = false;
+let prevScreen    = 'game-screen';
 
 // ════════════════════════════════════════
 // START / RESTART
 // ════════════════════════════════════════
 function startGame() {
-  gameOn       = true;
-  score        = 0;
-  sentIdx      = 0;
-  selectedWord = null;
-  touchDragging = false;
-
+  gameOn=true; score=0; sentIdx=0; selectedWord=null; touchDragging=false;
   document.getElementById('score-val').textContent   = '0';
   document.getElementById('total-val').textContent   = TOTAL_GAPS;
   document.getElementById('final-total').textContent = TOTAL_GAPS;
   document.getElementById('prog-fill').style.width   = '0%';
   document.getElementById('wrong-overlay').classList.remove('show');
   document.getElementById('drag-ghost').style.display = 'none';
-
   setupChests();
   showScreen('game-screen');
   loadSentence(0);
@@ -825,336 +862,176 @@ function startGame() {
 
 function restartGame() {
   stopFireworks();
-  gameOn = false;
+  gameOn=false;
   document.getElementById('wrong-overlay').classList.remove('show');
-  document.getElementById('drag-ghost').style.display = 'none';
-  document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
-  selectedWord = null;
-  setTimeout(startGame, 80);
+  document.getElementById('drag-ghost').style.display='none';
+  document.querySelectorAll('.chest').forEach(c=>c.classList.remove('selected'));
+  selectedWord=null;
+  setTimeout(startGame,80);
 }
 
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+}
+
+function showChart(from) {
+  prevScreen = from || 'game-screen';
+  showScreen('chart-screen');
+  document.getElementById('chart-inner').scrollTop = 0;
+}
+
+function closeChart() {
+  showScreen(prevScreen);
 }
 
 // ════════════════════════════════════════
 // LOAD SENTENCE
-// Renders one full sentence with inline gap(s)
 // ════════════════════════════════════════
 function loadSentence(idx) {
   if (idx >= SENTENCES.length) {
-    // All done — WIN
-    gameOn = false;
-    document.getElementById('final-score').textContent = score;
-    setTimeout(() => {
-      bigFireworks();
-      setTimeout(() => { stopFireworks(); showScreen('end-screen'); }, 3500);
-    }, 300);
+    gameOn=false;
+    document.getElementById('final-score').textContent=score;
+    setTimeout(()=>{bigFireworks();setTimeout(()=>{stopFireworks();showScreen('end-screen');},3500);},300);
     return;
   }
+  const s=SENTENCES[idx];
+  selectedWord=null;
+  document.querySelectorAll('.chest').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('bg').style.backgroundImage=`url('${s.bg}')`;
+  document.getElementById('scene-lbl').textContent=s.label;
 
-  const s = SENTENCES[idx];
-  selectedWord = null;
-  document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
-
-  // Set background and label
-  document.getElementById('bg').style.backgroundImage = `url('${s.bg}')`;
-  document.getElementById('scene-lbl').textContent = s.label;
-
-  // Build sentence with inline gap elements
-  const container = document.getElementById('sentence-text');
-  container.innerHTML = '';
-
-  let gapCount = 0;
-  const parts = s.text.split(/\[([^\]]+)\]/);
-
-  parts.forEach((part, pi) => {
-    if (pi % 2 === 0) {
-      // Plain text
+  const container=document.getElementById('sentence-text');
+  container.innerHTML='';
+  let gc=0;
+  s.text.split(/\[([^\]]+)\]/).forEach((part,pi)=>{
+    if (pi%2===0) {
       if (part) container.appendChild(document.createTextNode(part));
     } else {
-      // Gap element — inline in the sentence
-      const gapEl = document.createElement('span');
-      gapEl.className = 'gap';
-      gapEl.id = `gap-${gapCount}`;
-      gapEl.dataset.answer = part.toLowerCase();
-      gapEl.textContent = '___';
-
-      const gc = gapCount; // capture for closure
-
-      // Tap to fill
-      gapEl.addEventListener('click', () => handleGapInteraction(gapEl, gc));
-      gapEl.addEventListener('touchend', e => {
-        e.preventDefault();
-        handleGapInteraction(gapEl, gc);
-      }, { passive: false });
-
-      // Desktop drop
-      gapEl.addEventListener('dragover', e => {
-        e.preventDefault();
-        gapEl.classList.add('drag-over');
+      const g=document.createElement('span');
+      g.className='gap'; g.id=`gap-${gc}`;
+      g.dataset.answer=part.toLowerCase(); g.textContent='___';
+      const gIdx=gc;
+      g.addEventListener('click',()=>handleGap(g,gIdx));
+      g.addEventListener('touchend',e=>{e.preventDefault();handleGap(g,gIdx);},{passive:false});
+      g.addEventListener('dragover',e=>{e.preventDefault();g.classList.add('drag-over');});
+      g.addEventListener('dragleave',()=>g.classList.remove('drag-over'));
+      g.addEventListener('drop',e=>{
+        e.preventDefault(); g.classList.remove('drag-over');
+        const w=e.dataTransfer.getData('text/plain')||selectedWord;
+        if(w) checkAnswer(g,w);
       });
-      gapEl.addEventListener('dragleave', () => gapEl.classList.remove('drag-over'));
-      gapEl.addEventListener('drop', e => {
-        e.preventDefault();
-        gapEl.classList.remove('drag-over');
-        const w = e.dataTransfer.getData('text/plain') || selectedWord;
-        if (w) checkAnswer(gapEl, w);
-      });
-
-      container.appendChild(gapEl);
-      gapCount++;
+      container.appendChild(g);
+      gc++;
     }
   });
 }
 
-function handleGapInteraction(gapEl, gapIdx) {
-  if (!gameOn || gapEl.classList.contains('correct')) return;
+function handleGap(g,idx) {
+  if (!gameOn||g.classList.contains('correct')) return;
   if (!selectedWord) return;
-  checkAnswer(gapEl, selectedWord);
+  checkAnswer(g,selectedWord);
 }
 
 // ════════════════════════════════════════
 // CHECK ANSWER
 // ════════════════════════════════════════
-function checkAnswer(gapEl, word) {
-  if (!gameOn || gapEl.classList.contains('correct')) return;
-
-  const given   = word.toLowerCase().trim();
-  const correct = gapEl.dataset.answer.toLowerCase().trim();
-
-  if (given === correct) {
-    // ✅ CORRECT
-    gapEl.classList.remove('drag-over');
-    gapEl.classList.add('correct');
-    gapEl.textContent = given.toUpperCase();
-
+function checkAnswer(g,word) {
+  if (!gameOn||g.classList.contains('correct')) return;
+  const given=word.toLowerCase().trim();
+  const correct=g.dataset.answer.toLowerCase().trim();
+  if (given===correct) {
+    g.classList.remove('drag-over'); g.classList.add('correct');
+    g.textContent=given.toUpperCase();
     score++;
-    selectedWord = null;
-    document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
-    document.getElementById('score-val').textContent = score;
-    document.getElementById('prog-fill').style.width = (score / TOTAL_GAPS * 100) + '%';
-
+    selectedWord=null;
+    document.querySelectorAll('.chest').forEach(c=>c.classList.remove('selected'));
+    document.getElementById('score-val').textContent=score;
+    document.getElementById('prog-fill').style.width=(score/TOTAL_GAPS*100)+'%';
     miniFirework();
-
-    // Check if all gaps in this sentence are filled
-    const allGaps = document.querySelectorAll('#sentence-text .gap');
-    const allCorrect = [...allGaps].every(g => g.classList.contains('correct'));
-
-    if (allCorrect) {
-      // Move to next sentence after short pause
-      setTimeout(() => {
-        sentIdx++;
-        loadSentence(sentIdx);
-      }, 700);
+    const allGaps=document.querySelectorAll('#sentence-text .gap');
+    if ([...allGaps].every(g=>g.classList.contains('correct'))) {
+      setTimeout(()=>{sentIdx++;loadSentence(sentIdx);},700);
     }
-    // else: wait for remaining gaps in same sentence
-
   } else {
-    // ❌ WRONG — flash and let student try again
-    gapEl.classList.add('wrong');
+    g.classList.add('wrong');
     document.getElementById('wrong-overlay').classList.add('show');
-    setTimeout(() => {
-      gapEl.classList.remove('wrong');
-      document.getElementById('wrong-overlay').classList.remove('show');
-    }, 900);
+    setTimeout(()=>{g.classList.remove('wrong');document.getElementById('wrong-overlay').classList.remove('show');},900);
   }
 }
 
 // ════════════════════════════════════════
 // CHEST SETUP
-// Tap to select, drag to drop
 // ════════════════════════════════════════
 function setupChests() {
-  const wordColors = { at:'#ffdd99', in:'#99ffbb', on:'#99bbff' };
-
-  document.querySelectorAll('.chest').forEach(chest => {
-    const word = chest.dataset.word;
-
-    // Remove old listeners by cloning
-    const fresh = chest.cloneNode(true);
-    chest.parentNode.replaceChild(fresh, chest);
-
-    // Desktop drag
-    fresh.draggable = true;
-    fresh.addEventListener('dragstart', e => {
-      selectedWord = word;
-      e.dataTransfer.setData('text/plain', word);
-      setTimeout(() => fresh.style.opacity = '0.4', 0);
+  const colors={at:'#ffdd99',in:'#99ffbb',on:'#99bbff'};
+  document.querySelectorAll('.chest').forEach(chest=>{
+    const word=chest.dataset.word;
+    const fresh=chest.cloneNode(true);
+    chest.parentNode.replaceChild(fresh,chest);
+    fresh.draggable=true;
+    fresh.addEventListener('dragstart',e=>{
+      selectedWord=word;
+      e.dataTransfer.setData('text/plain',word);
+      setTimeout(()=>fresh.style.opacity='0.4',0);
     });
-    fresh.addEventListener('dragend', () => {
-      fresh.style.opacity = '1';
-    });
-
-    // Touch drag
-    fresh.addEventListener('touchstart', e => handleTouchStart(e, word, fresh, wordColors[word]), { passive: false });
-
-    // Tap to select
-    const selectChest = () => {
-      if (touchDragging || !gameOn) return;
-      document.querySelectorAll('.chest').forEach(c => c.classList.remove('selected'));
-      if (selectedWord === word) {
-        selectedWord = null;
-      } else {
-        selectedWord = word;
-        fresh.classList.add('selected');
-      }
+    fresh.addEventListener('dragend',()=>fresh.style.opacity='1');
+    fresh.addEventListener('touchstart',e=>handleTouchStart(e,word,fresh,colors[word]),{passive:false});
+    const select=()=>{
+      if(touchDragging||!gameOn) return;
+      document.querySelectorAll('.chest').forEach(c=>c.classList.remove('selected'));
+      selectedWord=(selectedWord===word)?null:word;
+      if(selectedWord) fresh.classList.add('selected');
     };
-    fresh.addEventListener('click', selectChest);
-    fresh.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectChest(); }
-    });
+    fresh.addEventListener('click',select);
+    fresh.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select();}});
   });
 }
 
 // ════════════════════════════════════════
 // TOUCH DRAG
 // ════════════════════════════════════════
-function handleTouchStart(e, word, chestEl, color) {
-  e.preventDefault();
-  touchDragging = true;
-  selectedWord = word;
-
-  const ghost = document.getElementById('drag-ghost');
-  ghost.textContent = word.toUpperCase();
-  ghost.style.color = color || '#FFD700';
-  ghost.style.display = 'block';
-  moveGhost(e.touches[0].clientX, e.touches[0].clientY);
-
+function handleTouchStart(e,word,chestEl,color) {
+  e.preventDefault(); touchDragging=true; selectedWord=word;
+  const ghost=document.getElementById('drag-ghost');
+  ghost.textContent=word.toUpperCase(); ghost.style.color=color||'#FFD700';
+  ghost.style.display='block';
+  moveGhost(e.touches[0].clientX,e.touches[0].clientY);
   function onMove(ev) {
     ev.preventDefault();
-    const t = ev.touches[0];
-    moveGhost(t.clientX, t.clientY);
-    document.querySelectorAll('.gap').forEach(g => g.classList.remove('drag-over'));
-    const el = document.elementFromPoint(t.clientX, t.clientY);
-    if (el && el.classList.contains('gap') && !el.classList.contains('correct')) {
-      el.classList.add('drag-over');
-    }
+    const t=ev.touches[0]; moveGhost(t.clientX,t.clientY);
+    document.querySelectorAll('.gap').forEach(g=>g.classList.remove('drag-over'));
+    const el=document.elementFromPoint(t.clientX,t.clientY);
+    if(el&&el.classList.contains('gap')&&!el.classList.contains('correct')) el.classList.add('drag-over');
   }
-
   function onEnd(ev) {
-    ghost.style.display = 'none';
-    document.querySelectorAll('.gap').forEach(g => g.classList.remove('drag-over'));
-    const t = ev.changedTouches[0];
-    const el = document.elementFromPoint(t.clientX, t.clientY);
-    const droppedWord = word;
-    cleanup();
-    if (el && el.classList.contains('gap') && !el.classList.contains('correct')) {
-      checkAnswer(el, droppedWord);
-    }
+    ghost.style.display='none';
+    document.querySelectorAll('.gap').forEach(g=>g.classList.remove('drag-over'));
+    const t=ev.changedTouches[0];
+    const el=document.elementFromPoint(t.clientX,t.clientY);
+    const w=word; cleanup();
+    if(el&&el.classList.contains('gap')&&!el.classList.contains('correct')) checkAnswer(el,w);
   }
-
-  function onCancel() {
-    ghost.style.display = 'none';
-    document.querySelectorAll('.gap').forEach(g => g.classList.remove('drag-over'));
-    cleanup();
-  }
-
-  function cleanup() {
-    selectedWord = null;
-    setTimeout(() => { touchDragging = false; }, 50);
-    document.removeEventListener('touchmove', onMove);
-    document.removeEventListener('touchend', onEnd);
-    document.removeEventListener('touchcancel', onCancel);
-  }
-
-  document.addEventListener('touchmove', onMove, { passive: false });
-  document.addEventListener('touchend', onEnd, { passive: false });
-  document.addEventListener('touchcancel', onCancel, { passive: false });
+  function onCancel() {ghost.style.display='none';document.querySelectorAll('.gap').forEach(g=>g.classList.remove('drag-over'));cleanup();}
+  function cleanup() {selectedWord=null;setTimeout(()=>{touchDragging=false;},50);document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);document.removeEventListener('touchcancel',onCancel);}
+  document.addEventListener('touchmove',onMove,{passive:false});
+  document.addEventListener('touchend',onEnd,{passive:false});
+  document.addEventListener('touchcancel',onCancel,{passive:false});
 }
-
-function moveGhost(x, y) {
-  const g = document.getElementById('drag-ghost');
-  g.style.left = x + 'px';
-  g.style.top  = y + 'px';
-}
+function moveGhost(x,y){const g=document.getElementById('drag-ghost');g.style.left=x+'px';g.style.top=y+'px';}
 
 // ════════════════════════════════════════
 // FIREWORKS
 // ════════════════════════════════════════
-const fwCanvas = document.getElementById('fw-canvas');
-const fwCtx    = fwCanvas.getContext('2d');
-let fwParts    = [];
-let fwOn       = false;
-let fwRaf      = null;
-
-function resizeFW() {
-  fwCanvas.width  = window.innerWidth;
-  fwCanvas.height = window.innerHeight;
-}
-resizeFW();
-window.addEventListener('resize', resizeFW);
-
-function burst(x, y, n) {
-  const cols = ['#FFD700','#FF6B6B','#4ECDC4','#96CEB4','#DDA0DD','#98FB98','#FF69B4'];
-  for (let i = 0; i < n; i++) {
-    const a = (Math.PI * 2 / n) * i + Math.random() * 0.3;
-    const s = 3 + Math.random() * 5;
-    fwParts.push({
-      x, y,
-      vx: Math.cos(a) * s,
-      vy: Math.sin(a) * s - 1,
-      col: cols[i % cols.length],
-      life: 1,
-      decay: 0.024 + Math.random() * 0.02,
-      sz: 2 + Math.random() * 3
-    });
-  }
-}
-
-function animFW() {
-  fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-  fwParts = fwParts.filter(p => p.life > 0);
-  fwParts.forEach(p => {
-    p.x += p.vx; p.y += p.vy; p.vy += 0.1; p.life -= p.decay;
-    fwCtx.beginPath();
-    fwCtx.arc(p.x, p.y, p.sz * p.life, 0, Math.PI * 2);
-    fwCtx.fillStyle   = p.col;
-    fwCtx.shadowColor = p.col;
-    fwCtx.shadowBlur  = 5;
-    fwCtx.fill();
-    fwCtx.shadowBlur  = 0;
-  });
-  if (fwOn || fwParts.length > 0) {
-    fwRaf = requestAnimationFrame(animFW);
-  } else {
-    fwCanvas.style.display = 'none';
-    fwRaf = null;
-  }
-}
-
-function miniFirework() {
-  fwCanvas.style.display = 'block';
-  fwOn = true;
-  const panel = document.getElementById('sentence-panel').getBoundingClientRect();
-  burst(
-    window.innerWidth * 0.5 + (Math.random() - 0.5) * 160,
-    panel.top - 8 + (Math.random() - 0.5) * 20,
-    16
-  );
-  if (!fwRaf) animFW();
-  setTimeout(() => { fwOn = false; }, 460);
-}
-
-function bigFireworks() {
-  fwCanvas.style.display = 'block';
-  fwOn = true;
-  let n = 0;
-  const iv = setInterval(() => {
-    burst(Math.random() * fwCanvas.width, Math.random() * fwCanvas.height * 0.65, 52);
-    if (++n >= 6) clearInterval(iv);
-  }, 340);
-  if (!fwRaf) animFW();
-}
-
-function stopFireworks() {
-  fwOn = false;
-  fwParts = [];
-  if (fwRaf) { cancelAnimationFrame(fwRaf); fwRaf = null; }
-  fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-  fwCanvas.style.display = 'none';
-}
+const fwC=document.getElementById('fw-canvas'),fwX=fwC.getContext('2d');
+let fwP=[],fwOn=false,fwR=null;
+function resizeFW(){fwC.width=innerWidth;fwC.height=innerHeight;}
+resizeFW();window.addEventListener('resize',resizeFW);
+function burst(x,y,n){const cols=['#FFD700','#FF6B6B','#4ECDC4','#96CEB4','#DDA0DD','#98FB98','#FF69B4'];for(let i=0;i<n;i++){const a=(Math.PI*2/n)*i+Math.random()*0.3,s=3+Math.random()*5;fwP.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,col:cols[i%cols.length],life:1,decay:0.024+Math.random()*0.02,sz:2+Math.random()*3});}}
+function animFW(){fwX.clearRect(0,0,fwC.width,fwC.height);fwP=fwP.filter(p=>p.life>0);fwP.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.1;p.life-=p.decay;fwX.beginPath();fwX.arc(p.x,p.y,p.sz*p.life,0,Math.PI*2);fwX.fillStyle=p.col;fwX.shadowColor=p.col;fwX.shadowBlur=5;fwX.fill();fwX.shadowBlur=0;});if(fwOn||fwP.length>0)fwR=requestAnimationFrame(animFW);else{fwC.style.display='none';fwR=null;}}
+function miniFirework(){fwC.style.display='block';fwOn=true;const r=document.getElementById('sentence-panel').getBoundingClientRect();burst(innerWidth*.5+(Math.random()-.5)*160,r.top-8+(Math.random()-.5)*20,16);if(!fwR)animFW();setTimeout(()=>{fwOn=false;},460);}
+function bigFireworks(){fwC.style.display='block';fwOn=true;let n=0;const iv=setInterval(()=>{burst(Math.random()*fwC.width,Math.random()*fwC.height*.65,52);if(++n>=6)clearInterval(iv);},340);if(!fwR)animFW();}
+function stopFireworks(){fwOn=false;fwP=[];if(fwR){cancelAnimationFrame(fwR);fwR=null;}fwX.clearRect(0,0,fwC.width,fwC.height);fwC.style.display='none';}
 
 </script>
 </body>
