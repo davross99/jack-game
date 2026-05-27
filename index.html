@@ -700,136 +700,151 @@ body {
 // ════════════════════════════════════════
 const SENTENCES = [
 
-  // ── SCENE 1: THE AIRPORT ──
-  // Jack departs — clock times, days, months
+  // SCENE 1 · THE AIRPORT
   { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
-    text:'It is Monday [in] June and Jack is ready for adventure.' },
+    text:'Jack wakes up [at] six o'clock.' },
   { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
-    text:'His flight to Peru leaves [at] nine o\'clock [in] the morning.' },
+    text:'"My flight leaves [at] eight thirty," he tells his mother.' },
   { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
-    text:'He waits [at] the check-in desk [in] the busy terminal.' },
+    text:'His mother says, "Be [at] the airport [in] thirty minutes, Jack!"' },
   { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
-    text:'The pilot says, "We arrive [at] Lima [at] three o\'clock."' },
+    text:'Jack arrives [at] the terminal [in] a taxi.' },
+  { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
+    text:'The woman [at] the desk says, "Your plane leaves [at] eight thirty. Please be [at] the gate [in] twenty minutes."' },
+  { bg:'scene01.jpg', label:'SCENE 1 · THE AIRPORT',
+    text:'Jack thinks, "I am leaving [in] five minutes — my adventure begins!"' },
 
-  // ── SCENE 2: IN THE AIR ──
-  // Time periods, seasons
+  // SCENE 2 · IN THE AIR
   { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
-    text:'[In] the afternoon the plane flies high over the jungle.' },
+    text:'Jack sits [in] the plane and looks out of the window.' },
   { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
-    text:'Jack thinks, "Peru is very hot [in] summer."' },
+    text:'The pilot says, "We will land [in] Lima [at] three o'clock [in] the afternoon."' },
   { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
-    text:'The pilot says, "We land [at] six o\'clock [in] the evening."' },
+    text:'"Peru is beautiful [in] summer," Jack thinks.' },
+  { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
+    text:'A passenger says, "I first came to Peru [in] 1987. I come back every year [in] July."' },
+  { bg:'scene02.jpg', label:'SCENE 2 · IN THE AIR',
+    text:'"The rainy season starts [in] September," the passenger adds.' },
 
-  // ── SCENE 3: THE AIRSTRIP ──
-  // Specific times, place
+  // SCENE 3 · THE AIRSTRIP
   { bg:'scene03.jpg', label:'SCENE 3 · THE AIRSTRIP',
-    text:'The plane lands [at] a small airstrip [in] the jungle.' },
+    text:'The plane lands [in] Lima [at] exactly three o'clock.' },
   { bg:'scene03.jpg', label:'SCENE 3 · THE AIRSTRIP',
-    text:'Jack steps off the plane [at] exactly half past six.' },
+    text:'Jack takes a small plane to the jungle. It lands [at] a tiny airstrip [in] the Amazon.' },
   { bg:'scene03.jpg', label:'SCENE 3 · THE AIRSTRIP',
-    text:'"The last explorer came here [in] the 1920s," says the pilot.' },
+    text:'The pilot says, "The last explorer came here [in] the 1920s."' },
+  { bg:'scene03.jpg', label:'SCENE 3 · THE AIRSTRIP',
+    text:'Jack thinks, "We have arrived [in] the dry season — it is always hot [in] June."' },
 
-  // ── SCENE 4: THE VILLAGE ──
-  // Night, morning, dialogue, months, dates
+  // SCENE 4 · THE VILLAGE
   { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
     text:'Jack arrives [at] the village [at] night.' },
   { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
-    text:'He sits [in] a warm hut with the village chief.' },
+    text:'He sits [in] a warm hut with the old chief.' },
   { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
-    text:'The chief says, "It rains every day [in] September."' },
+    text:'The chief says, "It rains every day [in] September and [in] October."' },
   { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
-    text:'"Our big festival is [on] the 25th of September," he adds.' },
+    text:'"Our big festival is [on] the 25th of September," he adds proudly.' },
   { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
-    text:'"You must leave [in] the morning," warns the chief.' },
+    text:'"You must leave [in] the morning," warns the chief. "[In] the afternoon the warriors return."' },
+  { bg:'scene04.jpg', label:'SCENE 4 · THE VILLAGE',
+    text:'Jack nods. "I will leave [at] dawn [on] Tuesday," he says quietly.' },
 
-  // ── SCENE 5: THE WARNING ──
-  // Days of week, sunrise, repetition
+  // SCENE 5 · THE WARNING
   { bg:'scene05.jpg', label:'SCENE 5 · THE WARNING',
-    text:'[In] the morning [on] Tuesday Jack and the guide set off.' },
+    text:'Jack wakes up [at] dawn [on] Tuesday.' },
   { bg:'scene05.jpg', label:'SCENE 5 · THE WARNING',
-    text:'Jack says, "We must arrive [at] the river [at] noon."' },
+    text:'He meets his guide [at] the edge of the village [at] six o'clock.' },
   { bg:'scene05.jpg', label:'SCENE 5 · THE WARNING',
-    text:'[At] sunrise the birds sing loudly [in] the trees.' },
+    text:'The guide says, "We must arrive [at] the river [at] noon. We walk [in] the morning and rest [in] the afternoon."' },
   { bg:'scene05.jpg', label:'SCENE 5 · THE WARNING',
-    text:'The guide says, "We rest [on] Wednesday and walk [on] Thursday."' },
+    text:'"[At] sunrise the birds will guide us," says Jack.' },
+  { bg:'scene05.jpg', label:'SCENE 5 · THE WARNING',
+    text:'The guide adds, "We rest [on] Wednesday and continue [on] Thursday."' },
 
-  // ── SCENE 6: THE RIVER ──
-  // IN canoe (not ON — correct!), midday, noon
+  // SCENE 6 · THE RIVER
   { bg:'scene06.jpg', label:'SCENE 6 · THE RIVER',
-    text:'Jack and the guide sit [in] a small canoe on the river.' },
+    text:'Jack and the guide sit [in] a small canoe on the wide river.' },
   { bg:'scene06.jpg', label:'SCENE 6 · THE RIVER',
-    text:'They reach the waterfall [at] midday.' },
+    text:'"We will reach the waterfall [at] midday," says the guide.' },
   { bg:'scene06.jpg', label:'SCENE 6 · THE RIVER',
-    text:'The guide says, "We stop here [at] noon to eat."' },
+    text:'[At] noon they stop to eat [on] the riverbank.' },
   { bg:'scene06.jpg', label:'SCENE 6 · THE RIVER',
-    text:'"[In] the dry season [in] July this river is very low."' },
+    text:'The guide says, "[In] the dry season [in] July this river is very low. [In] the wet season [in] February it floods everything."' },
+  { bg:'scene06.jpg', label:'SCENE 6 · THE RIVER',
+    text:'Jack writes [in] his journal. "[In] three hours we will reach the temple," he thinks.' },
 
-  // ── SCENE 7: THE CHASE ──
-  // Afternoon, distance, days
+  // SCENE 7 · THE CHASE
   { bg:'scene07.jpg', label:'SCENE 7 · THE CHASE',
-    text:'[In] the afternoon warriors appear [in] the forest.' },
+    text:'[In] the afternoon warriors suddenly appear [in] the forest.' },
   { bg:'scene07.jpg', label:'SCENE 7 · THE CHASE',
-    text:'Jack runs along the path [at] full speed.' },
+    text:'"Run!" shouts the guide. They race along the path [at] full speed.' },
   { bg:'scene07.jpg', label:'SCENE 7 · THE CHASE',
-    text:'The guide shouts, "We were here [on] Friday — they remember us!"' },
+    text:'The guide shouts breathlessly, "They saw us [at] the river [on] Friday!"' },
+  { bg:'scene07.jpg', label:'SCENE 7 · THE CHASE',
+    text:'Jack says, "We must hide [in] the trees [at] sunset!"' },
   { bg:'scene07.jpg', label:'SCENE 7 · THE CHASE',
     text:'Drums echo [in] the distance [in] the dark jungle.' },
 
-  // ── SCENE 8: THE CAVE ──
-  // Sunset, darkness, decades
+  // SCENE 8 · THE CAVE
   { bg:'scene08.jpg', label:'SCENE 8 · THE CAVE',
-    text:'[At] sunset Jack hides [in] a cave [in] the cliff.' },
+    text:'[At] sunset Jack and the guide hide [in] a cave [in] the cliff.' },
   { bg:'scene08.jpg', label:'SCENE 8 · THE CAVE',
-    text:'He reads his map [in] the darkness.' },
+    text:'Jack reads his map [in] the darkness.' },
   { bg:'scene08.jpg', label:'SCENE 8 · THE CAVE',
     text:'"This cave was used [in] the 1940s by explorers," he reads.' },
   { bg:'scene08.jpg', label:'SCENE 8 · THE CAVE',
-    text:'A large snake hangs [on] the cave wall above him.' },
+    text:'"The temple was discovered [in] 1923," says Jack quietly.' },
+  { bg:'scene08.jpg', label:'SCENE 8 · THE CAVE',
+    text:'A large snake hangs [on] the cave wall. "We leave [at] midnight," whispers Jack.' },
 
-  // ── SCENE 9: THE TEMPLE ──
-  // Morning, days, century, dates
+  // SCENE 9 · THE TEMPLE
   { bg:'scene09.jpg', label:'SCENE 9 · THE TEMPLE',
-    text:'[In] the morning [on] Wednesday Jack finally sees the temple.' },
+    text:'[In] the early morning [on] Wednesday Jack finally sees the temple.' },
   { bg:'scene09.jpg', label:'SCENE 9 · THE TEMPLE',
     text:'It stands [on] a high cliff above the jungle.' },
   { bg:'scene09.jpg', label:'SCENE 9 · THE TEMPLE',
     text:'"It was built [in] the sixth century," Jack says quietly.' },
   { bg:'scene09.jpg', label:'SCENE 9 · THE TEMPLE',
-    text:'Ancient fire burns [at] the entrance [in] the early light.' },
+    text:'Ancient fire burns [at] the entrance.' },
+  { bg:'scene09.jpg', label:'SCENE 9 · THE TEMPLE',
+    text:'"We must be [in] the temple [at] midday — that is when the door opens," Jack whispers.' },
 
-  // ── SCENE 10: INSIDE THE TEMPLE ──
-  // Midday, seasons, centuries
+  // SCENE 10 · INSIDE THE TEMPLE
   { bg:'scene10.jpg', label:'SCENE 10 · INSIDE THE TEMPLE',
-    text:'Jack enters the temple [at] midday [on] Thursday.' },
+    text:'Jack enters the temple [at] exactly midday [on] Thursday.' },
   { bg:'scene10.jpg', label:'SCENE 10 · INSIDE THE TEMPLE',
     text:'Gold sits [on] the stone altars [in] the great hall.' },
   { bg:'scene10.jpg', label:'SCENE 10 · INSIDE THE TEMPLE',
-    text:'A golden statue stands [on] a black pedestal [in] the centre.' },
+    text:'A golden statue stands [on] a black pedestal [in] the centre of the room.' },
   { bg:'scene10.jpg', label:'SCENE 10 · INSIDE THE TEMPLE',
-    text:'"This temple was last opened [in] 1987," Jack reads [on] the wall.' },
+    text:'Jack reads the words [on] the wall: "This temple was sealed [in] 1987."' },
+  { bg:'scene10.jpg', label:'SCENE 10 · INSIDE THE TEMPLE',
+    text:'"It has been closed [in] the 21st century — until now!" he whispers.' },
 
-  // ── SCENE 11: THE ESCAPE ──
-  // Evening, clock time, days
+  // SCENE 11 · THE ESCAPE
   { bg:'scene11.jpg', label:'SCENE 11 · THE ESCAPE',
-    text:'[At] six o\'clock [in] the evening Jack grabs the statue.' },
+    text:'[At] six o'clock [in] the evening Jack grabs the golden statue.' },
   { bg:'scene11.jpg', label:'SCENE 11 · THE ESCAPE',
-    text:'He runs [on] the stone stairs [at] great speed.' },
+    text:'Suddenly the temple shakes. He runs [on] the stone stairs [at] great speed.' },
   { bg:'scene11.jpg', label:'SCENE 11 · THE ESCAPE',
     text:'Jack escapes [in] a secret tunnel [in] the rock.' },
   { bg:'scene11.jpg', label:'SCENE 11 · THE ESCAPE',
-    text:'He thinks, "I must be [at] the airstrip [on] Friday morning!"' },
+    text:'He thinks, "I must be [at] the airstrip [on] Friday morning [at] eight o'clock!"' },
 
-  // ── SCENE 12: FREEDOM! ──
-  // Midnight, dawn, days, months — grand finale
+  // SCENE 12 · FREEDOM!
   { bg:'scene12.jpg', label:'SCENE 12 · FREEDOM!',
-    text:'[At] midnight Jack boards the small plane.' },
+    text:'[At] midnight Jack reaches the airstrip and boards the small plane.' },
   { bg:'scene12.jpg', label:'SCENE 12 · FREEDOM!',
-    text:'[In] the sky he looks down [at] the jungle below.' },
+    text:'[In] the sky he looks down [at] the jungle far below.' },
   { bg:'scene12.jpg', label:'SCENE 12 · FREEDOM!',
-    text:'[At] dawn [on] Saturday — Jack is finally safe!' },
+    text:'[At] dawn [on] Saturday the plane lands [in] Lima.' },
   { bg:'scene12.jpg', label:'SCENE 12 · FREEDOM!',
-    text:'He smiles and says, "I will be home [in] July — [at] Christmas I will tell this story!"' }
-];
+    text:'Jack smiles and says, "I will be home [in] July."' },
+  { bg:'scene12.jpg', label:'SCENE 12 · FREEDOM!',
+    text:'"[At] Christmas I will tell everyone this story!"' }
+
+]
 
 const TOTAL_GAPS = SENTENCES.reduce((n,s) =>
   n + (s.text.match(/\[[^\]]+\]/g)||[]).length, 0);
