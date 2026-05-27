@@ -73,8 +73,8 @@ body { font-family:'Nunito',sans-serif; user-select:none; -webkit-user-select:no
 
 /* SENTENCE PANEL */
 #sentence-panel { position:relative; z-index:40; width:100%; flex-shrink:0; background:rgba(4,2,0,0.94); border-top:3px solid #D4AF37; padding:0.7rem 1rem 0.75rem; display:flex; align-items:center; justify-content:center; min-height:clamp(80px,18vh,120px); }
-#sentence-text { font-family:'Nunito',sans-serif; font-size:clamp(1.15rem,5vw,1.65rem); font-weight:800; color:#f5e8c0; text-shadow:1px 1px 2px rgba(0,0,0,0.9); text-align:center; line-height:1.7; width:100%; white-space:normal; word-break:normal; overflow-wrap:break-word; }
-.gap { display:inline; font-family:'Bangers',cursive; font-size:clamp(1.15rem,5vw,1.65rem); font-weight:900; letter-spacing:2px; color:#FFD700; border-bottom:3px dotted #FFD700; padding:0 6px; cursor:pointer; white-space:nowrap; transition:background 0.12s; }
+#sentence-text { font-family:'Nunito',sans-serif; font-size:clamp(1.25rem,5.5vw,1.85rem); font-weight:800; color:#f5e8c0; text-shadow:1px 1px 2px rgba(0,0,0,0.9); text-align:center; line-height:1.7; width:100%; white-space:normal; word-break:normal; overflow-wrap:break-word; }
+.gap { display:inline; font-family:'Bangers',cursive; font-size:clamp(1.25rem,5.5vw,1.85rem); font-weight:900; letter-spacing:2px; color:#FFD700; border-bottom:3px dotted #FFD700; padding:0 6px; cursor:pointer; white-space:nowrap; transition:background 0.12s; }
 .gap.correct { color:#80ff80; border-bottom:3px solid #50c850; cursor:default; }
 .gap.wrong { color:#ff5555; border-bottom:3px solid #e63232; animation:shk 0.4s ease; }
 @keyframes shk { 0%,100%{padding-left:6px} 25%{padding-left:12px} 75%{padding-left:2px} }
@@ -538,16 +538,22 @@ function setupChests() {
     const fresh=chest.cloneNode(true);
     chest.parentNode.replaceChild(fresh,chest);
 
-    // Simple tap to select/deselect
-    const selectFn=()=>{
+    // ONE TOUCH — tap chest and it immediately fills the next unfilled gap
+    const tapFn=()=>{
       if (!gameOn) return;
+      // Find the first unfilled gap
+      const nextGap=document.querySelector('#sentence-text .gap:not(.correct)');
+      if (!nextGap) return;
+      // Flash the chest to show it was tapped
       document.querySelectorAll('.chest').forEach(c=>c.classList.remove('selected'));
-      selectedWord=(selectedWord===word)?null:word;
-      if (selectedWord) fresh.classList.add('selected');
+      fresh.classList.add('selected');
+      setTimeout(()=>fresh.classList.remove('selected'),300);
+      // Fill the gap immediately
+      checkAnswer(nextGap,word);
     };
-    fresh.addEventListener('click',selectFn);
-    fresh.addEventListener('touchend',e=>{e.preventDefault();selectFn();},{passive:false});
-    fresh.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectFn();}});
+    fresh.addEventListener('click',tapFn);
+    fresh.addEventListener('touchend',e=>{e.preventDefault();tapFn();},{passive:false});
+    fresh.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tapFn();}});
 
     // Also support drag for desktop
     fresh.draggable=true;
