@@ -73,8 +73,8 @@ body { font-family:'Nunito',sans-serif; user-select:none; -webkit-user-select:no
 
 /* SENTENCE PANEL */
 #sentence-panel { position:relative; z-index:40; width:100%; flex-shrink:0; background:rgba(4,2,0,0.94); border-top:3px solid #D4AF37; padding:0.7rem 1rem 0.75rem; display:flex; align-items:center; justify-content:center; min-height:clamp(80px,18vh,120px); }
-#sentence-text { font-family:'Nunito',sans-serif; font-size:clamp(1.25rem,5.5vw,1.85rem); font-weight:800; color:#f5e8c0; text-shadow:1px 1px 2px rgba(0,0,0,0.9); text-align:center; line-height:1.7; width:100%; white-space:normal; word-break:normal; overflow-wrap:break-word; }
-.gap { display:inline; font-family:'Bangers',cursive; font-size:clamp(1.25rem,5.5vw,1.85rem); font-weight:900; letter-spacing:2px; color:#FFD700; border-bottom:3px dotted #FFD700; padding:0 6px; cursor:pointer; white-space:nowrap; transition:background 0.12s; }
+#sentence-text { font-family:'Nunito',sans-serif; font-size:clamp(1.15rem,5vw,1.65rem); font-weight:800; color:#f5e8c0; text-shadow:1px 1px 2px rgba(0,0,0,0.9); text-align:center; line-height:1.7; width:100%; white-space:normal; word-break:normal; overflow-wrap:break-word; }
+.gap { display:inline; font-family:'Bangers',cursive; font-size:clamp(1.15rem,5vw,1.65rem); font-weight:900; letter-spacing:2px; color:#FFD700; border-bottom:3px dotted #FFD700; padding:0 6px; cursor:pointer; white-space:nowrap; transition:background 0.12s; }
 .gap.correct { color:#80ff80; border-bottom:3px solid #50c850; cursor:default; }
 .gap.wrong { color:#ff5555; border-bottom:3px solid #e63232; animation:shk 0.4s ease; }
 @keyframes shk { 0%,100%{padding-left:6px} 25%{padding-left:12px} 75%{padding-left:2px} }
@@ -116,6 +116,108 @@ body { font-family:'Nunito',sans-serif; user-select:none; -webkit-user-select:no
 .w-sub { color:#ffcccc; font-size:clamp(0.9rem,3vw,1.1rem); font-weight:700; }
 #fw-canvas { position:fixed; inset:0; z-index:150; pointer-events:none; display:none; }
 
+/* INSTRUCTIONS SCREEN */
+#instructions-screen {
+  background: linear-gradient(rgba(0,40,0,0.92), rgba(0,20,0,0.95)),
+    url('scene05.jpg') center/cover no-repeat;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+#instructions-inner {
+  width: 100%; height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 0 2rem 0;
+}
+.inst-hud {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(0,0,0,0.92);
+  border-bottom: 2px solid #FFD700;
+  padding: 0.4rem 0.8rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.inst-hud-title {
+  font-family: 'Bangers', cursive;
+  color: #FFD700; font-size: clamp(0.9rem,3.5vw,1.3rem); letter-spacing: 2px;
+}
+.inst-close {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.7rem,2.5vw,1rem);
+  background: rgba(180,0,0,0.85); color: #fff;
+  border: none; border-radius: 8px; padding: 0.2rem 0.6rem; cursor: pointer;
+}
+/* Language selector tabs */
+.lang-tabs {
+  display: flex; justify-content: center; gap: 0.4rem;
+  padding: 0.5rem 0.5rem 0.2rem;
+  flex-wrap: wrap;
+  background: rgba(0,0,0,0.7);
+  border-bottom: 1px solid rgba(255,215,0,0.2);
+}
+.lang-tab {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.65rem,2.5vw,0.9rem);
+  letter-spacing: 1px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,215,0,0.6);
+  border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 20px;
+  padding: 0.2rem 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.lang-tab.active {
+  background: rgba(255,215,0,0.2);
+  color: #FFD700;
+  border-color: #FFD700;
+}
+/* Language panels */
+.lang-panel { display: none; padding: 0.8rem 0.8rem 0; }
+.lang-panel.active { display: block; }
+.inst-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1.1rem,5vw,1.6rem);
+  color: #FFD700; text-shadow: 2px 2px 0 #5a3800;
+  letter-spacing: 2px; text-align: center;
+  padding: 0.3rem 0 0.6rem;
+}
+.inst-section {
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.6rem;
+}
+.inst-section-title {
+  font-family: 'Bangers', cursive;
+  color: #FFD700; font-size: clamp(0.8rem,3vw,1.05rem);
+  letter-spacing: 2px; margin-bottom: 0.4rem;
+}
+.inst-steps {
+  color: #f5e8c0;
+  font-size: clamp(0.75rem,2.8vw,0.95rem);
+  font-weight: 700; line-height: 1.8;
+}
+.inst-steps li { margin-bottom: 0.2rem; }
+.inst-prep {
+  color: #f5e8c0;
+  font-size: clamp(0.72rem,2.6vw,0.92rem);
+  font-weight: 700; line-height: 1.7;
+}
+.inst-prep li { margin-bottom: 0.15rem; }
+.inst-tip {
+  background: rgba(255,215,0,0.1);
+  border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  margin-bottom: 0.6rem;
+  font-size: clamp(0.72rem,2.6vw,0.92rem);
+  color: #f5e8c0; font-weight: 700; text-align: center;
+}
+.inst-tip span { color: #FFD700; }
+.inst-correct { color: #90ee90; }
+.inst-wrong   { color: #ff8888; }
+
 /* END */
 #end-screen { background:linear-gradient(rgba(0,0,0,0.62),rgba(0,0,0,0.62)),url('scene12.jpg') center/cover no-repeat; gap:1rem; text-align:center; padding:2rem 1.5rem; }
 .end-trophy { font-size:clamp(3rem,10vw,5rem); animation:bounce 2s ease-in-out infinite; }
@@ -141,6 +243,7 @@ body { font-family:'Nunito',sans-serif; user-select:none; -webkit-user-select:no
   </div>
   <button class="btn-gold" onclick="startGame()">▶ START ADVENTURE</button>
   <button class="btn-chart-link" onclick="showChart('title-screen')">📋 GRAMMAR CHART</button>
+  <button class="btn-chart-link" style="background:rgba(0,0,100,0.7);color:#aaaaff;border-color:#aaaaff;" onclick="showInstructions('title-screen')">📖 HOW TO PLAY</button>
 </div>
 
 <!-- GAME -->
@@ -150,6 +253,7 @@ body { font-family:'Nunito',sans-serif; user-select:none; -webkit-user-select:no
     <div class="hud-title">🗺️ JACK'S QUEST</div>
     <div class="hud-score">⭐ <span id="score-val">0</span>/<span id="total-val">0</span></div>
     <button class="btn-hud btn-green" onclick="showChart('game-screen')">📋</button>
+    <button class="btn-hud" style="background:rgba(0,0,150,0.85);color:#aaaaff;" onclick="showInstructions('game-screen')">📖</button>
     <button class="btn-hud btn-red" onclick="restartGame()">↩ RESTART</button>
   </div>
   <div id="prog"><div id="prog-fill"></div></div>
@@ -197,6 +301,129 @@ body { font-family:'Nunito',sans-serif; user-select:none; -webkit-user-select:no
   </div>
 </div>
 
+<!-- INSTRUCTIONS -->
+<div class="screen" id="instructions-screen">
+  <div id="instructions-inner">
+    <div class="inst-hud">
+      <div class="inst-hud-title">📖 HOW TO PLAY</div>
+      <button class="inst-close" onclick="closeInstructions()">✕ BACK</button>
+    </div>
+
+    <!-- Language tabs -->
+    <div class="lang-tabs">
+      <button class="lang-tab active" onclick="showLang('es')">🇪🇸 Español</button>
+      <button class="lang-tab" onclick="showLang('zh')">🇨🇳 中文</button>
+      <button class="lang-tab" onclick="showLang('ru')">🇷🇺 Русский</button>
+      <button class="lang-tab" onclick="showLang('hi')">🇮🇳 हिंदी</button>
+    </div>
+
+    <!-- SPANISH -->
+    <div class="lang-panel active" id="lang-es">
+      <div class="inst-title">¿Cómo jugar?</div>
+      <div class="inst-section">
+        <div class="inst-section-title">📋 Instrucciones</div>
+        <ol class="inst-steps">
+          <li>Lee la frase completa en la pantalla.</li>
+          <li>Encuentra el hueco <strong style="color:#FFD700">___</strong> en la frase.</li>
+          <li>Toca el cofre del tesoro correcto: <strong>AT</strong>, <strong>IN</strong> o <strong>ON</strong>.</li>
+          <li>La preposición correcta aparecerá automáticamente en el hueco.</li>
+        </ol>
+      </div>
+      <div class="inst-section">
+        <div class="inst-section-title">🎯 Las preposiciones</div>
+        <ul class="inst-prep">
+          <li>🟠 <strong>AT</strong> → horas exactas y momentos específicos<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">at 7 o'clock, at night, at Christmas</em></li>
+          <li>🟢 <strong>IN</strong> → meses, estaciones, años y períodos<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">in July, in summer, in 1987, in the morning</em></li>
+          <li>🔵 <strong>ON</strong> → días de la semana y fechas<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">on Monday, on the 25th of September</em></li>
+        </ul>
+      </div>
+      <div class="inst-tip"><span class="inst-correct">✅ Correcto:</span> ¡Fuegos artificiales! Pasa a la siguiente frase.</div>
+      <div class="inst-tip"><span class="inst-wrong">❌ Incorrecto:</span> Pantalla roja. ¡Inténtalo de nuevo!</div>
+      <div class="inst-tip">Pulsa <span>📋</span> para ver la tabla de gramática en cualquier momento.</div>
+      <div style="text-align:center;padding:0.5rem;font-family:'Bangers',cursive;color:rgba(255,215,0,0.5);font-size:0.85rem;letter-spacing:2px;">¡BUENA SUERTE EN TU AVENTURA! 🗺️</div>
+    </div>
+
+    <!-- CHINESE -->
+    <div class="lang-panel" id="lang-zh">
+      <div class="inst-title">怎么玩？</div>
+      <div class="inst-section">
+        <div class="inst-section-title">📋 游戏说明</div>
+        <ol class="inst-steps">
+          <li>仔细阅读屏幕上的完整句子。</li>
+          <li>找到句子中的空格 <strong style="color:#FFD700">___</strong>。</li>
+          <li>点击正确的宝箱：<strong>AT</strong>、<strong>IN</strong> 或 <strong>ON</strong>。</li>
+          <li>正确的介词会自动填入空格中。</li>
+        </ol>
+      </div>
+      <div class="inst-section">
+        <div class="inst-section-title">🎯 介词用法</div>
+        <ul class="inst-prep">
+          <li>🟠 <strong>AT</strong> → 具体时间或特定时刻<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">at 7 o'clock 七点，at night 夜晚，at Christmas 圣诞节</em></li>
+          <li>🟢 <strong>IN</strong> → 月份、季节、年份或时间段<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">in July 七月，in summer 夏天，in 1987 一九八七年，in the morning 早上</em></li>
+          <li>🔵 <strong>ON</strong> → 星期几或具体日期<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">on Monday 周一，on the 25th of September 九月二十五日</em></li>
+        </ul>
+      </div>
+      <div class="inst-tip"><span class="inst-correct">✅ 答对了：</span> 屏幕会出现烟花！进入下一个句子。</div>
+      <div class="inst-tip"><span class="inst-wrong">❌ 答错了：</span> 屏幕会闪烁红光。请再试一次！</div>
+      <div class="inst-tip">随时点击 <span>📋</span> 按钮查看语法表。</div>
+      <div style="text-align:center;padding:0.5rem;font-family:'Bangers',cursive;color:rgba(255,215,0,0.5);font-size:0.85rem;letter-spacing:2px;">祝你冒险愉快！🗺️</div>
+    </div>
+
+    <!-- RUSSIAN -->
+    <div class="lang-panel" id="lang-ru">
+      <div class="inst-title">Как играть?</div>
+      <div class="inst-section">
+        <div class="inst-section-title">📋 Инструкции</div>
+        <ol class="inst-steps">
+          <li>Прочитайте полное предложение на экране.</li>
+          <li>Найдите пропуск <strong style="color:#FFD700">___</strong> в предложении.</li>
+          <li>Нажмите на правильный сундук с сокровищами: <strong>AT</strong>, <strong>IN</strong> или <strong>ON</strong>.</li>
+          <li>Правильный предлог автоматически появится в пустом месте.</li>
+        </ol>
+      </div>
+      <div class="inst-section">
+        <div class="inst-section-title">🎯 Предлоги</div>
+        <ul class="inst-prep">
+          <li>🟠 <strong>AT</strong> → точное время и определённые моменты<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">at 7 o'clock — в 7 часов, at night — ночью, at Christmas — на Рождество</em></li>
+          <li>🟢 <strong>IN</strong> → месяцы, времена года, годы и периоды<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">in July — в июле, in summer — летом, in 1987 — в 1987 году, in the morning — утром</em></li>
+          <li>🔵 <strong>ON</strong> → дни недели и конкретные даты<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">on Monday — в понедельник, on the 25th of September — 25 сентября</em></li>
+        </ul>
+      </div>
+      <div class="inst-tip"><span class="inst-correct">✅ Правильно:</span> Вы увидите фейерверк! Следующее предложение.</div>
+      <div class="inst-tip"><span class="inst-wrong">❌ Неправильно:</span> Экран мигнёт красным. Попробуйте ещё раз!</div>
+      <div class="inst-tip">Нажмите <span>📋</span> в любое время для таблицы грамматики.</div>
+      <div style="text-align:center;padding:0.5rem;font-family:'Bangers',cursive;color:rgba(255,215,0,0.5);font-size:0.85rem;letter-spacing:2px;">УДАЧИ В ПРИКЛЮЧЕНИИ! 🗺️</div>
+    </div>
+
+    <!-- HINDI -->
+    <div class="lang-panel" id="lang-hi">
+      <div class="inst-title">कैसे खेलें?</div>
+      <div class="inst-section">
+        <div class="inst-section-title">📋 निर्देश</div>
+        <ol class="inst-steps">
+          <li>स्क्रीन पर पूरा वाक्य ध्यान से पढ़ें।</li>
+          <li>वाक्य में खाली जगह <strong style="color:#FFD700">___</strong> ढूंढें।</li>
+          <li>सही खज़ाने के संदूक को छुएँ: <strong>AT</strong>, <strong>IN</strong> या <strong>ON</strong>।</li>
+          <li>सही प्रीपोज़िशन अपने आप खाली जगह में भर जाएगा।</li>
+        </ol>
+      </div>
+      <div class="inst-section">
+        <div class="inst-section-title">🎯 प्रीपोज़िशन का उपयोग</div>
+        <ul class="inst-prep">
+          <li>🟠 <strong>AT</strong> → सटीक समय और खास पल<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">at 7 o'clock — 7 बजे, at night — रात में, at Christmas — क्रिसमस पर</em></li>
+          <li>🟢 <strong>IN</strong> → महीने, मौसम, साल और समय की अवधि<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">in July — जुलाई में, in summer — गर्मियों में, in 1987 — 1987 में, in the morning — सुबह</em></li>
+          <li>🔵 <strong>ON</strong> → सप्ताह के दिन और तारीख़ें<br><em style="color:rgba(255,220,100,0.8);font-size:0.85em;">on Monday — सोमवार को, on the 25th of September — 25 सितंबर को</em></li>
+        </ul>
+      </div>
+      <div class="inst-tip"><span class="inst-correct">✅ सही जवाब:</span> आतिशबाज़ी दिखाई देगी! अगले वाक्य पर जाएँ।</div>
+      <div class="inst-tip"><span class="inst-wrong">❌ गलत जवाब:</span> स्क्रीन लाल रंग में चमकेगी। फिर से कोशिश करें!</div>
+      <div class="inst-tip">किसी भी समय <span>📋</span> बटन दबाकर व्याकरण की तालिका देखें।</div>
+      <div style="text-align:center;padding:0.5rem;font-family:'Bangers',cursive;color:rgba(255,215,0,0.5);font-size:0.85rem;letter-spacing:2px;">आपके एडवेंचर के लिए शुभकामनाएँ! 🗺️</div>
+    </div>
+
+  </div>
+</div>
+
 <!-- CHART -->
 <div class="screen" id="chart-screen">
   <div id="chart-inner">
@@ -204,49 +431,130 @@ body { font-family:'Nunito',sans-serif; user-select:none; -webkit-user-select:no
       <div class="chart-hud-title">📋 AT · IN · ON</div>
       <button class="chart-close" onclick="closeChart()">✕ BACK</button>
     </div>
-    <div class="chart-jack">🗺️🌿</div>
-    <div class="chart-main-title">AT — IN — ON</div>
-    <div class="chart-sub">PREPOSITIONS OF TIME</div>
+    <div class="chart-jack">🦜🌿🦜</div>
+    <div class="chart-main-title">AT · IN · ON</div>
+    <div class="chart-sub">PREPOSITIONS OF TIME &amp; PLACE</div>
 
+    <!-- TIME SECTION HEADER -->
+    <div style="font-family:'Bangers',cursive;font-size:clamp(0.9rem,3.5vw,1.2rem);letter-spacing:3px;color:#FFD700;text-align:center;padding:0.3rem 0;background:rgba(0,0,0,0.4);margin:0 0.7rem 0.5rem;border-radius:6px;">⏰ PREPOSITIONS OF TIME</div>
+
+    <!-- AT TIME -->
     <div class="chart-section at">
-      <div class="chart-header"><div class="chart-badge">AT</div><div><div>AT + Specific Time</div><div style="font-size:0.75em;opacity:0.8;">AT + Holiday Period</div></div></div>
+      <div class="chart-header"><div class="chart-badge">AT</div><div><div>AT + Specific Time</div></div></div>
       <div class="chart-examples">
-        <div class="chart-rule">Jack wakes up <em>at</em> 6 o'clock.</div>
-        <div class="chart-rule">The plane leaves <em>at</em> 8.30.</div>
-        <div class="chart-rule">They meet <em>at</em> noon / <em>at</em> midnight.</div>
-        <div class="chart-rule">Jack arrives <em>at</em> night / <em>at</em> sunset.</div>
-        <div class="chart-rule">Schools close <em>at</em> Christmas.</div>
-        <div class="chart-rule">"Meet me <em>at</em> the gate <em>at</em> ten o'clock!"</div>
+        <div class="chart-rule">I get up <em>at</em> 7 o'clock.</div>
+        <div class="chart-rule">Lunch is <em>at</em> midday. We meet <em>at</em> noon.</div>
       </div>
     </div>
 
+    <!-- AT HOLIDAY -->
+    <div class="chart-section at">
+      <div class="chart-header"><div class="chart-badge">AT</div><div><div>AT + Holiday Period</div></div></div>
+      <div class="chart-examples">
+        <div class="chart-rule">They sing carols <em>at</em> Christmas.</div>
+        <div class="chart-rule">The family meets <em>at</em> Easter time.</div>
+      </div>
+    </div>
+
+    <!-- ON DAYS -->
     <div class="chart-section on">
-      <div class="chart-header"><div class="chart-badge">ON</div><div><div>ON + Days of the Week</div><div style="font-size:0.75em;opacity:0.8;">ON + Dates</div></div></div>
+      <div class="chart-header"><div class="chart-badge">ON</div><div><div>ON + Days &amp; Dates</div></div></div>
       <div class="chart-examples">
-        <div class="chart-rule">Jack sets off <em>on</em> Monday.</div>
-        <div class="chart-rule">The guide arrives <em>on</em> Friday.</div>
-        <div class="chart-rule">They rest <em>on</em> Sunday.</div>
-        <div class="chart-rule">The festival is <em>on</em> the 25th of September.</div>
-        <div class="chart-rule">"We celebrate <em>on</em> Christmas Day!"</div>
+        <div class="chart-rule">I will visit you <em>on</em> Wednesday.</div>
+        <div class="chart-rule">His birthday is <em>on</em> March 27th.</div>
+        <div class="chart-rule">The exam is <em>on</em> the 16th.</div>
       </div>
     </div>
 
+    <!-- IN MONTHS -->
     <div class="chart-section in">
-      <div class="chart-header"><div class="chart-badge">IN</div><div><div>IN + Morning / Afternoon / Evening</div><div style="font-size:0.75em;opacity:0.8;">IN + Months · Seasons · Years · Decades</div></div></div>
+      <div class="chart-header"><div class="chart-badge">IN</div><div><div>IN + Months &amp; Years</div></div></div>
       <div class="chart-examples">
-        <div class="chart-rule">Jack leaves <em>in</em> the morning.</div>
-        <div class="chart-rule">They travel <em>in</em> the afternoon.</div>
-        <div class="chart-rule">Stars appear <em>in</em> the evening.</div>
-        <div class="chart-rule">Peru is hot <em>in</em> July / <em>in</em> summer.</div>
-        <div class="chart-rule">"It rains <em>in</em> September," says the chief.</div>
-        <div class="chart-rule">The temple was built <em>in</em> the 6th century.</div>
-        <div class="chart-rule">Explorers came <em>in</em> the 1920s.</div>
-        <div class="chart-rule">"I will be back <em>in</em> three hours."</div>
+        <div class="chart-rule">My birthday is <em>in</em> January.</div>
+        <div class="chart-rule">I'm going on holiday <em>in</em> August.</div>
+        <div class="chart-rule">Shakespeare was born <em>in</em> 1564.</div>
+        <div class="chart-rule">The Titanic sank <em>in</em> 1912.</div>
       </div>
     </div>
 
-    <div class="chart-tip">💡 <span>Days &amp; Dates → ON &nbsp;|&nbsp; Months, Seasons, Years → IN &nbsp;|&nbsp; Times &amp; Holidays → AT</span></div>
-    <div class="chart-tip">🗺️ Jack says: <span>"I fly ON Monday, IN July, AT 9 o'clock!"</span></div>
+    <!-- IN DECADE/CENTURY -->
+    <div class="chart-section in">
+      <div class="chart-header"><div class="chart-badge">IN</div><div><div>IN + Decade / Century</div></div></div>
+      <div class="chart-examples">
+        <div class="chart-rule">Life was difficult <em>in</em> the 1940s.</div>
+        <div class="chart-rule">We are living <em>in</em> the 21st century.</div>
+        <div class="chart-rule">The building was built <em>in</em> the sixth century.</div>
+      </div>
+    </div>
+
+    <!-- IN SEASON -->
+    <div class="chart-section in">
+      <div class="chart-header"><div class="chart-badge">IN</div><div><div>IN + Season</div></div></div>
+      <div class="chart-examples">
+        <div class="chart-rule">We go to the beach <em>in</em> summer.</div>
+        <div class="chart-rule">There are many flowers <em>in</em> spring.</div>
+      </div>
+    </div>
+
+    <!-- AT NIGHT / IN THE MORNING -->
+    <div class="chart-section at" style="background:rgba(0,0,0,0);">
+      <div class="chart-header" style="background:linear-gradient(90deg,#D4A574,#82B4D4);color:#1a1a00;">
+        <div class="chart-badge" style="background:#8B7040;">AT/IN</div>
+        <div><div>AT night · IN the morning/afternoon/evening</div></div>
+      </div>
+      <div class="chart-examples">
+        <div class="chart-rule">She works <em>at</em> night.</div>
+        <div class="chart-rule">We exercise <em>in</em> the morning.</div>
+        <div class="chart-rule">Lunch is <em>in</em> the afternoon.</div>
+        <div class="chart-rule">Dinner is <em>in</em> the evening.</div>
+      </div>
+    </div>
+
+    <!-- PLACE SECTION HEADER -->
+    <div style="font-family:'Bangers',cursive;font-size:clamp(0.9rem,3.5vw,1.2rem);letter-spacing:3px;color:#FFD700;text-align:center;padding:0.3rem 0;background:rgba(0,0,0,0.4);margin:0.5rem 0.7rem 0.5rem;border-radius:6px;">📍 PREPOSITIONS OF PLACE</div>
+
+    <!-- AT PLACE -->
+    <div class="chart-section at">
+      <div class="chart-header"><div class="chart-badge">AT</div><div><div>AT + Specific Point / Location</div></div></div>
+      <div class="chart-examples">
+        <div class="chart-rule">His office is <em>at</em> 23 Pine Street.</div>
+        <div class="chart-rule">She is waiting <em>at</em> the main entrance.</div>
+        <div class="chart-rule">He is <em>at</em> the gym.</div>
+      </div>
+    </div>
+
+    <!-- ON SURFACE -->
+    <div class="chart-section on">
+      <div class="chart-header"><div class="chart-badge">ON</div><div><div>ON + Surface (horizontal or vertical)</div></div></div>
+      <div class="chart-examples">
+        <div class="chart-rule">The book is <em>on</em> the table.</div>
+        <div class="chart-rule">The poster is <em>on</em> the wall.</div>
+        <div class="chart-rule">We live <em>on</em> the third floor.</div>
+      </div>
+    </div>
+
+    <!-- IN ENCLOSED -->
+    <div class="chart-section in">
+      <div class="chart-header"><div class="chart-badge">IN</div><div><div>IN + Enclosed Container / Building</div></div></div>
+      <div class="chart-examples">
+        <div class="chart-rule">The car is <em>in</em> the garage.</div>
+        <div class="chart-rule">The children are <em>in</em> the classroom.</div>
+      </div>
+    </div>
+
+    <!-- IN LARGE AREA -->
+    <div class="chart-section in">
+      <div class="chart-header"><div class="chart-badge">IN</div><div><div>IN + Large Area (City, Country, Region)</div></div></div>
+      <div class="chart-examples">
+        <div class="chart-rule">Jack is <em>in</em> the hut.</div>
+        <div class="chart-rule">We live <em>in</em> Paris.</div>
+        <div class="chart-rule">The Sydney Opera House is <em>in</em> Australia.</div>
+        <div class="chart-rule">Jack is <em>in</em> the Amazon rainforest.</div>
+      </div>
+    </div>
+
+    <div class="chart-tip">💡 <span>Days &amp; Dates → ON &nbsp;|&nbsp; Months, Seasons, Years, Enclosed spaces → IN &nbsp;|&nbsp; Times, Holidays, Specific points → AT</span></div>
+    <div class="chart-tip">🗺️ <span>"I fly ON Monday, IN July, AT 9 o'clock — and Jack hides IN a cave, ON a cliff, AT midnight!"</span></div>
     <div style="text-align:center;padding:0.5rem;font-family:'Bangers',cursive;color:rgba(255,215,0,0.5);font-size:0.8rem;letter-spacing:2px;">GOOD LUCK ON YOUR ADVENTURE! 🌿</div>
   </div>
 </div>
@@ -519,7 +827,7 @@ function checkAnswer(g,word) {
     miniFW();
     const allGaps=document.querySelectorAll('#sentence-text .gap');
     if ([...allGaps].every(g=>g.classList.contains('correct'))) {
-      setTimeout(()=>{sentIdx++;loadSentence(sentIdx);},700);
+      setTimeout(()=>{sentIdx++;loadSentence(sentIdx);},2000);
     }
   } else {
     g.classList.add('wrong');
@@ -538,22 +846,16 @@ function setupChests() {
     const fresh=chest.cloneNode(true);
     chest.parentNode.replaceChild(fresh,chest);
 
-    // ONE TOUCH — tap chest and it immediately fills the next unfilled gap
-    const tapFn=()=>{
+    // Simple tap to select/deselect
+    const selectFn=()=>{
       if (!gameOn) return;
-      // Find the first unfilled gap
-      const nextGap=document.querySelector('#sentence-text .gap:not(.correct)');
-      if (!nextGap) return;
-      // Flash the chest to show it was tapped
       document.querySelectorAll('.chest').forEach(c=>c.classList.remove('selected'));
-      fresh.classList.add('selected');
-      setTimeout(()=>fresh.classList.remove('selected'),300);
-      // Fill the gap immediately
-      checkAnswer(nextGap,word);
+      selectedWord=(selectedWord===word)?null:word;
+      if (selectedWord) fresh.classList.add('selected');
     };
-    fresh.addEventListener('click',tapFn);
-    fresh.addEventListener('touchend',e=>{e.preventDefault();tapFn();},{passive:false});
-    fresh.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tapFn();}});
+    fresh.addEventListener('click',selectFn);
+    fresh.addEventListener('touchend',e=>{e.preventDefault();selectFn();},{passive:false});
+    fresh.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectFn();}});
 
     // Also support drag for desktop
     fresh.draggable=true;
@@ -612,6 +914,29 @@ function touchDrag(e,word,chestEl,color) {
   document.addEventListener('touchmove',onMove,{passive:false});
   document.addEventListener('touchend',onEnd,{passive:false});
   document.addEventListener('touchcancel',onEnd,{passive:false});
+}
+
+// ══════════════════════════════════════════
+// INSTRUCTIONS
+// ══════════════════════════════════════════
+let prevInstructionsScreen = 'title-screen';
+
+function showInstructions(from) {
+  prevInstructionsScreen = from || 'title-screen';
+  showScreen('instructions-screen');
+  document.getElementById('instructions-inner').scrollTop = 0;
+  showLang('es'); // default to Spanish
+}
+
+function closeInstructions() {
+  showScreen(prevInstructionsScreen);
+}
+
+function showLang(code) {
+  document.querySelectorAll('.lang-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('lang-' + code).classList.add('active');
+  document.querySelector('[onclick="showLang('' + code + '')"]').classList.add('active');
 }
 
 // ══════════════════════════════════════════
