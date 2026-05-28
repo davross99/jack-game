@@ -2,43 +2,317 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Jack & The Temple of Shadows</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
 <style>
-body { margin:0; background:#000; color:#fff; font-family:sans-serif; }
-.screen { display:none; padding:20px; text-align:center; }
-.active { display:block; }
-button { padding:15px 30px; font-size:20px; cursor:pointer; }
-.chest { display:inline-block; padding:20px; margin:10px; background:#4E2E06; cursor:pointer; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body { width:100%; height:100%; overflow:hidden; background:#000; position:fixed; }
+body { font-family:"Nunito",sans-serif; user-select:none; }
+.screen { display:none; position:fixed; inset:0; flex-direction:column; align-items:center; justify-content:center; }
+.screen.active { display:flex; }
+#title-screen { background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url("scene01.jpg") center/cover no-repeat; gap:0.9rem; padding:2rem 1.5rem; text-align:center; }
+.tt { font-family:"Bangers",cursive; font-size:clamp(2rem,8vw,3.5rem); color:#FFD700; text-shadow:3px 3px 0 #5a3800; letter-spacing:2px; line-height:1.1; }
+.ts { font-family:"Bangers",cursive; font-size:clamp(0.85rem,3vw,1.2rem); color:#90ee90; letter-spacing:4px; }
+.pills { display:flex; gap:0.6rem; justify-content:center; }
+.pill { background:rgba(255,215,0,0.12); border:2px solid #FFD700; border-radius:40px; padding:0.22rem 1rem; font-family:"Bangers",cursive; font-size:clamp(1rem,3.5vw,1.4rem); color:#FFD700; letter-spacing:2px; }
+.hint { color:#ddd; font-size:clamp(0.8rem,2.8vw,1rem); max-width:300px; line-height:1.6; background:rgba(0,0,0,0.65); padding:0.5rem 0.8rem; border-radius:8px; }
+.btn-gold { background:linear-gradient(135deg,#FFD700,#FFA500); color:#1a1a00; font-family:"Bangers",cursive; font-size:clamp(1.1rem,4vw,1.7rem); letter-spacing:2px; border:none; padding:0.7rem 2.5rem; border-radius:40px; cursor:pointer; box-shadow:0 5px 0 #8B6914; }
+.btn-gold:active { transform:translateY(4px); box-shadow:0 1px 0 #8B6914; }
+.btn-sm { font-family:"Bangers",cursive; font-size:clamp(0.85rem,3vw,1.1rem); letter-spacing:2px; border-radius:40px; padding:0.4rem 1.2rem; cursor:pointer; border:2px solid; }
+.bg { background:rgba(0,100,0,0.7); color:#90ee90; border-color:#90ee90; }
+.bb { background:rgba(0,0,120,0.7); color:#aaaaff; border-color:#aaaaff; }
+#game-screen { justify-content:flex-start; background:#000; }
+#bg { position:fixed; inset:0; z-index:0; background-size:auto 58%; background-position:center 30%; background-repeat:no-repeat; background-color:#0a140a; transition:background-image 1.2s ease; }
+#bg::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(0,0,0,0.18) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 52%,rgba(0,0,0,0.6) 75%,rgba(0,0,0,0.92) 90%,rgba(0,0,0,0.97) 100%); }
+#hud { position:relative; z-index:40; width:100%; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; gap:0.3rem; padding:0.32rem 0.6rem; background:rgba(0,0,0,0.85); border-bottom:2px solid rgba(255,215,0,0.45); }
+.ht { font-family:"Bangers",cursive; color:#FFD700; font-size:clamp(0.6rem,2vw,0.88rem); letter-spacing:2px; white-space:nowrap; }
+.hs { font-family:"Bangers",cursive; color:#90ee90; font-size:clamp(0.6rem,2vw,0.88rem); white-space:nowrap; }
+.bh { font-family:"Bangers",cursive; font-size:clamp(0.55rem,1.8vw,0.78rem); border:none; border-radius:10px; padding:0.18rem 0.5rem; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+.br { background:rgba(180,0,0,0.92); color:#fff; }
+.bgg { background:rgba(0,120,0,0.85); color:#90ee90; }
+.bbl { background:rgba(0,0,160,0.85); color:#aaaaff; }
+#prog { position:relative; z-index:40; width:100%; height:4px; flex-shrink:0; background:rgba(255,255,255,0.1); }
+#pf { height:100%; background:linear-gradient(90deg,#FFD700,#FFA500); width:0%; transition:width 0.4s; }
+#slbl { position:relative; z-index:40; width:100%; flex-shrink:0; text-align:center; padding:0.14rem 0; font-family:"Bangers",cursive; font-size:clamp(0.5rem,1.8vw,0.72rem); color:rgba(255,215,0,0.82); letter-spacing:2px; background:rgba(0,0,0,0.52); }
+#spc { flex:1; min-height:0; position:relative; z-index:1; }
+#chests { position:relative; z-index:40; width:100%; flex-shrink:0; display:flex; align-items:flex-end; justify-content:space-around; padding:0 1rem 0.3rem; }
+.chest { display:flex; flex-direction:column; align-items:center; width:clamp(68px,19vw,90px); cursor:pointer; touch-action:manipulation; position:relative; }
+.chest:active { transform:scale(0.93); }
+.cr { width:160%; height:clamp(14px,4vw,22px); background:radial-gradient(ellipse at center bottom,rgba(255,238,30,0.96) 0%,rgba(255,175,0,0.52) 48%,transparent 100%); filter:blur(2px); margin-bottom:-7px; pointer-events:none; }
+.csp { font-size:clamp(0.62rem,2.1vw,0.85rem); line-height:1; text-align:center; letter-spacing:-1px; filter:drop-shadow(0 -2px 4px rgba(255,210,0,0.85)); pointer-events:none; white-space:nowrap; margin-bottom:-4px; position:relative; z-index:6; }
+.cl { width:112%; height:clamp(13px,3.8vw,19px); position:relative; z-index:5; transform:perspective(40px) rotateX(-48deg); transform-origin:bottom center; border-radius:4px 4px 0 0; overflow:hidden; box-shadow:0 -4px 10px rgba(255,175,0,0.38); }
+.cl::before { content:""; position:absolute; inset:0; background:repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 11px),linear-gradient(180deg,#C8801A,#8A5008,#D09018,#7A4A06); }
+.cl::after { content:""; position:absolute; top:44%; left:0; right:0; height:3px; background:linear-gradient(90deg,#9A6008,#FFD700,#9A6008); }
+.cgl { width:100%; height:clamp(7px,2vw,11px); background:linear-gradient(180deg,rgba(255,232,38,1) 0%,rgba(255,172,0,0.72) 55%,rgba(200,98,0,0.18) 100%); box-shadow:0 0 10px rgba(255,210,0,0.55); position:relative; z-index:4; pointer-events:none; }
+.cb { width:100%; position:relative; z-index:3; border-radius:0 0 5px 5px; overflow:hidden; box-shadow:0 5px 14px rgba(0,0,0,0.78); }
+.cb::before { content:""; position:absolute; inset:0; background:repeating-linear-gradient(90deg,rgba(0,0,0,0.11) 0,rgba(0,0,0,0.11) 1px,transparent 1px,transparent 9px),linear-gradient(180deg,#7C4C10,#4E2E06,#6A3A0C,#4A2A04,#7C4C10); }
+.cb::after { content:""; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#A07010,#FFD700,#A07010); z-index:1; }
+.cin { position:relative; z-index:2; padding:0.22rem 0.1rem 0.2rem; }
+.cmb { position:absolute; top:44%; left:0; right:0; height:3px; background:linear-gradient(90deg,#A07010,#E8B828,#A07010); z-index:3; pointer-events:none; }
+.ccp { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:12px; height:8px; background:linear-gradient(180deg,#FFD700,#B8860B,#FFD700); border-radius:2px; border:1px solid #7a5500; z-index:4; pointer-events:none; }
+.cw { font-family:"Bangers",cursive; font-size:clamp(1rem,4.2vw,1.35rem); letter-spacing:2px; font-weight:900; text-shadow:2px 2px 0 rgba(0,0,0,1),0 0 10px rgba(0,0,0,0.88); margin-top:3px; position:relative; z-index:10; pointer-events:none; }
+#sp { position:relative; z-index:40; width:100%; flex-shrink:0; background:rgba(4,2,0,0.94); border-top:3px solid #D4AF37; padding:0.7rem 1rem 0.75rem; display:flex; align-items:center; justify-content:center; min-height:clamp(80px,18vh,120px); }
+#st { font-family:"Nunito",sans-serif; font-size:clamp(1.15rem,5vw,1.65rem); font-weight:800; color:#f5e8c0; text-shadow:1px 1px 2px rgba(0,0,0,0.9); text-align:center; line-height:1.7; width:100%; white-space:normal; word-break:normal; overflow-wrap:break-word; }
+.gap { display:inline; font-family:"Bangers",cursive; font-size:clamp(1.15rem,5vw,1.65rem); font-weight:900; letter-spacing:2px; color:#FFD700; border-bottom:3px dotted #FFD700; padding:0 6px; cursor:pointer; white-space:nowrap; }
+.gap.correct { color:#80ff80; border-bottom:3px solid #50c850; cursor:default; }
+.gap.wrong { color:#ff5555; border-bottom:3px solid #e63232; animation:shk 0.4s ease; }
+@keyframes shk { 0%,100%{padding-left:6px} 25%{padding-left:12px} 75%{padding-left:2px} }
+#chart-screen { background:linear-gradient(rgba(0,40,0,0.88),rgba(0,30,0,0.92)),url("scene09.jpg") center/cover no-repeat; justify-content:flex-start; overflow:hidden; }
+#chi { width:100%; height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 0 1rem 0; }
+.chud { position:sticky; top:0; z-index:10; background:rgba(0,0,0,0.9); border-bottom:2px solid #FFD700; padding:0.4rem 0.8rem; display:flex; align-items:center; justify-content:space-between; }
+.chtit { font-family:"Bangers",cursive; color:#FFD700; font-size:clamp(0.9rem,3.5vw,1.3rem); letter-spacing:2px; }
+.cbk { font-family:"Bangers",cursive; font-size:clamp(0.7rem,2.5vw,1rem); background:rgba(180,0,0,0.85); color:#fff; border:none; border-radius:8px; padding:0.2rem 0.6rem; cursor:pointer; }
+.cjk { text-align:center; font-size:clamp(2rem,8vw,3.5rem); padding:0.5rem 0 0.2rem; animation:bnc 2s ease-in-out infinite; }
+@keyframes bnc { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.cmt { font-family:"Bangers",cursive; text-align:center; font-size:clamp(1.4rem,6vw,2.2rem); color:#FFD700; text-shadow:2px 2px 0 #5a3800; letter-spacing:3px; }
+.csu { font-family:"Bangers",cursive; text-align:center; font-size:clamp(0.8rem,3vw,1.1rem); color:#90ee90; letter-spacing:3px; padding-bottom:0.7rem; }
+.cs { margin:0 0.7rem 0.6rem; border-radius:10px; overflow:hidden; box-shadow:0 3px 10px rgba(0,0,0,0.5); }
+.csh { display:flex; align-items:center; gap:0.5rem; padding:0.4rem 0.8rem; font-family:"Bangers",cursive; font-size:clamp(0.85rem,3.2vw,1.1rem); letter-spacing:2px; }
+.sat .csh { background:#D4A574; color:#3a1a00; }
+.son .csh { background:#82B4D4; color:#001a30; }
+.sin .csh { background:#90C878; color:#0a2800; }
+.smx .csh { background:linear-gradient(90deg,#D4A574,#82B4D4); color:#1a1a00; }
+.cbge { font-family:"Bangers",cursive; font-size:clamp(0.85rem,3.5vw,1.2rem); width:clamp(28px,8vw,40px); height:clamp(28px,8vw,40px); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.sat .cbge { background:#B8843A; color:#fff; }
+.son .cbge { background:#4A7AAA; color:#fff; }
+.sin .cbge { background:#5A9840; color:#fff; }
+.smx .cbge { background:#8B7040; color:#fff; }
+.csb { background:rgba(0,0,0,0.55); padding:0.4rem 0.8rem 0.45rem; }
+.ce { font-family:"Nunito",sans-serif; font-size:clamp(0.7rem,2.6vw,0.92rem); color:#f5e8c0; font-weight:700; padding:0.18rem 0; border-bottom:1px solid rgba(255,215,0,0.12); }
+.ce:last-child { border-bottom:none; }
+.ce em { font-style:normal; color:#FFD700; font-weight:900; }
+.slb { font-family:"Bangers",cursive; font-size:clamp(0.82rem,3vw,1.05rem); letter-spacing:3px; color:#FFD700; text-align:center; padding:0.28rem 0; background:rgba(0,0,0,0.45); margin:0.2rem 0.7rem 0.5rem; border-radius:6px; }
+.ctp { margin:0.3rem 0.7rem; background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.3); border-radius:8px; padding:0.35rem 0.65rem; font-size:clamp(0.68rem,2.5vw,0.88rem); color:#f5e8c0; font-weight:700; text-align:center; }
+.ctp span { color:#FFD700; }
+#inst-screen { background:linear-gradient(rgba(0,40,0,0.92),rgba(0,20,0,0.95)),url("scene05.jpg") center/cover no-repeat; justify-content:flex-start; overflow:hidden; }
+#iin { width:100%; height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 0 2rem 0; }
+.ihud { position:sticky; top:0; z-index:10; background:rgba(0,0,0,0.92); border-bottom:2px solid #FFD700; padding:0.4rem 0.8rem; display:flex; align-items:center; justify-content:space-between; }
+.ihudt { font-family:"Bangers",cursive; color:#FFD700; font-size:clamp(0.9rem,3.5vw,1.3rem); letter-spacing:2px; }
+.ibk { font-family:"Bangers",cursive; font-size:clamp(0.7rem,2.5vw,1rem); background:rgba(180,0,0,0.85); color:#fff; border:none; border-radius:8px; padding:0.2rem 0.6rem; cursor:pointer; }
+.ltabs { display:flex; justify-content:center; gap:0.4rem; padding:0.5rem 0.5rem 0.3rem; flex-wrap:wrap; background:rgba(0,0,0,0.7); border-bottom:1px solid rgba(255,215,0,0.2); }
+.ltab { font-family:"Bangers",cursive; font-size:clamp(0.65rem,2.5vw,0.9rem); letter-spacing:1px; background:rgba(255,255,255,0.08); color:rgba(255,215,0,0.6); border:1px solid rgba(255,215,0,0.3); border-radius:20px; padding:0.2rem 0.7rem; cursor:pointer; }
+.ltab.on { background:rgba(255,215,0,0.2); color:#FFD700; border-color:#FFD700; }
+.lpn { display:none; padding:0.8rem 0.8rem 0; }
+.lpn.on { display:block; }
+.it { font-family:"Bangers",cursive; font-size:clamp(1.1rem,5vw,1.6rem); color:#FFD700; text-shadow:2px 2px 0 #5a3800; letter-spacing:2px; text-align:center; padding:0.3rem 0 0.6rem; }
+.isc { background:rgba(0,0,0,0.5); border:1px solid rgba(255,215,0,0.2); border-radius:8px; padding:0.6rem 0.8rem; margin-bottom:0.6rem; }
+.isct { font-family:"Bangers",cursive; color:#FFD700; font-size:clamp(0.8rem,3vw,1.05rem); letter-spacing:2px; margin-bottom:0.4rem; }
+.ist { color:#f5e8c0; font-size:clamp(0.75rem,2.8vw,0.95rem); font-weight:700; line-height:1.8; padding-left:1.2rem; }
+.ipr { color:#f5e8c0; font-size:clamp(0.72rem,2.6vw,0.92rem); font-weight:700; line-height:1.8; padding-left:1.2rem; }
+.itp { background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.3); border-radius:6px; padding:0.32rem 0.6rem; margin-bottom:0.5rem; font-size:clamp(0.72rem,2.6vw,0.92rem); color:#f5e8c0; font-weight:700; text-align:center; }
+.itp span { color:#FFD700; }
+.iok { color:#90ee90; }
+.ibd { color:#ff8888; }
+#wo { position:fixed; inset:0; z-index:200; background:rgba(130,0,0,0.48); display:none; align-items:center; justify-content:center; flex-direction:column; gap:0.5rem; }
+#wo.show { display:flex; animation:wfl 0.3s ease; }
+@keyframes wfl { 0%{background:rgba(220,0,0,0.75)} 100%{background:rgba(130,0,0,0.48)} }
+.wm { font-family:"Bangers",cursive; font-size:clamp(2.2rem,9vw,4.2rem); color:#ff5555; letter-spacing:4px; text-shadow:0 0 22px rgba(255,0,0,0.82); }
+.ws { color:#ffcccc; font-size:clamp(0.9rem,3vw,1.1rem); font-weight:700; }
+#fwc { position:fixed; inset:0; z-index:150; pointer-events:none; display:none; }
+#end-screen { background:linear-gradient(rgba(0,0,0,0.62),rgba(0,0,0,0.62)),url("scene12.jpg") center/cover no-repeat; gap:1rem; text-align:center; padding:2rem 1.5rem; }
+.etr { font-size:clamp(3rem,10vw,5rem); animation:bnc 2s ease-in-out infinite; }
+.eti { font-family:"Bangers",cursive; font-size:clamp(2rem,8vw,3.8rem); color:#FFD700; text-shadow:3px 3px 0 #8B6914; letter-spacing:3px; }
+.esc { font-family:"Bangers",cursive; font-size:clamp(1.3rem,5vw,2.4rem); color:#90ff90; }
+.emg { color:#ddd; font-size:clamp(0.85rem,2.8vw,1rem); max-width:340px; line-height:1.6; background:rgba(0,0,0,0.58); padding:0.5rem 0.8rem; border-radius:8px; }
 </style>
 </head>
 <body>
-
-<div id="title-screen" class="screen active">
-  <h1>JACK & THE TEMPLE OF SHADOWS</h1>
-  <button onclick="startGame()">START ADVENTURE</button>
+<div class="screen active" id="title-screen">
+  <div class="tt">&#x1F5FA; JACK &amp; THE<br>TEMPLE OF SHADOWS</div>
+  <div class="ts">JUNGLE ADVENTURE</div>
+  <div class="pills"><span class="pill">AT</span><span class="pill">IN</span><span class="pill">ON</span></div>
+  <div class="hint">Tap <strong style="color:#FFD700">AT</strong>, <strong style="color:#90ee90">IN</strong> or <strong style="color:#aaaaff">ON</strong><br>to fill the gap in the sentence</div>
+  <button class="btn-gold" onclick="startGame()">START ADVENTURE</button>
+  <button class="btn-sm bg" onclick="openChart(0)">GRAMMAR CHART</button>
+  <button class="btn-sm bb" onclick="openInst(0)">HOW TO PLAY</button>
 </div>
-
-<div id="game-screen" class="screen">
-  <div id="sentence-text"></div>
+<div class="screen" id="game-screen">
+  <div id="bg"></div>
+  <div id="hud">
+    <span class="ht">JACK</span>
+    <span class="hs">* <span id="sv">0</span>/<span id="tv">0</span></span>
+    <button class="bh bgg" onclick="openChart(1)">CHART</button>
+    <button class="bh bbl" onclick="openInst(1)">HELP</button>
+    <button class="bh br" onclick="restartGame()">RESTART</button>
+  </div>
+  <div id="prog"><div id="pf"></div></div>
+  <div id="slbl">SCENE 1</div>
+  <div id="spc"></div>
   <div id="chests">
-    <div class="chest" onclick="selectWord('at')">AT</div>
-    <div class="chest" onclick="selectWord('in')">IN</div>
-    <div class="chest" onclick="selectWord('on')">ON</div>
+    <div class="chest" onclick="pick(0)">
+      <div class="cr"></div><div class="csp">coins</div>
+      <div class="cl"></div><div class="cgl"></div>
+      <div class="cb" style="position:relative;"><div class="cmb"></div><div class="ccp"></div><div class="cin"></div></div>
+      <div class="cw" style="color:#ffdd99;">AT</div>
+    </div>
+    <div class="chest" onclick="pick(1)">
+      <div class="cr"></div><div class="csp">coins</div>
+      <div class="cl"></div><div class="cgl"></div>
+      <div class="cb" style="position:relative;"><div class="cmb"></div><div class="ccp"></div><div class="cin"></div></div>
+      <div class="cw" style="color:#99ffbb;">IN</div>
+    </div>
+    <div class="chest" onclick="pick(2)">
+      <div class="cr"></div><div class="csp">coins</div>
+      <div class="cl"></div><div class="cgl"></div>
+      <div class="cb" style="position:relative;"><div class="cmb"></div><div class="ccp"></div><div class="cin"></div></div>
+      <div class="cw" style="color:#99bbff;">ON</div>
+    </div>
+  </div>
+  <div id="sp"><div id="st"></div></div>
+</div>
+<div class="screen" id="chart-screen">
+  <div id="chi">
+    <div class="chud"><div class="chtit">GRAMMAR CHART</div><button class="cbk" onclick="closeChart()">BACK</button></div>
+    <div class="cjk">trees</div>
+    <div class="cmt">AT - IN - ON</div>
+    <div class="csu">PREPOSITIONS OF TIME AND PLACE</div>
+    <div class="slb">PREPOSITIONS OF TIME</div>
+    <div class="cs sat"><div class="csh"><div class="cbge">AT</div><div>AT + Specific Time</div></div><div class="csb"><div class="ce">I get up <em>at</em> 7 o'clock. Lunch is <em>at</em> midday.</div><div class="ce">We meet <em>at</em> noon.</div></div></div>
+    <div class="cs sat"><div class="csh"><div class="cbge">AT</div><div>AT + Holiday Period</div></div><div class="csb"><div class="ce">They sing carols <em>at</em> Christmas.</div><div class="ce">The family meets <em>at</em> Easter time.</div></div></div>
+    <div class="cs son"><div class="csh"><div class="cbge">ON</div><div>ON + Days and Dates</div></div><div class="csb"><div class="ce">I will visit you <em>on</em> Wednesday.</div><div class="ce">His birthday is <em>on</em> March 27th. The exam is <em>on</em> the 16th.</div></div></div>
+    <div class="cs sin"><div class="csh"><div class="cbge">IN</div><div>IN + Months and Years</div></div><div class="csb"><div class="ce">My birthday is <em>in</em> January. Holiday <em>in</em> August.</div><div class="ce">Shakespeare born <em>in</em> 1564. Titanic sank <em>in</em> 1912.</div></div></div>
+    <div class="cs sin"><div class="csh"><div class="cbge">IN</div><div>IN + Decade and Century</div></div><div class="csb"><div class="ce">Life was difficult <em>in</em> the 1940s.</div><div class="ce">We live <em>in</em> the 21st century.</div><div class="ce">Built <em>in</em> the sixth century.</div></div></div>
+    <div class="cs sin"><div class="csh"><div class="cbge">IN</div><div>IN + Season</div></div><div class="csb"><div class="ce">We go to the beach <em>in</em> summer.</div><div class="ce">Flowers <em>in</em> spring.</div></div></div>
+    <div class="cs smx"><div class="csh"><div class="cbge">AT/IN</div><div>AT night - IN morning / afternoon / evening</div></div><div class="csb"><div class="ce">She works <em>at</em> night. Exercise <em>in</em> the morning.</div><div class="ce">Lunch <em>in</em> the afternoon. Dinner <em>in</em> the evening.</div></div></div>
+    <div class="slb">PREPOSITIONS OF PLACE</div>
+    <div class="cs sat"><div class="csh"><div class="cbge">AT</div><div>AT + Specific Point or Location</div></div><div class="csb"><div class="ce">His office is <em>at</em> 23 Pine Street.</div><div class="ce">Waiting <em>at</em> the entrance. He is <em>at</em> the gym.</div></div></div>
+    <div class="cs son"><div class="csh"><div class="cbge">ON</div><div>ON + Surface</div></div><div class="csb"><div class="ce">The book is <em>on</em> the table. Poster <em>on</em> the wall.</div><div class="ce">We live <em>on</em> the third floor.</div></div></div>
+    <div class="cs sin"><div class="csh"><div class="cbge">IN</div><div>IN + Enclosed Space or Building</div></div><div class="csb"><div class="ce">The car is <em>in</em> the garage.</div><div class="ce">Children are <em>in</em> the classroom.</div></div></div>
+    <div class="cs sin"><div class="csh"><div class="cbge">IN</div><div>IN + Large Area (City, Country, Region)</div></div><div class="csb"><div class="ce">Jack is <em>in</em> the hut. We live <em>in</em> Paris.</div><div class="ce">Opera House is <em>in</em> Australia. Jack is <em>in</em> the Amazon.</div></div></div>
+    <div class="ctp"><span>Days and Dates - ON | Months, Seasons, Years - IN | Times and Holidays - AT</span></div>
+    <div class="ctp"><span>Jack hides IN a cave, ON a cliff, AT midnight!</span></div>
   </div>
 </div>
-
+<div class="screen" id="inst-screen">
+  <div id="iin">
+    <div class="ihud"><div class="ihudt">HOW TO PLAY</div><button class="ibk" onclick="closeInst()">BACK</button></div>
+    <div class="ltabs">
+      <button class="ltab on" data-lang="es" onclick="showLang(this)">Espanol</button>
+      <button class="ltab" data-lang="zh" onclick="showLang(this)">Zhongwen</button>
+      <button class="ltab" data-lang="ru" onclick="showLang(this)">Russki</button>
+      <button class="ltab" data-lang="hi" onclick="showLang(this)">Hindi</button>
+    </div>
+    <div class="lpn on" id="lp-es">
+      <div class="it">Como jugar?</div>
+      <div class="isc"><div class="isct">Instrucciones</div><ol class="ist"><li>Lee la frase completa.</li><li>Encuentra el hueco ___ en la frase.</li><li>Toca el cofre correcto: AT, IN o ON.</li><li>La preposicion correcta aparecera.</li></ol></div>
+      <div class="isc"><div class="isct">Las preposiciones</div><ul class="ipr"><li>AT - horas exactas: at 7 o'clock, at night, at Christmas</li><li>IN - meses, estaciones, anos: in July, in summer, in 1987, in the morning</li><li>ON - dias de la semana: on Monday, on the 25th</li></ul></div>
+      <div class="itp"><span class="iok">Correcto: Fuegos artificiales! Siguiente frase.</span></div>
+      <div class="itp"><span class="ibd">Incorrecto: Pantalla roja. Intentalo de nuevo!</span></div>
+    </div>
+    <div class="lpn" id="lp-zh">
+      <div class="it">Zen me wan?</div>
+      <div class="isc"><div class="isct">You xi shuo ming</div><ol class="ist"><li>Zi xi yue du wan zheng ju zi.</li><li>Zhao dao kong ge ___.</li><li>Dian ji zheng que bao xiang: AT, IN huo ON.</li><li>Zheng que jie ci hui zi dong tian ru.</li></ol></div>
+      <div class="itp"><span class="iok">Da dui le: Yan hua! Xia yi ju.</span></div>
+      <div class="itp"><span class="ibd">Da cuo le: Hong guang. Qing zai shi!</span></div>
+    </div>
+    <div class="lpn" id="lp-ru">
+      <div class="it">Kak igrat?</div>
+      <div class="isc"><div class="isct">Instrukcii</div><ol class="ist"><li>Prochtayte polnoye predlozheniye.</li><li>Naydite propusk ___.</li><li>Nazhmite na sunduk: AT, IN ili ON.</li><li>Pravilnyy predlog poyavitsya.</li></ol></div>
+      <div class="itp"><span class="iok">Pravilno: Feyrerverk! Sleduyushcheye.</span></div>
+      <div class="itp"><span class="ibd">Nepravilno: Ekran mignot krasnym. Poprobuy!</span></div>
+    </div>
+    <div class="lpn" id="lp-hi">
+      <div class="it">Kaise khelen?</div>
+      <div class="isc"><div class="isct">Nirdesh</div><ol class="ist"><li>Poora vaakya padhen.</li><li>Khaali jagah ___ dhundhen.</li><li>Sahi sandook chuyen: AT, IN ya ON.</li><li>Sahi preposition apne aap aayega.</li></ol></div>
+      <div class="itp"><span class="iok">Sahi: Aatishbaazi! Agla vaakya.</span></div>
+      <div class="itp"><span class="ibd">Galat: Screen laal hogi. Phir koshish karen!</span></div>
+    </div>
+  </div>
+</div>
+<div class="screen" id="end-screen">
+  <div class="etr">TROPHY</div>
+  <div class="eti">ADVENTURE COMPLETE!</div>
+  <div class="esc">Score: <span id="fs">0</span>/<span id="ft">0</span></div>
+  <div class="emg">Jack escapes with the golden statue! You mastered AT, IN and ON!</div>
+  <button class="btn-gold" onclick="restartGame()">PLAY AGAIN</button>
+</div>
+<canvas id="fwc"></canvas>
+<div id="wo"><div class="wm">WRONG!</div><div class="ws">Try again!</div></div>
 <script>
-let selectedWord = null;
-function startGame() {
-  document.getElementById('title-screen').classList.remove('active');
-  document.getElementById('game-screen').classList.add('active');
-  document.getElementById('sentence-text').innerHTML = "Jack wakes up ___ six o'clock.";
-}
-function selectWord(word) {
-  selectedWord = word;
-  alert("Selected: " + word);
-}
+var W = ["at","in","on"];
+var SS = [
+["scene01.jpg","SCENE 1 - THE AIRPORT","Jack wakes up [at] six o'clock on Monday morning."],
+["scene01.jpg","SCENE 1 - THE AIRPORT",'"My flight leaves [at] eight thirty," he tells his mother.'],
+["scene01.jpg","SCENE 1 - THE AIRPORT",'His mother says, "Be [at] the airport [in] thirty minutes, Jack!"'],
+["scene01.jpg","SCENE 1 - THE AIRPORT","Jack arrives [at] the terminal [in] a taxi."],
+["scene01.jpg","SCENE 1 - THE AIRPORT",'The woman [at] the desk says, "Your plane leaves [at] eight thirty. Please be [at] the gate [in] twenty minutes."'],
+["scene01.jpg","SCENE 1 - THE AIRPORT",'Jack thinks, "I am leaving [in] five minutes - my adventure begins!"'],
+["scene02.jpg","SCENE 2 - IN THE AIR","Jack sits [in] the plane and looks out of the window."],
+["scene02.jpg","SCENE 2 - IN THE AIR",'The pilot says, "We will land [in] Lima [at] three o'clock [in] the afternoon."'],
+["scene02.jpg","SCENE 2 - IN THE AIR",'"Peru is beautiful [in] summer," Jack thinks.'],
+["scene02.jpg","SCENE 2 - IN THE AIR",'A passenger says, "I first came to Peru [in] 1987. I return every year [in] July."'],
+["scene02.jpg","SCENE 2 - IN THE AIR",'"The rainy season starts [in] September," the passenger adds.'],
+["scene03.jpg","SCENE 3 - THE AIRSTRIP","The plane lands [in] Lima [at] exactly three o'clock."],
+["scene03.jpg","SCENE 3 - THE AIRSTRIP","Jack takes a small plane to the jungle. It lands [at] a tiny airstrip [in] the Amazon."],
+["scene03.jpg","SCENE 3 - THE AIRSTRIP",'The pilot says, "The last explorer came here [in] the 1920s."'],
+["scene03.jpg","SCENE 3 - THE AIRSTRIP",'Jack thinks, "We have arrived [in] the dry season - it is always very hot [in] June."'],
+["scene04.jpg","SCENE 4 - THE VILLAGE","Jack arrives [at] the village [at] night."],
+["scene04.jpg","SCENE 4 - THE VILLAGE","He sits [in] a warm hut with the old chief."],
+["scene04.jpg","SCENE 4 - THE VILLAGE",'The chief says, "It rains every day [in] September and [in] October."'],
+["scene04.jpg","SCENE 4 - THE VILLAGE",'"Our big festival is [on] the 25th of September," he adds proudly.'],
+["scene04.jpg","SCENE 4 - THE VILLAGE",'"You must leave [in] the morning," warns the chief. "[In] the afternoon the warriors return."'],
+["scene04.jpg","SCENE 4 - THE VILLAGE",'Jack nods. "I will leave [at] dawn [on] Tuesday," he says quietly.'],
+["scene05.jpg","SCENE 5 - THE WARNING","Jack wakes up [at] dawn [on] Tuesday."],
+["scene05.jpg","SCENE 5 - THE WARNING","He meets his guide [at] the edge of the village [at] six o'clock."],
+["scene05.jpg","SCENE 5 - THE WARNING",'The guide says, "We must arrive [at] the river [at] noon. We will walk [in] the morning and rest [in] the afternoon."'],
+["scene05.jpg","SCENE 5 - THE WARNING",'"[At] sunrise the birds will guide us [in] the jungle," says Jack.'],
+["scene05.jpg","SCENE 5 - THE WARNING",'The guide adds, "We will rest [on] Wednesday and continue [on] Thursday."'],
+["scene06.jpg","SCENE 6 - THE RIVER","Jack and the guide sit [in] a small canoe on the wide river."],
+["scene06.jpg","SCENE 6 - THE RIVER",'"We will reach the waterfall [at] midday," says the guide.'],
+["scene06.jpg","SCENE 6 - THE RIVER","[At] noon they stop to eat [on] the riverbank."],
+["scene06.jpg","SCENE 6 - THE RIVER",'The guide says, "[In] the dry season [in] July this river is very low. [In] the wet season [in] February it floods."'],
+["scene06.jpg","SCENE 6 - THE RIVER",'Jack writes [in] his journal. "[In] three hours we will reach the temple," he thinks.'],
+["scene07.jpg","SCENE 7 - THE CHASE","[In] the afternoon warriors suddenly appear [in] the jungle."],
+["scene07.jpg","SCENE 7 - THE CHASE",'"Run!" shouts the guide. They race along the path [at] full speed.'],
+["scene07.jpg","SCENE 7 - THE CHASE",'The guide shouts, "They saw us [at] the river [on] Friday!"'],
+["scene07.jpg","SCENE 7 - THE CHASE",'Jack says, "We must hide [in] the trees [at] sunset!"'],
+["scene07.jpg","SCENE 7 - THE CHASE","Drums echo [in] the distance [in] the dark jungle."],
+["scene08.jpg","SCENE 8 - THE CAVE","[At] sunset Jack and the guide hide [in] a cave [in] the cliff."],
+["scene08.jpg","SCENE 8 - THE CAVE","Jack reads his map [in] the darkness."],
+["scene08.jpg","SCENE 8 - THE CAVE",'"This cave was used [in] the 1940s by explorers," he reads.'],
+["scene08.jpg","SCENE 8 - THE CAVE",'"The temple was discovered [in] 1923," says Jack quietly.'],
+["scene08.jpg","SCENE 8 - THE CAVE",'A large snake hangs [on] the cave wall. "We will leave [at] midnight," whispers Jack.'],
+["scene09.jpg","SCENE 9 - THE TEMPLE","[In] the early morning [on] Wednesday Jack finally sees the temple."],
+["scene09.jpg","SCENE 9 - THE TEMPLE","It stands [on] a high cliff above the jungle."],
+["scene09.jpg","SCENE 9 - THE TEMPLE",'"It was built [in] the sixth century," Jack says quietly.'],
+["scene09.jpg","SCENE 9 - THE TEMPLE","Ancient fire burns [at] the entrance."],
+["scene09.jpg","SCENE 9 - THE TEMPLE",'"We must be [in] the temple [at] midday - that is when the door opens," Jack whispers.'],
+["scene10.jpg","SCENE 10 - INSIDE THE TEMPLE","Jack enters the temple [at] exactly midday [on] Thursday."],
+["scene10.jpg","SCENE 10 - INSIDE THE TEMPLE","Gold sits [on] the stone altars [in] the great hall."],
+["scene10.jpg","SCENE 10 - INSIDE THE TEMPLE","A golden statue stands [on] a black pedestal [in] the centre of the room."],
+["scene10.jpg","SCENE 10 - INSIDE THE TEMPLE",'Jack reads the words [on] the wall: "This temple was sealed [in] 1987."'],
+["scene10.jpg","SCENE 10 - INSIDE THE TEMPLE",'"It has been closed [in] the 21st century - until now!" he whispers.'],
+["scene11.jpg","SCENE 11 - THE ESCAPE","[At] six o'clock [in] the evening Jack grabs the golden statue."],
+["scene11.jpg","SCENE 11 - THE ESCAPE","Suddenly the temple shakes. He runs [on] the stone stairs [at] great speed."],
+["scene11.jpg","SCENE 11 - THE ESCAPE","Jack escapes [in] a secret tunnel [in] the rock."],
+["scene11.jpg","SCENE 11 - THE ESCAPE",'He thinks, "I must be [at] the airstrip [on] Friday morning [at] eight o'clock!"'],
+["scene12.jpg","SCENE 12 - FREEDOM!","[At] midnight Jack reaches the airstrip and boards the small plane."],
+["scene12.jpg","SCENE 12 - FREEDOM!","[In] the sky he looks down [at] the jungle far below."],
+["scene12.jpg","SCENE 12 - FREEDOM!","[At] dawn [on] Saturday the plane lands [in] Lima."],
+["scene12.jpg","SCENE 12 - FREEDOM!",'Jack smiles and says, "I will be home [in] July."'],
+["scene12.jpg","SCENE 12 - FREEDOM!",'"[At] Christmas I will tell everyone this story!"']
+];
+var TOT=0;
+for(var i=0;i<SS.length;i++){var m=SS[i][2].match(/\[[^\]]+\]/g);if(m)TOT+=m.length;}
+var sc=0,si=0,on=false,prev=0;
+function showSc(id){var all=document.querySelectorAll(".screen");for(var i=0;i<all.length;i++)all[i].classList.remove("active");document.getElementById(id).classList.add("active");}
+function startGame(){sc=0;si=0;on=true;document.getElementById("sv").textContent="0";document.getElementById("tv").textContent=TOT;document.getElementById("ft").textContent=TOT;document.getElementById("pf").style.width="0%";document.getElementById("wo").classList.remove("show");showSc("game-screen");loadS(0);}
+function restartGame(){stopFW();on=false;document.getElementById("wo").classList.remove("show");setTimeout(startGame,80);}
+function openChart(f){prev=f;showSc("chart-screen");document.getElementById("chi").scrollTop=0;}
+function closeChart(){showSc(prev===0?"title-screen":"game-screen");}
+function openInst(f){prev=f;showSc("inst-screen");document.getElementById("iin").scrollTop=0;showLang(document.querySelector(".ltab.on"));}
+function closeInst(){showSc(prev===0?"title-screen":"game-screen");}
+function showLang(btn){var panels=document.querySelectorAll(".lpn");for(var i=0;i<panels.length;i++)panels[i].classList.remove("on");var tabs=document.querySelectorAll(".ltab");for(var i=0;i<tabs.length;i++)tabs[i].classList.remove("on");var code=btn.getAttribute("data-lang");document.getElementById("lp-"+code).classList.add("on");btn.classList.add("on");}
+function loadS(idx){if(idx>=SS.length){on=false;document.getElementById("fs").textContent=sc;setTimeout(function(){bigFW();setTimeout(function(){stopFW();showSc("end-screen");},3500);},300);return;}var s=SS[idx];document.getElementById("bg").style.backgroundImage="url('"+s[0]+"')";document.getElementById("slbl").textContent=s[1];var box=document.getElementById("st");box.innerHTML="";var parts=s[2].split(/\[([^\]]+)\]/);var gc=0;for(var i=0;i<parts.length;i++){if(i%2===0){if(parts[i])box.appendChild(document.createTextNode(parts[i]));}else{var g=document.createElement("span");g.className="gap";g.id="gap-"+gc;g.setAttribute("data-answer",parts[i].toLowerCase());g.textContent="___";box.appendChild(g);gc++;}}}
+function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;document.getElementById("sv").textContent=sc;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){si=nxt;loadS(si);},2000);}}else{g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
+var fwC=document.getElementById("fwc"),fwX=fwC.getContext("2d"),fwP=[],fwOn=false,fwR=null;
+function rsz(){fwC.width=window.innerWidth;fwC.height=window.innerHeight;}rsz();window.addEventListener("resize",rsz);
+function burst(x,y,n){var c=["#FFD700","#FF6B6B","#4ECDC4","#96CEB4","#DDA0DD","#98FB98","#FF69B4"];for(var i=0;i<n;i++){var a=(Math.PI*2/n)*i+Math.random()*0.3,sp=3+Math.random()*5;fwP.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1,col:c[i%c.length],life:1,decay:0.024+Math.random()*0.02,sz:2+Math.random()*3});}}
+function animFW(){fwX.clearRect(0,0,fwC.width,fwC.height);var alive=[];for(var i=0;i<fwP.length;i++){var p=fwP[i];if(p.life>0){p.x+=p.vx;p.y+=p.vy;p.vy+=0.1;p.life-=p.decay;fwX.beginPath();fwX.arc(p.x,p.y,p.sz*p.life,0,Math.PI*2);fwX.fillStyle=p.col;fwX.shadowColor=p.col;fwX.shadowBlur=5;fwX.fill();fwX.shadowBlur=0;alive.push(p);}}fwP=alive;if(fwOn||fwP.length>0){fwR=requestAnimationFrame(animFW);}else{fwC.style.display="none";fwR=null;}}
+function miniFW(){fwC.style.display="block";fwOn=true;var r=document.getElementById("sp").getBoundingClientRect();burst(window.innerWidth*0.5+(Math.random()-0.5)*160,r.top-8,16);if(!fwR)animFW();setTimeout(function(){fwOn=false;},460);}
+function bigFW(){fwC.style.display="block";fwOn=true;var n=0;var iv=setInterval(function(){burst(Math.random()*fwC.width,Math.random()*fwC.height*0.65,52);n++;if(n>=6)clearInterval(iv);},340);if(!fwR)animFW();}
+function stopFW(){fwOn=false;fwP=[];if(fwR){cancelAnimationFrame(fwR);fwR=null;}fwX.clearRect(0,0,fwC.width,fwC.height);fwC.style.display="none";}
 </script>
 </body>
 </html>
