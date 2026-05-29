@@ -257,13 +257,16 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
         </div>
   </div>
 </div>
-<div class="screen" id="end-screen">
-  <div class="etr" id="end-emoji">&#x1F3C6;</div>
-  <div class="eti" id="end-grade">ADVENTURE COMPLETE!</div>
-  <div class="esc" id="end-score">YOU SCORED 0 / 108</div>
-  <div id="end-remain" style="font-family:'Bangers',cursive;font-size:clamp(0.9rem,3.5vw,1.2rem);color:#FFD700;margin-bottom:0.2rem;text-align:center;"></div>
-  <div class="emg" id="end-msg">Jack escapes!</div>
-  <div id="end-sub" style="color:#90ee90;font-family:'Bangers',cursive;font-size:clamp(0.82rem,3vw,1.05rem);text-align:center;max-width:320px;padding:0 1rem;"></div>
+<div class="screen" id="end-screen" style="overflow-y:auto;-webkit-overflow-scrolling:touch;justify-content:flex-start;padding:1rem 1rem 2rem;">
+  <div style="text-align:center;width:100%;">
+    <div class="etr" id="end-emoji">&#x1F3C6;</div>
+    <div class="eti" id="end-grade">ADVENTURE COMPLETE!</div>
+    <div class="esc" id="end-score">YOU SCORED 0 / 94</div>
+    <div id="end-remain" style="font-family:'Bangers',cursive;font-size:clamp(0.85rem,3vw,1.1rem);color:#FFD700;margin-bottom:0.3rem;"></div>
+    <div class="emg" id="end-msg" style="margin-bottom:0.3rem;"></div>
+    <div id="end-sub" style="color:#90ee90;font-family:'Bangers',cursive;font-size:clamp(0.78rem,2.8vw,1rem);text-align:center;max-width:320px;padding:0 0.5rem;margin:0 auto 0.8rem;"></div>
+  </div>
+  <div id="grade-ladder" style="width:100%;margin-bottom:1rem;"></div>
   <button class="btn-gold" onclick="restartGame()">&#x1F504; PLAY AGAIN</button>
 </div>
 <canvas id="fwc"></canvas>
@@ -282,7 +285,7 @@ var SS = [
 ["scene02.jpg","SCENE 2 - IN THE AIR",'"Peru is beautiful [in] summer," Jack thinks.'],
 ["scene02.jpg","SCENE 2 - IN THE AIR",'A passenger says, "I first came to Peru [in] 1987. I return every year [in] July."'],
 ["scene02.jpg","SCENE 2 - IN THE AIR",'"The rainy season starts [in] September," the passenger adds.'],
-["scene03.jpg","SCENE 3 - THE AIRSTRIP","The plane lands [in] Lima [at] exactly three o&#39;clock."],
+["scene03.jpg","SCENE 3 - THE AIRSTRIP","Jack's small plane lands [at] a jungle airstrip [in] the Amazon."],
 ["scene03.jpg","SCENE 3 - THE AIRSTRIP","Jack takes a small plane to the jungle. It lands [at] a tiny airstrip [in] the Amazon."],
 ["scene03.jpg","SCENE 3 - THE AIRSTRIP",'The pilot says, "The last explorer came here [in] the 1920s."'],
 ["scene03.jpg","SCENE 3 - THE AIRSTRIP",'Jack thinks, "We have arrived [in] the dry season - it is always very hot [in] June."'],
@@ -353,7 +356,36 @@ function adjustChests(){
   }
 }
 function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;document.getElementById("sv").textContent=sc;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){var st=document.getElementById("st");st.classList.add("fade");setTimeout(function(){si=nxt;loadS(si);setTimeout(function(){st.classList.remove("fade");},50);},220);},450);}}else{g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
-function buildEndScreen(score){var total=108,remaining=total-score,emoji,grade,msg,sub;if(score===108){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=95){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=80){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=60){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=40){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" / "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;}
+function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,msg,sub;if(score===total){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=95){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=80){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=60){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=40){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" / "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;
+  // Build grade ladder
+  var grades=[
+    {min:0,max:39,emoji:"&#x1F331;",label:"KEEP GOING!"},
+    {min:40,max:59,emoji:"&#x1F44D;",label:"GOOD EFFORT!"},
+    {min:60,max:74,emoji:"&#x2B50;",label:"GREAT WORK!"},
+    {min:75,max:84,emoji:"&#x1F3AF;",label:"OUTSTANDING!"},
+    {min:85,max:93,emoji:"&#x1F525;",label:"INCREDIBLE!"},
+    {min:94,max:94,emoji:"&#x1F451;",label:"PERFECT!"}
+  ];
+  var ladder=document.getElementById("grade-ladder");
+  ladder.innerHTML="";
+  var header=document.createElement("div");
+  header.style.cssText="font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(0.8rem,3vw,1rem);letter-spacing:2px;text-align:center;margin-bottom:0.4rem;";
+  header.textContent="GRADE LADDER";
+  ladder.appendChild(header);
+  for(var gi=grades.length-1;gi>=0;gi--){
+    var gr=grades[gi];
+    var isCurrent=(score>=gr.min&&score<=gr.max);
+    var isAchieved=score>gr.max;
+    var row=document.createElement("div");
+    var bg=isCurrent?"rgba(255,215,0,0.25)":isAchieved?"rgba(80,200,80,0.15)":"rgba(255,255,255,0.05)";
+    var border=isCurrent?"2px solid #FFD700":isAchieved?"1px solid #50c850":"1px solid rgba(255,255,255,0.1)";
+    var txtCol=isCurrent?"#FFD700":isAchieved?"#90ee90":"rgba(255,255,255,0.4)";
+    row.style.cssText="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.6rem;margin-bottom:0.25rem;border-radius:8px;background:"+bg+";border:"+border+";";
+    var scoreRange=gr.max===94?"94 = PERFECT":gr.min+"-"+gr.max+" correct";
+    row.innerHTML="<span style='font-size:1.1rem'>"+gr.emoji+"</span><span style='font-family:Bangers,cursive;color:"+txtCol+";font-size:clamp(0.75rem,2.8vw,0.95rem);letter-spacing:1px;flex:1'>"+gr.label+"</span><span style='font-family:Nunito,sans-serif;font-size:clamp(0.65rem,2.2vw,0.8rem);color:"+txtCol+"'>"+scoreRange+"</span>"+(isCurrent?"<span style='font-size:0.8rem'>&#x261C;</span>":"");
+    ladder.appendChild(row);
+  }
+}
 var fwC=document.getElementById("fwc"),fwX=fwC.getContext("2d"),fwP=[],fwOn=false,fwR=null;
 function rsz(){fwC.width=window.innerWidth;fwC.height=window.innerHeight;}rsz();window.addEventListener("resize",rsz);window.addEventListener("resize",adjustChests);
 function burst(x,y,n){var c=["#FFD700","#FF6B6B","#4ECDC4","#96CEB4","#DDA0DD","#98FB98","#FF69B4"];for(var i=0;i<n;i++){var a=(Math.PI*2/n)*i+Math.random()*0.3,sp=3+Math.random()*5;fwP.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1,col:c[i%c.length],life:1,decay:0.024+Math.random()*0.02,sz:2+Math.random()*3});}}
