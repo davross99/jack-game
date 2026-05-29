@@ -29,6 +29,7 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
 #chart-overlay {
   position:fixed;
   top:100%;
+  display:block;
   left:0; right:0; bottom:0;
   z-index:100;
   background:linear-gradient(rgba(0,40,0,0.95),rgba(0,30,0,0.98));
@@ -434,6 +435,7 @@ function checkSavedGame(){
 }
 
 function startWithChart(){
+  resetChartOverlay();
   // Copy chart content into overlay if not done yet
   var inner = document.getElementById("chart-overlay-inner");
   if(!inner.hasChildNodes() || inner.children.length === 0){
@@ -477,9 +479,17 @@ function startWithChart(){
 function closeChartOverlay(){
   var overlay = document.getElementById("chart-overlay");
   overlay.classList.remove("open");
-  // Hide drag hint
-  var hint = document.getElementById("drag-hint");
-  if(hint) hint.style.display = "none";
+  overlay.style.display = "none";
+  var intro = document.getElementById("chart-intro-msg");
+  if(intro) intro.style.display = "none";
+}
+
+function resetChartOverlay(){
+  var overlay = document.getElementById("chart-overlay");
+  overlay.style.display = "";
+  overlay.classList.remove("open");
+  var intro = document.getElementById("chart-intro-msg");
+  if(intro){ intro.style.display = ""; intro.style.opacity = "0"; }
 }
 
 function startGame(){sc=0;si=0;on=true;attempted=0;closeChartOverlay();document.getElementById("sv").textContent="0";document.getElementById("tv").textContent=TOT;document.getElementById("pf").style.width="0%";document.getElementById("wo").classList.remove("show");showSc("game-screen");loadS(0);}
@@ -498,7 +508,7 @@ function adjustChests(){
     chests.style.bottom=(h+5)+"px";
   }
 }
-function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;attempted++;document.getElementById("sv").textContent=sc;document.getElementById("tv").textContent=attempted;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){var st=document.getElementById("st");st.classList.add("fade");setTimeout(function(){si=nxt;loadS(si);setTimeout(function(){st.classList.remove("fade");},50);},220);},450);}}else{attempted++;document.getElementById("sv").textContent=sc;document.getElementById("tv").textContent=attempted;g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
+function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;attempted++;document.getElementById("sv").textContent=sc;document.getElementById("tv").textContent=attempted;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){si=nxt;loadS(si);adjustChests();},500);}}else{attempted++;document.getElementById("sv").textContent=sc;document.getElementById("tv").textContent=attempted;g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
 function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,msg,sub;if(score>=100){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=90){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=78){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=62){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=48){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" / "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;
   // Build grade ladder
   var grades=[
