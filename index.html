@@ -34,12 +34,14 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   background:linear-gradient(rgba(0,40,0,0.95),rgba(0,30,0,0.98));
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
-  transition:top 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+  transition:top 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
   border-radius:20px 20px 0 0;
   box-shadow:0 -5px 30px rgba(0,0,0,0.8);
+  pointer-events:none;
 }
 #chart-overlay.open {
-  top:10%;
+  top:8%;
+  pointer-events:all;
 }
 .tt { font-family:"Bangers",cursive; font-size:clamp(2.2rem,9vw,4rem); color:#FFD700; text-shadow:3px 3px 0 #5a3800, 0 0 30px rgba(255,150,0,0.6), 0 0 60px rgba(255,100,0,0.3); letter-spacing:3px; line-height:1.1; }
 .ts { font-family:"Bangers",cursive; font-size:clamp(0.85rem,3vw,1.2rem); color:#90ee90; letter-spacing:4px; }
@@ -436,7 +438,6 @@ function startWithChart(){
   var inner = document.getElementById("chart-overlay-inner");
   if(!inner.hasChildNodes() || inner.children.length === 0){
     var src = document.getElementById("chi");
-    // Clone chart content (skip the sticky hud)
     for(var i=0;i<src.children.length;i++){
       var el = src.children[i];
       if(el.className !== "chud"){
@@ -444,28 +445,44 @@ function startWithChart(){
       }
     }
   }
-  // Make sure title screen is showing
   showSc("title-screen");
-  // Slide chart overlay up
   var overlay = document.getElementById("chart-overlay");
-  overlay.classList.add("open");
   overlay.scrollTop = 0;
   
-  // Add touch/drag to close
+  // Show intro text first
+  var intro = document.getElementById("chart-intro-msg");
+  intro.style.opacity = "1";
+  
+  // After 1.5s, slide chart up and fade intro text
+  setTimeout(function(){
+    overlay.classList.add("open");
+    // Fade out intro after chart opens
+    setTimeout(function(){
+      intro.style.opacity = "0";
+    }, 800);
+  }, 1500);
+
+  // Touch drag to close
   var startY = 0;
-  overlay.addEventListener("touchstart", function(e){ startY = e.touches[0].clientY; }, {passive:true, once:false});
-  overlay.addEventListener("touchend", function(e){
+  var isDragging = false;
+  overlay.ontouchstart = function(e){ startY = e.touches[0].clientY; isDragging=true; };
+  overlay.ontouchend = function(e){
+    if(!isDragging) return;
+    isDragging = false;
     var endY = e.changedTouches[0].clientY;
-    if(endY - startY > 80){ closeChartOverlay(); } // dragged down
-  }, {passive:true});
+    if(endY - startY > 60){ closeChartOverlay(); }
+  };
 }
 
 function closeChartOverlay(){
   var overlay = document.getElementById("chart-overlay");
   overlay.classList.remove("open");
+  // Hide drag hint
+  var hint = document.getElementById("drag-hint");
+  if(hint) hint.style.display = "none";
 }
 
-function startGame(){sc=0;si=0;on=true;attempted=0;document.getElementById("sv").textContent="0";document.getElementById("tv").textContent=TOT;document.getElementById("pf").style.width="0%";document.getElementById("wo").classList.remove("show");showSc("game-screen");loadS(0);}
+function startGame(){sc=0;si=0;on=true;attempted=0;closeChartOverlay();document.getElementById("sv").textContent="0";document.getElementById("tv").textContent=TOT;document.getElementById("pf").style.width="0%";document.getElementById("wo").classList.remove("show");showSc("game-screen");loadS(0);}
 function restartGame(){stopFW();on=false;clearProgress();document.getElementById("wo").classList.remove("show");setTimeout(startGame,80);}
 function openChart(f){prev=f;showSc("chart-screen");document.getElementById("chi").scrollTop=0;}
 function closeChart(){showSc(prev===0?"title-screen":"game-screen");}
@@ -534,17 +551,22 @@ function stopFW(){fwOn=false;fwP=[];if(fwR){cancelAnimationFrame(fwR);fwR=null;}
 checkSavedGame();
 </script>
 
+<!-- INTRO MESSAGE - shown before chart unrolls -->
+<div id="chart-intro-msg" style="position:fixed;inset:0;z-index:99;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity 0.5s ease;">
+  <div style="background:rgba(0,0,0,0.82);border:2px solid rgba(255,215,0,0.6);border-radius:16px;padding:1.2rem 1.8rem;max-width:300px;text-align:center;">
+    <div style="font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(1rem,4vw,1.4rem);letter-spacing:2px;margin-bottom:0.5rem;">📋 A LITTLE HELP...</div>
+    <div style="color:#f5e8c0;font-family:'Nunito',sans-serif;font-size:clamp(0.82rem,3vw,1rem);font-weight:700;line-height:1.6;">Here is the grammar chart — study it before you begin your adventure with Jack!</div>
+  </div>
+</div>
+
 <!-- CHART OVERLAY - slides up over title screen -->
 <div id="chart-overlay">
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;background:rgba(0,0,0,0.6);border-bottom:2px solid #FFD700;border-radius:20px 20px 0 0;">
-    <div style="font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(0.9rem,3.5vw,1.3rem);letter-spacing:2px;">📋 GRAMMAR CHART</div>
-    <div style="font-family:'Bangers',cursive;font-size:clamp(0.7rem,2.5vw,0.95rem);color:rgba(255,215,0,0.7);letter-spacing:1px;">↑ DRAG UP TO HIDE</div>
+  <div style="padding:0.5rem 1rem 0.3rem;background:rgba(0,0,0,0.7);border-radius:20px 20px 0 0;border-bottom:2px solid rgba(255,215,0,0.4);text-align:center;">
+    <div style="font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(0.9rem,3.5vw,1.2rem);letter-spacing:2px;">📋 GRAMMAR CHART</div>
   </div>
-  <div style="padding:0 0 1rem 0;" id="chart-overlay-inner">
-    <!-- Chart content copied here by JS -->
-  </div>
-  <div id="chart-start-btn" style="position:sticky;bottom:0;width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;font-family:'Bangers',cursive;font-size:clamp(1rem,4vw,1.5rem);letter-spacing:2px;text-align:center;padding:0.8rem;cursor:pointer;box-shadow:0 -3px 15px rgba(0,0,0,0.5);" onclick="startGame()">
-    ▶ START ADVENTURE NOW
+  <div style="padding:0 0 1rem 0;" id="chart-overlay-inner"></div>
+  <div id="drag-hint" style="position:sticky;bottom:0;width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;font-family:'Bangers',cursive;font-size:clamp(0.9rem,3.5vw,1.3rem);letter-spacing:2px;text-align:center;padding:0.7rem;cursor:pointer;box-shadow:0 -3px 15px rgba(0,0,0,0.5);" onclick="startGame()">
+    ▶ DRAG UP TO BEGIN — OR TAP HERE
   </div>
 </div>
 </body>
