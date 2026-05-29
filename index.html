@@ -126,6 +126,9 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   <div class="pills"><span class="pill">AT</span><span class="pill">IN</span><span class="pill">ON</span></div>
   <div class="hint">Tap <strong style="color:#FFD700">AT</strong>, <strong style="color:#90ee90">IN</strong> or <strong style="color:#aaaaff">ON</strong><br>to fill the gap in the sentence</div>
   <button class="btn-gold" onclick="startGame()">START ADVENTURE</button>
+  <div id="continue-btn" style="display:none;">
+    <button class="btn-gold" style="background:linear-gradient(135deg,#50c850,#208020);" onclick="continueGame()">&#x25B6; CONTINUE GAME</button>
+  </div>
   <button class="btn-sm bg" onclick="openChart(0)">GRAMMAR CHART</button>
   <button class="btn-sm bb" onclick="openInst(0)">HOW TO PLAY</button>
 </div>
@@ -287,10 +290,11 @@ var SS = [
 ["scene02.jpg","SCENE 2 - IN THE AIR","A passenger says, \"I visited Peru [in] 1987 and fell in love with it.\""],
 ["scene02.jpg","SCENE 2 - IN THE AIR","\"I come back every year [in] July,\" the passenger adds with a smile."],
 
-["scene03.jpg","SCENE 3 - THE AIRSTRIP","The small plane lands [at] a jungle airstrip [in] the Amazon."],
-["scene03.jpg","SCENE 3 - THE AIRSTRIP","Jack steps off [at] half past three [in] the afternoon."],
+["scene03.jpg","SCENE 3 - THE AIRSTRIP","The small plane lands [on] a short grass airstrip and the engine stops."],
 ["scene03.jpg","SCENE 3 - THE AIRSTRIP","The pilot says, \"The last explorer came here [in] the 1920s and never returned.\""],
+["scene03.jpg","SCENE 3 - THE AIRSTRIP","Jack gets off the plane [at] half past three [in] the afternoon."],
 ["scene03.jpg","SCENE 3 - THE AIRSTRIP","Jack thinks, \"I must find the village before dark. It gets cold [in] the evening.\""],
+["scene03.jpg","SCENE 3 - THE AIRSTRIP","He checks his watch. It is four o'clock [in] the afternoon."],
 
 ["scene04.jpg","SCENE 4 - THE VILLAGE","Jack arrives [in] the village late [at] night."],
 ["scene04.jpg","SCENE 4 - THE VILLAGE","He is welcomed [in] the chief's hut and given warm food."],
@@ -355,14 +359,59 @@ var TOT=0;
 for(var i=0;i<SS.length;i++){var m=SS[i][2].match(/\[[^\]]+\]/g);if(m)TOT+=m.length;}
 var sc=0,si=0,on=false,prev=0;
 function showSc(id){var all=document.querySelectorAll(".screen");for(var i=0;i<all.length;i++)all[i].classList.remove("active");document.getElementById(id).classList.add("active");}
+function saveProgress(){
+  try{
+    localStorage.setItem("jack_si",si);
+    localStorage.setItem("jack_sc",sc);
+    localStorage.setItem("jack_on",on?"1":"0");
+  }catch(e){}
+}
+
+function loadProgress(){
+  try{
+    var saved_on=localStorage.getItem("jack_on");
+    if(saved_on==="1"){
+      var saved_si=parseInt(localStorage.getItem("jack_si")||"0");
+      var saved_sc=parseInt(localStorage.getItem("jack_sc")||"0");
+      if(saved_si>0){
+        return {si:saved_si,sc:saved_sc};
+      }
+    }
+  }catch(e){}
+  return null;
+}
+
+function clearProgress(){
+  try{localStorage.removeItem("jack_si");localStorage.removeItem("jack_sc");localStorage.removeItem("jack_on");}catch(e){}
+}
+
+function continueGame(){
+  var saved=loadProgress();
+  if(!saved) return startGame();
+  sc=saved.sc; si=saved.si; on=true;
+  document.getElementById("sv").textContent=sc;
+  document.getElementById("tv").textContent=TOT;
+  document.getElementById("pf").style.width=(sc/TOT*100)+"%";
+  document.getElementById("wo").classList.remove("show");
+  showSc("game-screen");
+  loadS(si);
+}
+
+function checkSavedGame(){
+  var saved=loadProgress();
+  if(saved&&saved.si>0){
+    document.getElementById("continue-btn").style.display="block";
+  }
+}
+
 function startGame(){sc=0;si=0;on=true;document.getElementById("sv").textContent="0";document.getElementById("tv").textContent=TOT;document.getElementById("pf").style.width="0%";document.getElementById("wo").classList.remove("show");showSc("game-screen");loadS(0);}
-function restartGame(){stopFW();on=false;document.getElementById("wo").classList.remove("show");setTimeout(startGame,80);}
+function restartGame(){stopFW();on=false;clearProgress();document.getElementById("wo").classList.remove("show");setTimeout(startGame,80);}
 function openChart(f){prev=f;showSc("chart-screen");document.getElementById("chi").scrollTop=0;}
 function closeChart(){showSc(prev===0?"title-screen":"game-screen");}
 function openInst(f){prev=f;showSc("inst-screen");document.getElementById("iin").scrollTop=0;showLang(document.querySelector(".ltab.on"));}
 function closeInst(){showSc(prev===0?"title-screen":"game-screen");}
 function showLang(btn){var panels=document.querySelectorAll(".lpn");for(var i=0;i<panels.length;i++)panels[i].classList.remove("on");var tabs=document.querySelectorAll(".ltab");for(var i=0;i<tabs.length;i++)tabs[i].classList.remove("on");var code=btn.getAttribute("data-lang");document.getElementById("lp-"+code).classList.add("on");btn.classList.add("on");}
-function loadS(idx){if(idx>=SS.length){on=false;setTimeout(function(){bigFW();setTimeout(function(){stopFW();buildEndScreen(sc);showSc("end-screen");},3500);},300);return;}var s=SS[idx];document.getElementById("bg").style.backgroundImage="url('"+s[0]+"')";document.getElementById("slbl").textContent=s[1];var box=document.getElementById("st");box.innerHTML="";setTimeout(adjustChests,50);box.classList.remove("fade");var parts=s[2].split(/\[([^\]]+)\]/);var gc=0;for(var i=0;i<parts.length;i++){if(i%2===0){if(parts[i]){var sp=document.createElement("span");sp.innerHTML=parts[i];box.appendChild(sp);}}else{var g=document.createElement("span");g.className="gap";g.id="gap-"+gc;g.setAttribute("data-answer",parts[i].toLowerCase());g.textContent="___";box.appendChild(g);gc++;}}}
+function loadS(idx){if(idx>=SS.length){on=false;clearProgress();setTimeout(function(){bigFW();setTimeout(function(){stopFW();buildEndScreen(sc);showSc("end-screen");},3500);},300);return;}var s=SS[idx];document.getElementById("bg").style.backgroundImage="url('"+s[0]+"')";document.getElementById("slbl").textContent=s[1];var box=document.getElementById("st");box.innerHTML="";setTimeout(adjustChests,50);box.classList.remove("fade");var parts=s[2].split(/\[([^\]]+)\]/);var gc=0;for(var i=0;i<parts.length;i++){if(i%2===0){if(parts[i]){var sp=document.createElement("span");sp.innerHTML=parts[i];box.appendChild(sp);}}else{var g=document.createElement("span");g.className="gap";g.id="gap-"+gc;g.setAttribute("data-answer",parts[i].toLowerCase());g.textContent="___";box.appendChild(g);gc++;}}}
 function adjustChests(){
   var sp=document.getElementById("sp");
   var chests=document.getElementById("chests");
@@ -371,7 +420,7 @@ function adjustChests(){
     chests.style.bottom=(h+5)+"px";
   }
 }
-function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;document.getElementById("sv").textContent=sc;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){var st=document.getElementById("st");st.classList.add("fade");setTimeout(function(){si=nxt;loadS(si);setTimeout(function(){st.classList.remove("fade");},50);},220);},450);}}else{g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
+function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;document.getElementById("sv").textContent=sc;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){var st=document.getElementById("st");st.classList.add("fade");setTimeout(function(){si=nxt;loadS(si);setTimeout(function(){st.classList.remove("fade");},50);},220);},450);}}else{g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
 function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,msg,sub;if(score>=100){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=90){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=78){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=62){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=48){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" / "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;
   // Build grade ladder
   var grades=[
@@ -409,6 +458,7 @@ function animFW(){fwX.clearRect(0,0,fwC.width,fwC.height);var alive=[];for(var i
 function miniFW(){fwC.style.display="block";fwOn=true;var r=document.getElementById("sp").getBoundingClientRect();burst(window.innerWidth*0.5+(Math.random()-0.5)*160,r.top-8,16);if(!fwR)animFW();setTimeout(function(){fwOn=false;},460);}
 function bigFW(){fwC.style.display="block";fwOn=true;var n=0;var iv=setInterval(function(){burst(Math.random()*fwC.width,Math.random()*fwC.height*0.65,52);n++;if(n>=6)clearInterval(iv);},340);if(!fwR)animFW();}
 function stopFW(){fwOn=false;fwP=[];if(fwR){cancelAnimationFrame(fwR);fwR=null;}fwX.clearRect(0,0,fwC.width,fwC.height);fwC.style.display="none";}
+checkSavedGame();
 </script>
 </body>
 </html>
