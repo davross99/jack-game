@@ -133,7 +133,7 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   <div id="bg"></div>
   <div id="hud">
     <span class="ht">JACK</span>
-    <span class="hs">* <span id="sv">0</span>/<span id="tv">0</span></span>
+    <span class="hs">&#x2705;<span id="sv">0</span> / <span id="tv">0</span></span>
     <button class="bh bgg" onclick="openChart(1)">CHART</button>
     <button class="bh bbl" onclick="openInst(1)">HELP</button>
     <button class="bh br" onclick="restartGame()">RESTART</button>
@@ -356,15 +356,15 @@ function adjustChests(){
   }
 }
 function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;document.getElementById("sv").textContent=sc;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){var st=document.getElementById("st");st.classList.add("fade");setTimeout(function(){si=nxt;loadS(si);setTimeout(function(){st.classList.remove("fade");},50);},220);},450);}}else{g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
-function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,msg,sub;if(score===total){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=95){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=80){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=60){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=40){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" / "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;
+function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,msg,sub;if(score>=108){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=95){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=85){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=70){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=50){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" / "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;
   // Build grade ladder
   var grades=[
-    {min:0,max:39,emoji:"&#x1F331;",label:"KEEP GOING!"},
-    {min:40,max:59,emoji:"&#x1F44D;",label:"GOOD EFFORT!"},
-    {min:60,max:74,emoji:"&#x2B50;",label:"GREAT WORK!"},
-    {min:75,max:84,emoji:"&#x1F3AF;",label:"OUTSTANDING!"},
-    {min:85,max:93,emoji:"&#x1F525;",label:"INCREDIBLE!"},
-    {min:94,max:94,emoji:"&#x1F451;",label:"PERFECT!"}
+    {min:0,max:49,emoji:"&#x1F331;",label:"KEEP GOING!"},
+    {min:50,max:69,emoji:"&#x1F44D;",label:"GOOD EFFORT!"},
+    {min:70,max:84,emoji:"&#x2B50;",label:"GREAT WORK!"},
+    {min:85,max:94,emoji:"&#x1F3AF;",label:"OUTSTANDING!"},
+    {min:95,max:107,emoji:"&#x1F525;",label:"INCREDIBLE!"},
+    {min:108,max:108,emoji:"&#x1F451;",label:"PERFECT!"}
   ];
   var ladder=document.getElementById("grade-ladder");
   ladder.innerHTML="";
@@ -377,11 +377,11 @@ function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,m
     var isCurrent=(score>=gr.min&&score<=gr.max);
     var isAchieved=score>gr.max;
     var row=document.createElement("div");
-    var bg=isCurrent?"rgba(255,215,0,0.25)":isAchieved?"rgba(80,200,80,0.15)":"rgba(255,255,255,0.05)";
-    var border=isCurrent?"2px solid #FFD700":isAchieved?"1px solid #50c850":"1px solid rgba(255,255,255,0.1)";
+    var bg=isCurrent?"rgba(255,215,0,0.35)":isAchieved?"rgba(80,200,80,0.15)":"rgba(255,255,255,0.04)";
+    var border=isCurrent?"3px solid #FFD700":isAchieved?"1px solid #50c850":"1px solid rgba(255,255,255,0.08)";
     var txtCol=isCurrent?"#FFD700":isAchieved?"#90ee90":"rgba(255,255,255,0.4)";
     row.style.cssText="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.6rem;margin-bottom:0.25rem;border-radius:8px;background:"+bg+";border:"+border+";";
-    var scoreRange=gr.max===94?"94 = PERFECT":gr.min+"-"+gr.max+" correct";
+    var scoreRange=gr.max===108?"108 = PERFECT":gr.min+"-"+gr.max+" correct";
     row.innerHTML="<span style='font-size:1.1rem'>"+gr.emoji+"</span><span style='font-family:Bangers,cursive;color:"+txtCol+";font-size:clamp(0.75rem,2.8vw,0.95rem);letter-spacing:1px;flex:1'>"+gr.label+"</span><span style='font-family:Nunito,sans-serif;font-size:clamp(0.65rem,2.2vw,0.8rem);color:"+txtCol+"'>"+scoreRange+"</span>"+(isCurrent?"<span style='font-size:0.8rem'>&#x261C;</span>":"");
     ladder.appendChild(row);
   }
