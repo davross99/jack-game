@@ -516,7 +516,19 @@ var fwC=document.getElementById("fwc"),fwX=fwC.getContext("2d"),fwP=[],fwOn=fals
 function rsz(){fwC.width=window.innerWidth;fwC.height=window.innerHeight;}rsz();window.addEventListener("resize",rsz);window.addEventListener("resize",adjustChests);
 function burst(x,y,n){var c=["#FFD700","#FF6B6B","#4ECDC4","#96CEB4","#DDA0DD","#98FB98","#FF69B4"];for(var i=0;i<n;i++){var a=(Math.PI*2/n)*i+Math.random()*0.3,sp=3+Math.random()*5;fwP.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1,col:c[i%c.length],life:1,decay:0.024+Math.random()*0.02,sz:2+Math.random()*3});}}
 function animFW(){fwX.clearRect(0,0,fwC.width,fwC.height);var alive=[];for(var i=0;i<fwP.length;i++){var p=fwP[i];if(p.life>0){p.x+=p.vx;p.y+=p.vy;p.vy+=0.1;p.life-=p.decay;fwX.beginPath();fwX.arc(p.x,p.y,p.sz*p.life,0,Math.PI*2);fwX.fillStyle=p.col;fwX.shadowColor=p.col;fwX.shadowBlur=5;fwX.fill();fwX.shadowBlur=0;alive.push(p);}}fwP=alive;if(fwOn||fwP.length>0){fwR=requestAnimationFrame(animFW);}else{fwC.style.display="none";fwR=null;}}
-function miniFW(){fwC.style.display="block";fwOn=true;var r=document.getElementById("sp").getBoundingClientRect();burst(window.innerWidth*0.5+(Math.random()-0.5)*160,r.top-8,16);if(!fwR)animFW();setTimeout(function(){fwOn=false;},460);}
+function miniFW(){
+  fwC.style.display="block";
+  var r=document.getElementById("sp").getBoundingClientRect();
+  // Multiple burst positions for variety
+  var cx=window.innerWidth*0.5;
+  var cy=r.top-20;
+  burst(cx+(Math.random()-0.5)*200, cy, 18);
+  burst(cx+(Math.random()-0.5)*100, cy+(Math.random()-0.5)*40, 10);
+  if(!fwR){ fwOn=true; animFW(); }
+  else { fwOn=true; }
+  if(miniFWTimer) clearTimeout(miniFWTimer);
+  miniFWTimer=setTimeout(function(){fwOn=false;},600);
+}
 function bigFW(){fwC.style.display="block";fwOn=true;var n=0;var iv=setInterval(function(){burst(Math.random()*fwC.width,Math.random()*fwC.height*0.65,52);n++;if(n>=6)clearInterval(iv);},340);if(!fwR)animFW();}
 function stopFW(){fwOn=false;fwP=[];if(fwR){cancelAnimationFrame(fwR);fwR=null;}fwX.clearRect(0,0,fwC.width,fwC.height);fwC.style.display="none";}
 checkSavedGame();
