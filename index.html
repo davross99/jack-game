@@ -22,21 +22,21 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
 .btn-sm { font-family:"Bangers",cursive; font-size:clamp(0.85rem,3vw,1.1rem); letter-spacing:2px; border-radius:40px; padding:0.4rem 1.2rem; cursor:pointer; border:2px solid; }
 .bg { background:rgba(0,100,0,0.7); color:#90ee90; border-color:#90ee90; }
 .bb { background:rgba(0,0,120,0.7); color:#aaaaff; border-color:#aaaaff; }
-#game-screen { justify-content:flex-start; background:#000; }
+#game-screen { background:#000; }
 #bg { position:fixed; inset:0; z-index:0; background-size:auto 58%; background-position:center 30%; background-repeat:no-repeat; background-color:#0a140a; transition:background-image 1.2s ease; }
 #bg::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(0,0,0,0.18) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 52%,rgba(0,0,0,0.6) 75%,rgba(0,0,0,0.92) 90%,rgba(0,0,0,0.97) 100%); }
-#hud { position:relative; z-index:40; width:100%; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; gap:0.3rem; padding:0.32rem 0.6rem; background:rgba(0,0,0,0.85); border-bottom:2px solid rgba(255,215,0,0.45); }
+#hud { position:fixed; top:0; left:0; right:0; z-index:40; display:flex; align-items:center; justify-content:space-between; gap:0.3rem; padding:0.32rem 0.6rem; background:rgba(0,0,0,0.85); border-bottom:2px solid rgba(255,215,0,0.45); }
 .ht { font-family:"Bangers",cursive; color:#FFD700; font-size:clamp(0.78rem,2.8vw,1rem); letter-spacing:2px; white-space:nowrap; }
 .hs { font-family:"Bangers",cursive; color:#90ee90; font-size:clamp(0.78rem,2.8vw,1rem); white-space:nowrap; }
-.bh { font-family:"Bangers",cursive; font-size:clamp(0.85rem,3.2vw,1.1rem); border:none; border-radius:12px; padding:0.35rem 0.85rem; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+.bh { font-family:"Bangers",cursive; font-size:clamp(0.85rem,3.2vw,1.1rem); border:none; border-radius:12px; padding:0.35rem 0.9rem; cursor:pointer; white-space:nowrap; flex-shrink:0; }
 .br { background:rgba(180,0,0,0.92); color:#fff; }
 .bgg { background:rgba(0,120,0,0.85); color:#90ee90; }
 .bbl { background:rgba(0,0,160,0.85); color:#aaaaff; }
-#prog { position:relative; z-index:40; width:100%; height:4px; flex-shrink:0; background:rgba(255,255,255,0.1); }
+#prog { position:fixed; top:var(--hud-h,44px); left:0; right:0; z-index:40; height:4px; background:rgba(255,255,255,0.1); }
 #pf { height:100%; background:linear-gradient(90deg,#FFD700,#FFA500); width:0%; transition:width 0.4s; }
-#slbl { position:relative; z-index:40; width:100%; flex-shrink:0; text-align:center; padding:0.14rem 0; font-family:"Bangers",cursive; font-size:clamp(0.5rem,1.8vw,0.72rem); color:rgba(255,215,0,0.82); letter-spacing:2px; background:rgba(0,0,0,0.52); }
-#spc { flex:1; min-height:0; position:relative; z-index:1; max-height:clamp(0px,2vh,20px); }
-#chests { position:relative; z-index:40; width:100%; flex-shrink:0; display:flex; align-items:flex-end; justify-content:space-around; padding:0 1rem 0.3rem; }
+#slbl { position:fixed; top:calc(var(--hud-h,44px) + 4px); left:0; right:0; z-index:40; text-align:center; padding:0.14rem 0; font-family:"Bangers",cursive; font-size:clamp(0.5rem,1.8vw,0.72rem); color:rgba(255,215,0,0.82); letter-spacing:2px; background:rgba(0,0,0,0.52); }
+#spc { display:none; }
+#chests { position:fixed; bottom:clamp(80px,18vh,120px); left:0; right:0; z-index:40; display:flex; align-items:flex-end; justify-content:space-around; padding:0 1rem 0.3rem; }
 .chest { display:flex; flex-direction:column; align-items:center; width:clamp(68px,19vw,90px); cursor:pointer; touch-action:manipulation; position:relative; }
 .chest:active { transform:scale(0.93); }
 .cr { width:160%; height:clamp(14px,4vw,22px); background:radial-gradient(ellipse at center bottom,rgba(255,238,30,0.96) 0%,rgba(255,175,0,0.52) 48%,transparent 100%); filter:blur(2px); margin-bottom:-7px; pointer-events:none; }
@@ -52,7 +52,7 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
 .cmb { position:absolute; top:44%; left:0; right:0; height:3px; background:linear-gradient(90deg,#A07010,#E8B828,#A07010); z-index:3; pointer-events:none; }
 .ccp { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:12px; height:8px; background:linear-gradient(180deg,#FFD700,#B8860B,#FFD700); border-radius:2px; border:1px solid #7a5500; z-index:4; pointer-events:none; }
 .cw { font-family:"Bangers",cursive; font-size:clamp(1rem,4.2vw,1.35rem); letter-spacing:2px; font-weight:900; text-shadow:2px 2px 0 rgba(0,0,0,1),0 0 10px rgba(0,0,0,0.88); margin-top:3px; position:relative; z-index:10; pointer-events:none; }
-#sp { position:relative; z-index:40; width:100%; flex-shrink:0; background:rgba(4,2,0,0.94); border-top:3px solid #D4AF37; padding:0.7rem 1rem 0.75rem; display:flex; align-items:center; justify-content:center; min-height:clamp(80px,18vh,120px); }
+#sp { position:fixed; bottom:0; left:0; right:0; z-index:40; background:rgba(4,2,0,0.94); border-top:3px solid #D4AF37; padding:0.7rem 1rem 0.75rem; display:flex; align-items:center; justify-content:center; min-height:clamp(80px,18vh,120px); }
 #st { transition:opacity 0.35s ease; }
 #st.fade { opacity:0; }
 #st { font-family:"Nunito",sans-serif; font-size:clamp(1.15rem,5vw,1.65rem); font-weight:800; color:#f5e8c0; text-shadow:1px 1px 2px rgba(0,0,0,0.9); text-align:center; line-height:1.7; width:100%; white-space:normal; word-break:normal; overflow-wrap:break-word; }
@@ -143,19 +143,19 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   <div id="spc"></div>
   <div id="chests">
     <div class="chest" onclick="pick(0)">
-      <div class="cr"></div><div class="csp">coins</div>
+      <div class="cr"></div>
       <div class="cl"></div><div class="cgl"></div>
       <div class="cb" style="position:relative;"><div class="cmb"></div><div class="ccp"></div><div class="cin"></div></div>
       <div class="cw" style="color:#ffdd99;">AT</div>
     </div>
     <div class="chest" onclick="pick(1)">
-      <div class="cr"></div><div class="csp">coins</div>
+      <div class="cr"></div>
       <div class="cl"></div><div class="cgl"></div>
       <div class="cb" style="position:relative;"><div class="cmb"></div><div class="ccp"></div><div class="cin"></div></div>
       <div class="cw" style="color:#99ffbb;">IN</div>
     </div>
     <div class="chest" onclick="pick(2)">
-      <div class="cr"></div><div class="csp">coins</div>
+      <div class="cr"></div>
       <div class="cl"></div><div class="cgl"></div>
       <div class="cb" style="position:relative;"><div class="cmb"></div><div class="ccp"></div><div class="cin"></div></div>
       <div class="cw" style="color:#99bbff;">ON</div>
@@ -199,30 +199,62 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
       <button class="ltab" data-lang="fr" onclick="showLang(this)">&#x1F1EB;&#x1F1F7; FR</button>
     </div>
     <div class="lpn on" id="lp-es">
-      <div class="it">Como jugar?</div>
-      <div class="isc"><div class="isct">Instrucciones</div><ol class="ist"><li>Lee la frase completa.</li><li>Encuentra el hueco ___ en la frase.</li><li>Toca el cofre correcto: AT, IN o ON.</li><li>La preposicion correcta aparecera.</li></ol></div>
-      <div class="isc"><div class="isct">Las preposiciones</div><ul class="ipr"><li>AT - horas exactas: at 7 o&#39;clock, at night, at Christmas</li><li>IN - meses, estaciones, anos: in July, in summer, in 1987, in the morning</li><li>ON - dias de la semana: on Monday, on the 25th</li></ul></div>
-      <div class="itp"><span class="iok">Correcto: Fuegos artificiales! Siguiente frase.</span></div>
-      <div class="itp"><span class="ibd">Incorrecto: Pantalla roja. Intentalo de nuevo!</span></div>
+      <div class="it">&#xBF;C&#xF3;mo jugar?</div>
+      <div class="isc"><div class="isct">&#x1F4CB; Instrucciones</div><ol class="ist"><li>Lee la frase completa en la pantalla.</li><li>Encuentra el hueco <strong style="color:#FFD700">___</strong> en la frase.</li><li>Toca el cofre correcto: <strong>AT</strong>, <strong>IN</strong> o <strong>ON</strong>.</li><li>La preposici&#xF3;n correcta aparecer&#xE1; autom&#xE1;ticamente.</li></ol></div>
+      <div class="isc"><div class="isct">&#x1F3AF; Las preposiciones</div><ul class="ipr"><li>&#x1F7E0; <strong>AT</strong> &#x2192; horas exactas y momentos espec&#xED;ficos<br><em style="color:rgba(255,220,100,0.8)">at 7 o&#39;clock, at night, at Christmas</em></li><li>&#x1F7E2; <strong>IN</strong> &#x2192; meses, estaciones, a&#xF1;os y per&#xED;odos<br><em style="color:rgba(255,220,100,0.8)">in July, in summer, in 1987, in the morning</em></li><li>&#x1F535; <strong>ON</strong> &#x2192; d&#xED;as de la semana y fechas<br><em style="color:rgba(255,220,100,0.8)">on Monday, on the 25th of September</em></li></ul></div>
+      <div class="itp"><span class="iok">&#x2705; Correcto: &#xA1;Fuegos artificiales! Siguiente frase.</span></div>
+      <div class="itp"><span class="ibd">&#x274C; Incorrecto: Pantalla roja. &#xA1;Inténtalo de nuevo!</span></div>
+      <div class="itp">Pulsa <span>CHART</span> para ver la tabla de gram&#xE1;tica.</div>
     </div>
     <div class="lpn" id="lp-zh">
-      <div class="it">Zen me wan?</div>
-      <div class="isc"><div class="isct">You xi shuo ming</div><ol class="ist"><li>Zi xi yue du wan zheng ju zi.</li><li>Zhao dao kong ge ___.</li><li>Dian ji zheng que bao xiang: AT, IN huo ON.</li><li>Zheng que jie ci hui zi dong tian ru.</li></ol></div>
-      <div class="itp"><span class="iok">Da dui le: Yan hua! Xia yi ju.</span></div>
-      <div class="itp"><span class="ibd">Da cuo le: Hong guang. Qing zai shi!</span></div>
+      <div class="it">&#x600E;&#x4E48;&#x73A9;&#xFF1F;</div>
+      <div class="isc"><div class="isct">&#x1F4CB; &#x6E38;&#x620F;&#x8BF4;&#x660E;</div><ol class="ist"><li>&#x4ED4;&#x7EC6;&#x9605;&#x8BFB;&#x5C4F;&#x5E55;&#x4E0A;&#x7684;&#x5B8C;&#x6574;&#x53E5;&#x5B50;&#x3002;</li><li>&#x627E;&#x5230;&#x7A7A;&#x683C; <strong style="color:#FFD700">___</strong>&#x3002;</li><li>&#x70B9;&#x51FB;&#x6B63;&#x786E;&#x7684;&#x5B9D;&#x7BB1;&#xFF1A;<strong>AT</strong>&#x3001;<strong>IN</strong> &#x6216; <strong>ON</strong>&#x3002;</li><li>&#x6B63;&#x786E;&#x7684;&#x4ECB;&#x8BCD;&#x4F1A;&#x81EA;&#x52A8;&#x586B;&#x5165;&#x3002;</li></ol></div>
+      <div class="isc"><div class="isct">&#x1F3AF; &#x4ECB;&#x8BCD;&#x7528;&#x6CD5;</div><ul class="ipr"><li>&#x1F7E0; <strong>AT</strong> &#x2192; &#x5177;&#x4F53;&#x65F6;&#x95F4;<br><em style="color:rgba(255,220,100,0.8)">at 7 o&#39;clock &#x4E03;&#x70B9;, at night &#x591C;&#x6652;, at Christmas &#x5723;&#x8BDE;&#x8282;</em></li><li>&#x1F7E2; <strong>IN</strong> &#x2192; &#x6708;&#x4EFD;&#x3001;&#x5B63;&#x8282;&#x3001;&#x5E74;&#x4EFD;<br><em style="color:rgba(255,220,100,0.8)">in July &#x4E03;&#x6708;, in summer &#x590F;&#x5929;, in 1987, in the morning &#x65E9;&#x4E0A;</em></li><li>&#x1F535; <strong>ON</strong> &#x2192; &#x661F;&#x671F;&#x51E0;&#x6216;&#x65E5;&#x671F;<br><em style="color:rgba(255,220,100,0.8)">on Monday &#x5468;&#x4E00;, on the 25th of September &#x4E5D;&#x6708;&#x4E8C;&#x5341;&#x4E94;&#x65E5;</em></li></ul></div>
+      <div class="itp"><span class="iok">&#x2705; &#x7B54;&#x5BF9;&#xFF1A;&#x70DF;&#x82B1;&#xFF01;&#x4E0B;&#x4E00;&#x53E5;&#x3002;</span></div>
+      <div class="itp"><span class="ibd">&#x274C; &#x7B54;&#x9519;&#xFF1A;&#x5C4F;&#x5E55;&#x95EA;&#x70C1;&#x7EA2;&#x5149;&#x3002;&#x518D;&#x8BD5;&#xFF01;</span></div>
+      <div class="itp">&#x70B9;&#x51FB; <span>CHART</span> &#x67E5;&#x770B;&#x8BED;&#x6CD5;&#x8868;&#x3002;</div>
     </div>
     <div class="lpn" id="lp-ru">
-      <div class="it">Kak igrat?</div>
-      <div class="isc"><div class="isct">Instrukcii</div><ol class="ist"><li>Prochtayte polnoye predlozheniye.</li><li>Naydite propusk ___.</li><li>Nazhmite na sunduk: AT, IN ili ON.</li><li>Pravilnyy predlog poyavitsya.</li></ol></div>
-      <div class="itp"><span class="iok">Pravilno: Feyrerverk! Sleduyushcheye.</span></div>
-      <div class="itp"><span class="ibd">Nepravilno: Ekran mignot krasnym. Poprobuy!</span></div>
+      <div class="it">&#x41A;&#x430;&#x43A; &#x438;&#x433;&#x440;&#x430;&#x442;&#x44C;?</div>
+      <div class="isc"><div class="isct">&#x1F4CB; &#x418;&#x43D;&#x441;&#x442;&#x440;&#x443;&#x43A;&#x446;&#x438;&#x438;</div><ol class="ist"><li>&#x41F;&#x440;&#x43E;&#x447;&#x438;&#x442;&#x430;&#x439;&#x442;&#x435; &#x43F;&#x43E;&#x43B;&#x43D;&#x43E;&#x435; &#x43F;&#x440;&#x435;&#x434;&#x43B;&#x43E;&#x436;&#x435;&#x43D;&#x438;&#x435; &#x43D;&#x430; &#x44D;&#x43A;&#x440;&#x430;&#x43D;&#x435;.</li><li>&#x41D;&#x430;&#x439;&#x434;&#x438;&#x442;&#x435; &#x43F;&#x440;&#x43E;&#x43F;&#x443;&#x441;&#x43A; <strong style="color:#FFD700">___</strong>.</li><li>&#x41D;&#x430;&#x436;&#x43C;&#x438;&#x442;&#x435; &#x43D;&#x430; &#x43F;&#x440;&#x430;&#x432;&#x438;&#x43B;&#x44C;&#x43D;&#x44B;&#x439; &#x441;&#x443;&#x43D;&#x434;&#x443;&#x43A;: <strong>AT</strong>, <strong>IN</strong> &#x438;&#x43B;&#x438; <strong>ON</strong>.</li><li>&#x41F;&#x440;&#x430;&#x432;&#x438;&#x43B;&#x44C;&#x43D;&#x44B;&#x439; &#x43F;&#x440;&#x435;&#x434;&#x43B;&#x43E;&#x433; &#x43F;&#x43E;&#x44F;&#x432;&#x438;&#x442;&#x441;&#x44F; &#x430;&#x432;&#x442;&#x43E;&#x43C;&#x430;&#x442;&#x438;&#x447;&#x435;&#x441;&#x43A;&#x438;.</li></ol></div>
+      <div class="isc"><div class="isct">&#x1F3AF; &#x41F;&#x440;&#x435;&#x434;&#x43B;&#x43E;&#x433;&#x438;</div><ul class="ipr"><li>&#x1F7E0; <strong>AT</strong> &#x2192; &#x442;&#x43E;&#x447;&#x43D;&#x43E;&#x435; &#x432;&#x440;&#x435;&#x43C;&#x44F;<br><em style="color:rgba(255,220,100,0.8)">at 7 o&#39;clock &#x432; 7 &#x447;., at night &#x43D;&#x43E;&#x447;&#x44C;&#x44E;, at Christmas &#x420;&#x43E;&#x436;&#x434;&#x435;&#x441;&#x442;&#x432;&#x43E;</em></li><li>&#x1F7E2; <strong>IN</strong> &#x2192; &#x43C;&#x435;&#x441;&#x44F;&#x446;&#x44B;, &#x432;&#x440;&#x435;&#x43C;&#x435;&#x43D;&#x430; &#x433;&#x43E;&#x434;&#x430;, &#x433;&#x43E;&#x434;&#x44B;<br><em style="color:rgba(255,220,100,0.8)">in July &#x432; &#x438;&#x44E;&#x43B;&#x435;, in summer &#x43B;&#x435;&#x442;&#x43E;&#x43C;, in 1987, in the morning &#x443;&#x442;&#x440;&#x43E;&#x43C;</em></li><li>&#x1F535; <strong>ON</strong> &#x2192; &#x434;&#x43D;&#x438; &#x43D;&#x435;&#x434;&#x435;&#x43B;&#x438; &#x438; &#x434;&#x430;&#x442;&#x44B;<br><em style="color:rgba(255,220,100,0.8)">on Monday &#x432; &#x43F;&#x43E;&#x43D;&#x435;&#x434;&#x435;&#x43B;&#x44C;&#x43D;&#x438;&#x43A;, on the 25th 25 &#x441;&#x435;&#x43D;&#x442;&#x44F;&#x431;&#x440;&#x44F;</em></li></ul></div>
+      <div class="itp"><span class="iok">&#x2705; &#x41F;&#x440;&#x430;&#x432;&#x438;&#x43B;&#x44C;&#x43D;&#x43E;: &#x424;&#x435;&#x439;&#x435;&#x440;&#x432;&#x435;&#x440;&#x43A;! &#x421;&#x43B;&#x435;&#x434;&#x443;&#x44E;&#x449;&#x435;&#x435;.</span></div>
+      <div class="itp"><span class="ibd">&#x274C; &#x41D;&#x435;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x43B;&#x44C;&#x43D;&#x43E;: &#x44D;&#x43A;&#x440;&#x430;&#x43D; &#x43C;&#x438;&#x433;&#x43D;&#x451;&#x442; &#x43A;&#x440;&#x430;&#x441;&#x43D;&#x44B;&#x43C;. &#x415;&#x449;&#x451; &#x440;&#x430;&#x437;!</span></div>
+      <div class="itp">&#x41D;&#x430;&#x436;&#x43C;&#x438;&#x442;&#x435; <span>CHART</span> &#x434;&#x43B;&#x44F; &#x442;&#x430;&#x431;&#x43B;&#x438;&#x446;&#x44B;.</div>
+    </div>
+    <div class="lpn" id="lp-ja">
+      <div class="it">&#x3069;&#x3046;&#x3084;&#x3063;&#x3066;&#x904A;&#x3076;&#xFF1F;</div>
+      <div class="isc"><div class="isct">&#x1F4CB; &#x30B2;&#x30FC;&#x30E0;&#x306E;&#x8AAC;&#x660E;</div><ol class="ist"><li>&#x753B;&#x9762;&#x306E;&#x6587;&#x7AE0;&#x5168;&#x4F53;&#x3092;&#x8AAD;&#x307F;&#x307E;&#x3057;&#x3087;&#x3046;&#x3002;</li><li>&#x7A7A;&#x6B04; <strong style="color:#FFD700">___</strong> &#x3092;&#x898B;&#x3064;&#x3051;&#x307E;&#x3057;&#x3087;&#x3046;&#x3002;</li><li>&#x6B63;&#x3057;&#x3044;&#x5B9D;&#x7B31;&#x3092;&#x30BF;&#x30C3;&#x30D7;&#xFF1A;<strong>AT</strong>&#x3001;<strong>IN</strong>&#x3001;&#x307E;&#x305F;&#x306F; <strong>ON</strong>&#x3002;</li><li>&#x6B63;&#x3057;&#x3044;&#x524D;&#x7F6E;&#x8A5E;&#x304C;&#x81EA;&#x52D5;&#x7684;&#x306B;&#x5165;&#x308A;&#x307E;&#x3059;&#x3002;</li></ol></div>
+      <div class="isc"><div class="isct">&#x1F3AF; &#x524D;&#x7F6E;&#x8A5E;&#x306E;&#x4F7F;&#x3044;&#x65B9;</div><ul class="ipr"><li>&#x1F7E0; <strong>AT</strong> &#x2192; &#x7279;&#x5B9A;&#x306E;&#x6642;&#x523B;<br><em style="color:rgba(255,220,100,0.8)">at 7 o&#39;clock (7&#x6642;), at night (&#x591C;), at Christmas (&#x30AF;&#x30EA;&#x30B9;&#x30DE;&#x30B9;)</em></li><li>&#x1F7E2; <strong>IN</strong> &#x2192; &#x6708;&#x30FB;&#x5B63;&#x7BC0;&#x30FB;&#x5E74;<br><em style="color:rgba(255,220,100,0.8)">in July (7&#x6708;), in summer (&#x590F;), in 1987, in the morning (&#x671D;)</em></li><li>&#x1F535; <strong>ON</strong> &#x2192; &#x66DC;&#x65E5;&#x30FB;&#x65E5;&#x4ED8;<br><em style="color:rgba(255,220,100,0.8)">on Monday (&#x6708;&#x66DC;&#x65E5;), on the 25th of September (9&#x6708;25&#x65E5;)</em></li></ul></div>
+      <div class="itp"><span class="iok">&#x2705; &#x6B63;&#x89E3;&#xFF1A;&#x82B1;&#x706B;&#xFF01;&#x6B21;&#x306E;&#x6587;&#x7AE0;&#x3078;&#x3002;</span></div>
+      <div class="itp"><span class="ibd">&#x274C; &#x4E0D;&#x6B63;&#x89E3;&#xFF1A;&#x753B;&#x9762;&#x8D64;&#x70B9;&#x6EC5;&#x3002;&#x3082;&#x3046;&#x4E00;&#x5EA6;&#xFF01;</span></div>
+      <div class="itp"><span>CHART</span> &#x30DC;&#x30BF;&#x30F3;&#x3067;&#x6587;&#x6CD5;&#x8868;&#x3092;&#x78BA;&#x8A8D;&#x3002;</div>
     </div>
     <div class="lpn" id="lp-hi">
-      <div class="it">Kaise khelen?</div>
-      <div class="isc"><div class="isct">Nirdesh</div><ol class="ist"><li>Poora vaakya padhen.</li><li>Khaali jagah ___ dhundhen.</li><li>Sahi sandook chuyen: AT, IN ya ON.</li><li>Sahi preposition apne aap aayega.</li></ol></div>
-      <div class="itp"><span class="iok">Sahi: Aatishbaazi! Agla vaakya.</span></div>
-      <div class="itp"><span class="ibd">Galat: Screen laal hogi. Phir koshish karen!</span></div>
+      <div class="it">&#x915;&#x948;&#x938;&#x947; &#x916;&#x947;&#x932;&#x947;&#x902;?</div>
+      <div class="isc"><div class="isct">&#x1F4CB; &#x928;&#x93F;&#x930;&#x94D;&#x926;&#x947;&#x936;</div><ol class="ist"><li>&#x938;&#x94D;&#x915;&#x94D;&#x930;&#x940;&#x928; &#x92A;&#x930; &#x92A;&#x942;&#x930;&#x93E; &#x935;&#x93E;&#x915;&#x94D;&#x92F; &#x927;&#x94D;&#x92F;&#x93E;&#x928; &#x938;&#x947; &#x92A;&#x922;&#x93C;&#x947;&#x902;&#x964;</li><li>&#x916;&#x93E;&#x932;&#x940; &#x91C;&#x917;&#x939; <strong style="color:#FFD700">___</strong> &#x922;&#x942;&#x901;&#x922;&#x93C;&#x947;&#x902;&#x964;</li><li>&#x938;&#x939;&#x940; &#x938;&#x902;&#x926;&#x942;&#x915; &#x91B;&#x941;&#x090F;&#x901;: <strong>AT</strong>, <strong>IN</strong> &#x92F;&#x93E; <strong>ON</strong>&#x964;</li><li>&#x938;&#x939;&#x940; &#x92A;&#x94D;&#x930;&#x940;&#x92A;&#x94B;&#x91C;&#x93C;&#x93F;&#x936;&#x928; &#x905;&#x92A;&#x928;&#x947; &#x906;&#x92A; &#x92D;&#x930; &#x91C;&#x93E;&#x090F;&#x917;&#x93E;&#x964;</li></ol></div>
+      <div class="isc"><div class="isct">&#x1F3AF; &#x92A;&#x94D;&#x930;&#x940;&#x92A;&#x94B;&#x91C;&#x93C;&#x93F;&#x936;&#x928;</div><ul class="ipr"><li>&#x1F7E0; <strong>AT</strong> &#x2192; &#x938;&#x91F;&#x940;&#x915; &#x938;&#x92E;&#x92F;<br><em style="color:rgba(255,220,100,0.8)">at 7 o&#39;clock 7 &#x92C;&#x91C;&#x947;, at night &#x930;&#x93E;&#x924; &#x92E;&#x947;&#x902;, at Christmas &#x915;&#x94D;&#x930;&#x93F;&#x938;&#x92E;&#x938; &#x92A;&#x930;</em></li><li>&#x1F7E2; <strong>IN</strong> &#x2192; &#x92E;&#x939;&#x940;&#x928;&#x947;, &#x92E;&#x94C;&#x938;&#x92E;, &#x938;&#x93E;&#x932;<br><em style="color:rgba(255,220,100,0.8)">in July &#x91C;&#x941;&#x932;&#x93E;&#x908; &#x92E;&#x947;&#x902;, in summer &#x917;&#x930;&#x94D;&#x92E;&#x93F;&#x92F;&#x94B;&#x902; &#x92E;&#x947;&#x902;, in the morning &#x938;&#x941;&#x92C;&#x939;</em></li><li>&#x1F535; <strong>ON</strong> &#x2192; &#x926;&#x93F;&#x928; &#x914;&#x930; &#x924;&#x93E;&#x930;&#x940;&#x916;&#x93C;<br><em style="color:rgba(255,220,100,0.8)">on Monday &#x938;&#x94B;&#x92E;&#x935;&#x93E;&#x930; &#x915;&#x94B;, on the 25th 25 &#x938;&#x93F;&#x924;&#x902;&#x92C;&#x930; &#x915;&#x94B;</em></li></ul></div>
+      <div class="itp"><span class="iok">&#x2705; &#x938;&#x939;&#x940;: &#x906;&#x924;&#x93F;&#x936;&#x92C;&#x93C;&#x93E;&#x91C;&#x93C;&#x940;! &#x905;&#x917;&#x932;&#x947; &#x935;&#x93E;&#x915;&#x94D;&#x92F; &#x92A;&#x930; &#x91C;&#x93E;&#x090F;&#x901;&#x964;</span></div>
+      <div class="itp"><span class="ibd">&#x274C; &#x917;&#x932;&#x924;: &#x938;&#x94D;&#x915;&#x94D;&#x930;&#x940;&#x928; &#x932;&#x93E;&#x932; &#x92E;&#x947;&#x902; &#x91A;&#x92E;&#x915;&#x947;&#x917;&#x940;&#x964; &#x092B;&#x93F;&#x930; &#x938;&#x947; &#x915;&#x94B;&#x936;&#x93F;&#x936; &#x915;&#x930;&#x947;&#x902;!</span></div>
+      <div class="itp">&#x915;&#x93F;&#x938;&#x940; &#x92D;&#x940; &#x938;&#x92E;&#x92F; <span>CHART</span> &#x926;&#x92C;&#x93E;&#x915;&#x930; &#x924;&#x93E;&#x932;&#x93F;&#x915;&#x93E; &#x926;&#x947;&#x916;&#x947;&#x902;&#x964;</div>
     </div>
+    <div class="lpn" id="lp-de">
+      <div class="it">Wie spielt man?</div>
+      <div class="isc"><div class="isct">&#x1F4CB; Anleitung</div><ol class="ist"><li>Lies den vollst&#xE4;ndigen Satz auf dem Bildschirm.</li><li>Finde die L&#xFC;cke <strong style="color:#FFD700">___</strong> im Satz.</li><li>Tippe auf die richtige Schatztruhe: <strong>AT</strong>, <strong>IN</strong> oder <strong>ON</strong>.</li><li>Die richtige Pr&#xE4;position erscheint automatisch.</li></ol></div>
+      <div class="isc"><div class="isct">&#x1F3AF; Die Pr&#xE4;positionen</div><ul class="ipr"><li>&#x1F7E0; <strong>AT</strong> &#x2192; genaue Uhrzeiten<br><em style="color:rgba(255,220,100,0.8)">at 7 o&#39;clock (7 Uhr), at night (nachts), at Christmas (Weihnachten)</em></li><li>&#x1F7E2; <strong>IN</strong> &#x2192; Monate, Jahreszeiten, Jahre<br><em style="color:rgba(255,220,100,0.8)">in July (Juli), in summer (Sommer), in 1987, in the morning (morgens)</em></li><li>&#x1F535; <strong>ON</strong> &#x2192; Wochentage und Daten<br><em style="color:rgba(255,220,100,0.8)">on Monday (Montag), on the 25th of September (25. September)</em></li></ul></div>
+      <div class="itp"><span class="iok">&#x2705; Richtig: Feuerwerk! N&#xE4;chster Satz.</span></div>
+      <div class="itp"><span class="ibd">&#x274C; Falsch: Bildschirm blinkt rot. Nochmal!</span></div>
+      <div class="itp">Dr&#xFC;cke <span>CHART</span> f&#xFC;r die Grammatiktabelle.</div>
+    </div>
+    <div class="lpn" id="lp-fr">
+      <div class="it">Comment jouer ?</div>
+      <div class="isc"><div class="isct">&#x1F4CB; Instructions</div><ol class="ist"><li>Lis la phrase compl&#xE8;te &#xE0; l&#x27;&#xE9;cran.</li><li>Trouve l&#x27;espace vide <strong style="color:#FFD700">___</strong> dans la phrase.</li><li>Touche le bon coffre : <strong>AT</strong>, <strong>IN</strong> ou <strong>ON</strong>.</li><li>La bonne pr&#xE9;position appara&#xEE;tra automatiquement.</li></ol></div>
+      <div class="isc"><div class="isct">&#x1F3AF; Les pr&#xE9;positions</div><ul class="ipr"><li>&#x1F7E0; <strong>AT</strong> &#x2192; heures pr&#xE9;cises<br><em style="color:rgba(255,220,100,0.8)">at 7 o&#39;clock (7h), at night (la nuit), at Christmas (No&#xEB;l)</em></li><li>&#x1F7E2; <strong>IN</strong> &#x2192; mois, saisons, ann&#xE9;es<br><em style="color:rgba(255,220,100,0.8)">in July (juillet), in summer (&#xE9;t&#xE9;), in 1987, in the morning (matin)</em></li><li>&#x1F535; <strong>ON</strong> &#x2192; jours et dates<br><em style="color:rgba(255,220,100,0.8)">on Monday (lundi), on the 25th of September (25 sept.)</em></li></ul></div>
+      <div class="itp"><span class="iok">&#x2705; Bonne r&#xE9;ponse : Feu d&#x27;artifice ! Phrase suivante.</span></div>
+      <div class="itp"><span class="ibd">&#x274C; Mauvaise r&#xE9;ponse : &#xC9;cran rouge. R&#xE9;essaie !</span></div>
+      <div class="itp">Appuie sur <span>CHART</span> pour le tableau de grammaire.</div>
+    </div>
+        </div>
   </div>
 </div>
 <div class="screen" id="end-screen">
@@ -230,8 +262,8 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   <div class="eti" id="end-grade">ADVENTURE COMPLETE!</div>
   <div class="esc" id="end-score">YOU SCORED 0 / 108</div>
   <div id="end-remain" style="font-family:'Bangers',cursive;font-size:clamp(0.9rem,3.5vw,1.2rem);color:#FFD700;margin-bottom:0.2rem;text-align:center;"></div>
-  <div class="emg" id="end-msg">Jack escapes with the golden statue!</div>
-  <div id="end-sub" style="color:#90ee90;font-family:'Bangers',cursive;font-size:clamp(0.82rem,3vw,1.05rem);letter-spacing:1px;text-align:center;max-width:320px;padding:0 1rem;"></div>
+  <div class="emg" id="end-msg">Jack escapes!</div>
+  <div id="end-sub" style="color:#90ee90;font-family:'Bangers',cursive;font-size:clamp(0.82rem,3vw,1.05rem);text-align:center;max-width:320px;padding:0 1rem;"></div>
   <button class="btn-gold" onclick="restartGame()">&#x1F504; PLAY AGAIN</button>
 </div>
 <canvas id="fwc"></canvas>
@@ -313,22 +345,7 @@ function closeInst(){showSc(prev===0?"title-screen":"game-screen");}
 function showLang(btn){var panels=document.querySelectorAll(".lpn");for(var i=0;i<panels.length;i++)panels[i].classList.remove("on");var tabs=document.querySelectorAll(".ltab");for(var i=0;i<tabs.length;i++)tabs[i].classList.remove("on");var code=btn.getAttribute("data-lang");document.getElementById("lp-"+code).classList.add("on");btn.classList.add("on");}
 function loadS(idx){if(idx>=SS.length){on=false;setTimeout(function(){bigFW();setTimeout(function(){stopFW();buildEndScreen(sc);showSc("end-screen");},3500);},300);return;}var s=SS[idx];document.getElementById("bg").style.backgroundImage="url('"+s[0]+"')";document.getElementById("slbl").textContent=s[1];var box=document.getElementById("st");box.innerHTML="";box.classList.remove("fade");var parts=s[2].split(/\[([^\]]+)\]/);var gc=0;for(var i=0;i<parts.length;i++){if(i%2===0){if(parts[i]){var sp=document.createElement("span");sp.innerHTML=parts[i];box.appendChild(sp);}}else{var g=document.createElement("span");g.className="gap";g.id="gap-"+gc;g.setAttribute("data-answer",parts[i].toLowerCase());g.textContent="___";box.appendChild(g);gc++;}}}
 function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;document.getElementById("sv").textContent=sc;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){var st=document.getElementById("st");st.classList.add("fade");setTimeout(function(){si=nxt;loadS(si);setTimeout(function(){st.classList.remove("fade");},50);},350);},900);}}else{g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
-function buildEndScreen(score){
-  var total=108,remaining=total-score;
-  var emoji,grade,msg,sub;
-  if(score===108){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! You got every single answer correct!";sub="You are a Preposition CHAMPION! Extraordinary!";}
-  else if(score>=95){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! You are nearly perfect. One more try for complete victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}
-  else if(score>=80){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most of the prepositions. Brilliant!";sub="Can you close the gap? "+remaining+" more correct to go!";}
-  else if(score>=60){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent progress! You really understand prepositions now!";sub="Play again — you are getting closer to perfect!";}
-  else if(score>=40){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Play again and aim higher!";sub="Keep practising — every game makes you stronger!";}
-  else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring and you will improve!";sub="Play again — the temple is waiting for you!";}
-  document.getElementById("end-emoji").innerHTML=emoji;
-  document.getElementById("end-grade").textContent=grade;
-  document.getElementById("end-score").textContent="YOU SCORED "+score+" / "+total;
-  document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION! Every gap correct!":remaining+" gap"+(remaining===1?" answer":"s")+" away from perfect";
-  document.getElementById("end-msg").textContent=msg;
-  document.getElementById("end-sub").textContent=sub;
-}
+function buildEndScreen(score){var total=108,remaining=total-score,emoji,grade,msg,sub;if(score===108){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=95){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=80){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=60){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=40){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" / "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;}
 var fwC=document.getElementById("fwc"),fwX=fwC.getContext("2d"),fwP=[],fwOn=false,fwR=null;
 function rsz(){fwC.width=window.innerWidth;fwC.height=window.innerHeight;}rsz();window.addEventListener("resize",rsz);
 function burst(x,y,n){var c=["#FFD700","#FF6B6B","#4ECDC4","#96CEB4","#DDA0DD","#98FB98","#FF69B4"];for(var i=0;i<n;i++){var a=(Math.PI*2/n)*i+Math.random()*0.3,sp=3+Math.random()*5;fwP.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1,col:c[i%c.length],life:1,decay:0.024+Math.random()*0.02,sz:2+Math.random()*3});}}
