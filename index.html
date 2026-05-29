@@ -130,7 +130,7 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   <div class="ts">JUNGLE ADVENTURE</div>
   <div class="pills"><span class="pill">AT</span><span class="pill">IN</span><span class="pill">ON</span></div>
   <div class="hint">Tap <strong style="color:#FFD700">AT</strong>, <strong style="color:#90ee90">IN</strong> or <strong style="color:#aaaaff">ON</strong><br>to fill the gap in the sentence</div>
-  <button class="btn-gold" onclick="startGame()">START ADVENTURE</button>
+  <button class="btn-gold" onclick="startWithChart()">START ADVENTURE</button>
   <div id="continue-btn" style="display:none;">
     <button class="btn-gold" style="background:linear-gradient(135deg,#50c850,#208020);" onclick="continueGame()">&#x25B6; CONTINUE GAME</button>
   </div>
@@ -408,21 +408,21 @@ function checkSavedGame(){
 }
 
 function startWithChart(){
-  // Show chart briefly so student sees it, then they scroll up to start
   var chi = document.getElementById("chi");
-  // Add "scroll up to start" banner to chart
+  // Add sticky banner at bottom of chart
   var banner = document.getElementById("chart-start-banner");
   if(!banner){
     banner = document.createElement("div");
     banner.id = "chart-start-banner";
-    banner.style.cssText = "position:sticky;bottom:0;width:100%;background:rgba(255,215,0,0.95);color:#1a1a00;font-family:Bangers,cursive;font-size:clamp(1rem,4vw,1.4rem);letter-spacing:2px;text-align:center;padding:0.6rem;cursor:pointer;z-index:20;";
-    banner.innerHTML = "&#x2191; SCROLL UP TO BEGIN YOUR ADVENTURE &#x2191;";
+    banner.style.cssText = "position:sticky;bottom:0;left:0;right:0;width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;font-family:Bangers,cursive;font-size:clamp(1rem,4vw,1.5rem);letter-spacing:2px;text-align:center;padding:0.7rem 1rem;cursor:pointer;z-index:30;box-shadow:0 -3px 10px rgba(0,0,0,0.4);";
+    banner.innerHTML = "&#x2191;&#x2191; SCROLL UP WHEN READY TO START &#x2191;&#x2191;";
     banner.onclick = function(){ startGame(); };
     chi.appendChild(banner);
   }
-  prevSc = 0;
+  // Show chart screen
   showSc("chart-screen");
-  chi.scrollTop = 0;
+  // Scroll to top of chart
+  setTimeout(function(){ chi.scrollTop = 0; }, 50);
 }
 
 function startGame(){sc=0;si=0;on=true;attempted=0;document.getElementById("sv").textContent="0";document.getElementById("tv").textContent=TOT;document.getElementById("pf").style.width="0%";document.getElementById("wo").classList.remove("show");showSc("game-screen");loadS(0);}
