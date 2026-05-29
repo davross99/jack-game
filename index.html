@@ -12,10 +12,36 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
 .screen { display:none; position:fixed; inset:0; flex-direction:column; align-items:center; justify-content:center; }
 .screen.active { display:flex; }
 #title-screen {
-  background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),url("title.png") center/cover no-repeat;
+  background:url("title.png") center/cover no-repeat;
   gap:0.9rem; padding:2rem 1.5rem; text-align:center;
+  overflow:hidden;
 }
-.tt { font-family:"Bangers",cursive; font-size:clamp(2rem,8vw,3.5rem); color:#FFD700; text-shadow:3px 3px 0 #5a3800; letter-spacing:2px; line-height:1.1; }
+#title-screen::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 100%);
+  pointer-events:none;
+  z-index:0;
+}
+#title-screen > * { position:relative; z-index:1; }
+/* Chart overlay panel that slides over title */
+#chart-overlay {
+  position:fixed;
+  top:100%;
+  left:0; right:0; bottom:0;
+  z-index:100;
+  background:linear-gradient(rgba(0,40,0,0.95),rgba(0,30,0,0.98));
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  transition:top 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+  border-radius:20px 20px 0 0;
+  box-shadow:0 -5px 30px rgba(0,0,0,0.8);
+}
+#chart-overlay.open {
+  top:10%;
+}
+.tt { font-family:"Bangers",cursive; font-size:clamp(2.2rem,9vw,4rem); color:#FFD700; text-shadow:3px 3px 0 #5a3800, 0 0 30px rgba(255,150,0,0.6), 0 0 60px rgba(255,100,0,0.3); letter-spacing:3px; line-height:1.1; }
 .ts { font-family:"Bangers",cursive; font-size:clamp(0.85rem,3vw,1.2rem); color:#90ee90; letter-spacing:4px; }
 .tt-sub { color:#f5e8c0; font-size:clamp(0.8rem,2.8vw,1rem); text-align:center; max-width:280px; line-height:1.5; background:rgba(0,0,0,0.55); padding:0.4rem 0.8rem; border-radius:8px; }
 .tt-sub { color:#f5e8c0; font-size:clamp(0.8rem,2.8vw,1rem); text-align:center; max-width:280px; line-height:1.5; background:rgba(0,0,0,0.55); padding:0.4rem 0.8rem; border-radius:8px; }
@@ -128,8 +154,6 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
 <div class="screen active" id="title-screen">
   <div class="tt">&#x1F5FA; JACK &amp; THE<br>TEMPLE OF SHADOWS</div>
   <div class="ts">JUNGLE ADVENTURE</div>
-  <div class="pills"><span class="pill">AT</span><span class="pill">IN</span><span class="pill">ON</span></div>
-  <div class="hint">Tap <strong style="color:#FFD700">AT</strong>, <strong style="color:#90ee90">IN</strong> or <strong style="color:#aaaaff">ON</strong><br>to fill the gap in the sentence</div>
   <button class="btn-gold" onclick="startWithChart()">START ADVENTURE</button>
   <div id="continue-btn" style="display:none;">
     <button class="btn-gold" style="background:linear-gradient(135deg,#50c850,#208020);" onclick="continueGame()">&#x25B6; CONTINUE GAME</button>
@@ -408,21 +432,37 @@ function checkSavedGame(){
 }
 
 function startWithChart(){
-  var chi = document.getElementById("chi");
-  // Add sticky banner at bottom of chart
-  var banner = document.getElementById("chart-start-banner");
-  if(!banner){
-    banner = document.createElement("div");
-    banner.id = "chart-start-banner";
-    banner.style.cssText = "position:sticky;bottom:0;left:0;right:0;width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;font-family:Bangers,cursive;font-size:clamp(1rem,4vw,1.5rem);letter-spacing:2px;text-align:center;padding:0.7rem 1rem;cursor:pointer;z-index:30;box-shadow:0 -3px 10px rgba(0,0,0,0.4);";
-    banner.innerHTML = "&#x2191;&#x2191; SCROLL UP WHEN READY TO START &#x2191;&#x2191;";
-    banner.onclick = function(){ startGame(); };
-    chi.appendChild(banner);
+  // Copy chart content into overlay if not done yet
+  var inner = document.getElementById("chart-overlay-inner");
+  if(!inner.hasChildNodes() || inner.children.length === 0){
+    var src = document.getElementById("chi");
+    // Clone chart content (skip the sticky hud)
+    for(var i=0;i<src.children.length;i++){
+      var el = src.children[i];
+      if(el.className !== "chud"){
+        inner.appendChild(el.cloneNode(true));
+      }
+    }
   }
-  // Show chart screen
-  showSc("chart-screen");
-  // Scroll to top of chart
-  setTimeout(function(){ chi.scrollTop = 0; }, 50);
+  // Make sure title screen is showing
+  showSc("title-screen");
+  // Slide chart overlay up
+  var overlay = document.getElementById("chart-overlay");
+  overlay.classList.add("open");
+  overlay.scrollTop = 0;
+  
+  // Add touch/drag to close
+  var startY = 0;
+  overlay.addEventListener("touchstart", function(e){ startY = e.touches[0].clientY; }, {passive:true, once:false});
+  overlay.addEventListener("touchend", function(e){
+    var endY = e.changedTouches[0].clientY;
+    if(endY - startY > 80){ closeChartOverlay(); } // dragged down
+  }, {passive:true});
+}
+
+function closeChartOverlay(){
+  var overlay = document.getElementById("chart-overlay");
+  overlay.classList.remove("open");
 }
 
 function startGame(){sc=0;si=0;on=true;attempted=0;document.getElementById("sv").textContent="0";document.getElementById("tv").textContent=TOT;document.getElementById("pf").style.width="0%";document.getElementById("wo").classList.remove("show");showSc("game-screen");loadS(0);}
@@ -481,5 +521,19 @@ function bigFW(){fwC.style.display="block";fwOn=true;var n=0;var iv=setInterval(
 function stopFW(){fwOn=false;fwP=[];if(fwR){cancelAnimationFrame(fwR);fwR=null;}fwX.clearRect(0,0,fwC.width,fwC.height);fwC.style.display="none";}
 checkSavedGame();
 </script>
+
+<!-- CHART OVERLAY - slides up over title screen -->
+<div id="chart-overlay">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;background:rgba(0,0,0,0.6);border-bottom:2px solid #FFD700;border-radius:20px 20px 0 0;">
+    <div style="font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(0.9rem,3.5vw,1.3rem);letter-spacing:2px;">📋 GRAMMAR CHART</div>
+    <div style="font-family:'Bangers',cursive;font-size:clamp(0.7rem,2.5vw,0.95rem);color:rgba(255,215,0,0.7);letter-spacing:1px;">↑ DRAG UP TO HIDE</div>
+  </div>
+  <div style="padding:0 0 1rem 0;" id="chart-overlay-inner">
+    <!-- Chart content copied here by JS -->
+  </div>
+  <div id="chart-start-btn" style="position:sticky;bottom:0;width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;font-family:'Bangers',cursive;font-size:clamp(1rem,4vw,1.5rem);letter-spacing:2px;text-align:center;padding:0.8rem;cursor:pointer;box-shadow:0 -3px 15px rgba(0,0,0,0.5);" onclick="startGame()">
+    ▶ START ADVENTURE NOW
+  </div>
+</div>
 </body>
 </html>
