@@ -420,7 +420,7 @@ var SS = [
 ];
 
 var TOT=0;
-for(var i=0;i<SS.length;i++){var m=SS[i][2].match(/\[[^\]]+\]/g);if(m)TOT+=m.length;}
+for(var i=0;i<SS.length;i++){var m=SS[i][2].match(/\[(?:at|in|on|At|In|On)\]/g);if(m)TOT+=m.length;}
 var sc=0,si=0,on=false,prev=0;
 function showSc(id){var all=document.querySelectorAll(".screen");for(var i=0;i<all.length;i++)all[i].classList.remove("active");document.getElementById(id).classList.add("active");}
 function saveProgress(){
@@ -485,7 +485,7 @@ function adjustChests(){
   }
 }
 function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;attempted++;document.getElementById("sv").textContent=sc;document.getElementById("tv").textContent=attempted;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){var st=document.getElementById("st");st.classList.add("fade");setTimeout(function(){si=nxt;loadS(si);setTimeout(function(){st.classList.remove("fade");},50);},220);},450);}}else{attempted++;document.getElementById("tv").textContent=attempted;g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
-function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,msg,sub;if(score>=100){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=90){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=78){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=62){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=48){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" OUT OF "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;
+function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,msg,sub;if(score>=TOT){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=90){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=78){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=62){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=48){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" OUT OF "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;
   // Build grade ladder
   var grades=[
     {min:0,max:47,emoji:"&#x1F331;",label:"KEEP GOING!"},
@@ -493,7 +493,7 @@ function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,m
     {min:62,max:77,emoji:"&#x2B50;",label:"GREAT WORK!"},
     {min:78,max:89,emoji:"&#x1F3AF;",label:"OUTSTANDING!"},
     {min:90,max:99,emoji:"&#x1F525;",label:"INCREDIBLE!"},
-    {min:100,max:100,emoji:"&#x1F451;",label:"PERFECT!"}
+    {min:100,max:100,emoji:"&#x1F451;",label:"PERFECT! (100/100)"}
   ];
   var ladder=document.getElementById("grade-ladder");
   ladder.innerHTML="";
@@ -594,21 +594,23 @@ function launchQuest(){
 
 var fwC=document.getElementById("fwc"),fwX=fwC.getContext("2d"),fwP=[],fwOn=false,fwR=null,miniFWTimer=null,fwActive=0;
 function rsz(){fwC.width=window.innerWidth;fwC.height=window.innerHeight;}rsz();window.addEventListener("resize",rsz);window.addEventListener("resize",adjustChests);
-function burst(x,y,n){var c=["#FFD700","#FF6B6B","#4ECDC4","#96CEB4","#DDA0DD","#98FB98","#FF69B4"];for(var i=0;i<n;i++){var a=(Math.PI*2/n)*i+Math.random()*0.3,spd=3+Math.random()*5;fwP.push({x:x,y:y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd-1,col:c[i%c.length],life:1,decay:0.024+Math.random()*0.02,sz:2+Math.random()*3});}}
+function burst(x,y,n){var c=["#FFD700","#FF3366","#00FFCC","#FF6600","#CC44FF","#00FF88","#FF69B4","#44AAFF","#FFCC00","#FF4444"];for(var i=0;i<n;i++){var a=(Math.PI*2/n)*i+Math.random()*0.4,spd=2+Math.random()*3.5;fwP.push({x:x,y:y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd-1.5,col:c[i%c.length],life:1,decay:0.028+Math.random()*0.022,sz:1.5+Math.random()*2.5});}}
 function animFW(){fwX.clearRect(0,0,fwC.width,fwC.height);var alive=[];for(var i=0;i<fwP.length;i++){var p=fwP[i];if(p.life>0){p.x+=p.vx;p.y+=p.vy;p.vy+=0.1;p.life-=p.decay;fwX.beginPath();fwX.arc(p.x,p.y,Math.max(0.1,p.sz*p.life),0,Math.PI*2);fwX.fillStyle=p.col;fwX.shadowColor=p.col;fwX.shadowBlur=6;fwX.fill();fwX.shadowBlur=0;alive.push(p);}}fwP=alive;if(fwOn||fwP.length>0){fwR=requestAnimationFrame(animFW);}else{fwC.style.display="none";fwR=null;}}
 function miniFW(){
   fwC.style.display="block";
   fwActive++;
   fwOn=true;
+  // Centre burst above the gap/sentence panel
+  var panel=document.getElementById("sp");
   var cx=window.innerWidth*0.5;
-  var cy=window.innerHeight*0.42;
-  burst(cx+(Math.random()-0.5)*150,cy+(Math.random()-0.5)*100,22);
-  burst(cx+(Math.random()-0.5)*250,cy+(Math.random()-0.5)*120,14);
+  var cy=panel ? panel.getBoundingClientRect().top - 30 : window.innerHeight*0.6;
+  burst(cx,cy,20);
+  burst(cx+(Math.random()-0.5)*60,cy-(Math.random()*40),12);
   if(!fwR){animFW();}
   var myActive=fwActive;
   setTimeout(function(){
     if(fwActive===myActive){fwOn=false;}
-  },700);
+  },650);
 }
 function bigFW(){fwC.style.display="block";fwOn=true;var n=0;var iv=setInterval(function(){burst(Math.random()*fwC.width,Math.random()*fwC.height*0.65,52);n++;if(n>=6)clearInterval(iv);},340);if(!fwR)animFW();}
 function stopFW(){fwOn=false;fwP=[];if(fwR){cancelAnimationFrame(fwR);fwR=null;}fwX.clearRect(0,0,fwC.width,fwC.height);fwC.style.display="none";}
