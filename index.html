@@ -12,6 +12,15 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
 .screen { display:none; position:fixed; inset:0; flex-direction:column; align-items:center; justify-content:center; }
 .screen.active { display:flex; }
 #title-screen { background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url("title.png") center/cover no-repeat; gap:0.9rem; padding:2rem 1.5rem; text-align:center; }
+@keyframes pulse-glow {
+  0% { text-shadow: 0 0 10px #FF9900, 0 0 30px #FF6600, 3px 3px 0 #7a3500, 6px 6px 0 rgba(0,0,0,0.4); }
+  100% { text-shadow: 0 0 20px #FFCC00, 0 0 50px #FF9900, 0 0 80px rgba(255,150,0,0.4), 3px 3px 0 #7a3500, 6px 6px 0 rgba(0,0,0,0.4); }
+}
+@keyframes flicker {
+  0% { filter: drop-shadow(0 0 15px rgba(255,120,0,0.9)) drop-shadow(4px 4px 0 rgba(80,0,0,0.9)) drop-shadow(8px 8px 0 rgba(0,0,0,0.5)); }
+  50% { filter: drop-shadow(0 0 25px rgba(255,80,0,1)) drop-shadow(4px 4px 0 rgba(80,0,0,0.9)) drop-shadow(8px 8px 0 rgba(0,0,0,0.5)); }
+  100% { filter: drop-shadow(0 0 35px rgba(255,200,0,0.9)) drop-shadow(4px 4px 0 rgba(80,0,0,0.9)) drop-shadow(8px 8px 0 rgba(0,0,0,0.5)); }
+}
 .tt { font-family:"Bangers",cursive; font-size:clamp(2rem,8vw,3.5rem); color:#FFD700; text-shadow:3px 3px 0 #5a3800; letter-spacing:2px; line-height:1.1; }
 .tt-sub { color:#f5e8c0; font-size:clamp(0.82rem,3vw,1rem); text-align:center; max-width:280px; line-height:1.5; background:rgba(0,0,0,0.55); padding:0.4rem 0.8rem; border-radius:8px; }
 .ts { font-family:"Bangers",cursive; font-size:clamp(0.85rem,3vw,1.2rem); color:#90ee90; letter-spacing:4px; }
@@ -113,21 +122,6 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
 .wm { font-family:"Bangers",cursive; font-size:clamp(2.2rem,9vw,4.2rem); color:#ff5555; letter-spacing:4px; text-shadow:0 0 22px rgba(255,0,0,0.82); }
 .ws { color:#ffcccc; font-size:clamp(0.9rem,3vw,1.1rem); font-weight:700; }
 #fwc { position:fixed; inset:0; z-index:150; pointer-events:none; display:none; }
-/* CHART OVERLAY */
-#chart-overlay {
-  display:none;
-  position:fixed;
-  top:100%; left:0; right:0; bottom:0;
-  z-index:500;
-  background:linear-gradient(rgba(0,30,0,0.97),rgba(0,20,0,0.99));
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  transition:top 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
-  border-radius:24px 24px 0 0;
-  box-shadow:0 -8px 40px rgba(0,0,0,0.9);
-  pointer-events:none;
-}
-#chart-overlay.open { top:8%; pointer-events:all; }
 #chart-intro-msg {
   display:none;
   position:fixed; top:0; left:0; right:0; bottom:0;
@@ -135,7 +129,31 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   align-items:center; justify-content:center;
   pointer-events:none;
   opacity:0;
-  transition:opacity 0.6s ease;
+  filter:blur(12px);
+  transition:opacity 1.2s ease, filter 1.4s ease;
+}
+#chart-intro-msg.visible {
+  opacity:1;
+  filter:blur(0px);
+}
+/* Chart unroll animation */
+#chart-overlay {
+  display:none;
+  position:fixed;
+  top:0; left:0; right:0; bottom:0;
+  z-index:500;
+  background:linear-gradient(rgba(0,30,0,0.97),rgba(0,20,0,0.99));
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  border-radius:0;
+  box-shadow:0 -8px 40px rgba(0,0,0,0.9);
+  pointer-events:none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 2.5s cubic-bezier(0.4,0,0.2,1);
+}
+#chart-overlay.unrolling {
+  clip-path: inset(0 0 0% 0);
+  pointer-events:all;
 }
 #end-screen { background:linear-gradient(rgba(0,0,0,0.62),rgba(0,0,0,0.62)),url("scene12.jpg") center/cover no-repeat; gap:1rem; text-align:center; padding:2rem 1.5rem; }
 .etr { font-size:clamp(3rem,10vw,5rem); animation:bnc 2s ease-in-out infinite; }
@@ -146,9 +164,31 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
 </head>
 <body>
 <div class="screen active" id="title-screen">
-  <div class="tt" style="line-height:1.2;">
-    <span style="color:#FFE44D;text-shadow:3px 3px 0 #8B4500,0 0 25px rgba(255,180,0,0.9);">&#x1F5FA;&#xFE0F; JACK &amp; THE</span><br>
-    <span style="color:#FF6600;text-shadow:4px 4px 0 #5a0000,0 0 30px rgba(255,100,0,0.8),0 0 60px rgba(255,50,0,0.4);">TEMPLE </span><span style="color:#FFD700;text-shadow:4px 4px 0 #5a3800,0 0 25px rgba(255,200,0,0.7);">OF </span><span style="color:#FF2200;text-shadow:4px 4px 0 #5a0000,0 0 35px rgba(255,0,0,0.7);">SHADOWS</span>
+  <div class="tt" style="line-height:1.1;letter-spacing:3px;">
+    <span style="
+      display:block;
+      font-size:clamp(1.8rem,7vw,3rem);
+      color:#FFE566;
+      text-shadow:
+        0 0 10px #FF9900,
+        0 0 30px #FF6600,
+        3px 3px 0 #7a3500,
+        6px 6px 0 rgba(0,0,0,0.4);
+      animation:pulse-glow 2s ease-in-out infinite alternate;
+    ">&#x1F5FA;&#xFE0F; JACK &amp; THE</span>
+    <span style="
+      display:block;
+      font-size:clamp(2.4rem,10vw,4.2rem);
+      background:linear-gradient(180deg,#FF4400 0%,#FF9900 40%,#FFD700 70%,#FF6600 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      filter:
+        drop-shadow(0 0 15px rgba(255,120,0,0.9))
+        drop-shadow(4px 4px 0 rgba(80,0,0,0.9))
+        drop-shadow(8px 8px 0 rgba(0,0,0,0.5));
+      animation:flicker 3s ease-in-out infinite alternate;
+    ">TEMPLE OF<br>SHADOWS</span>
   </div>
   <div class="ts" style="color:#7FFF7F;text-shadow:0 0 12px rgba(0,255,0,0.5),1px 1px 0 #004400;">&#x1F33F; A PREPOSITIONS ADVENTURE &#x1F33F;</div>
   <button class="btn-gold" onclick="startWithChart()">&#x25B6; START ADVENTURE</button>
@@ -212,7 +252,7 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
     <div class="cs sin"><div class="csh"><div class="cbge">IN</div><div>IN + Enclosed Space or Building</div></div><div class="csb"><div class="ce">The car is <em>in</em> the garage.</div><div class="ce">Children are <em>in</em> the classroom.</div></div></div>
     <div class="cs sin"><div class="csh"><div class="cbge">IN</div><div>IN + Large Area (City, Country, Region)</div></div><div class="csb"><div class="ce">Jack is <em>in</em> the tent. We live <em>in</em> Paris.</div><div class="ce">Opera House is <em>in</em> Australia. Jack is <em>in</em> the Amazon.</div></div></div>
     <div class="ctp"><span>Days and Dates - ON | Months, Seasons, Years - IN | Times and Holidays - AT</span></div>
-    <div class="ctp"><span>Jack hides IN a cave, ON a cliff, AT midnight!</span></div>
+    <div class="ctp"><span>Jack sleeps IN a tent, ON a hill, AT midnight!</span></div>
   </div>
 </div>
 <div class="screen" id="inst-screen">
@@ -477,46 +517,79 @@ function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,m
 }
 // CHART OVERLAY FUNCTIONS
 var chartOverlayReady = false;
-function startWithChart(){
-  showSc("title-screen");
-  // Show intro message
-  var intro = document.getElementById("chart-intro-msg");
-  if(intro){ intro.style.display="flex"; setTimeout(function(){ intro.style.opacity="1"; },50); }
-  // Populate overlay once
-  if(!chartOverlayReady){
-    chartOverlayReady = true;
-    var inner = document.getElementById("chart-overlay-inner");
-    var src = document.getElementById("chi");
-    if(src && inner){
-      for(var i=0;i<src.children.length;i++){
-        var el=src.children[i];
-        if(!el.classList.contains("chud")) inner.appendChild(el.cloneNode(true));
-      }
+
+function populateChartOverlay(){
+  if(chartOverlayReady) return;
+  chartOverlayReady = true;
+  var inner = document.getElementById("chart-overlay-inner");
+  var src = document.getElementById("chi");
+  if(src && inner){
+    for(var i=0;i<src.children.length;i++){
+      var el=src.children[i];
+      if(!el.classList.contains("chud")) inner.appendChild(el.cloneNode(true));
     }
   }
-  // After 3s slide chart up, fade intro
-  setTimeout(function(){
-    var overlay=document.getElementById("chart-overlay");
-    if(overlay){ overlay.style.display="block"; overlay.classList.add("open"); }
-    setTimeout(function(){
-      if(intro){ intro.style.opacity="0"; setTimeout(function(){ intro.style.display="none"; },600); }
-    },800);
-  },3000);
-  // Drag to close
-  var overlay2=document.getElementById("chart-overlay");
-  if(overlay2){
-    var sy=0;
-    overlay2.ontouchstart=function(e){ sy=e.touches[0].clientY; };
-    overlay2.ontouchend=function(e){
-      if(e.changedTouches[0].clientY - sy > 60) closeChartOverlay();
-    };
-  }
 }
+
+function startWithChart(){
+  showSc("title-screen");
+  populateChartOverlay();
+  var intro = document.getElementById("chart-intro-msg");
+  var overlay = document.getElementById("chart-overlay");
+
+  // Step 1: After 1s, fade intro message IN with blur-to-focus effect
+  setTimeout(function(){
+    if(intro){
+      intro.style.display="flex";
+      setTimeout(function(){ intro.classList.add("visible"); }, 50);
+    }
+  }, 800);
+
+  // Step 2: After 4.5s reading time, fade intro OUT and start chart unroll
+  setTimeout(function(){
+    if(intro){ intro.classList.remove("visible"); }
+    // Step 3: Show overlay and start unroll animation
+    setTimeout(function(){
+      if(intro){ intro.style.display="none"; }
+      if(overlay){
+        overlay.style.display="block";
+        overlay.scrollTop=0;
+        setTimeout(function(){ overlay.classList.add("unrolling"); }, 50);
+      }
+    }, 1200);
+  }, 4500);
+}
+
 function closeChartOverlay(){
   var o=document.getElementById("chart-overlay");
-  if(o){ o.classList.remove("open"); setTimeout(function(){ o.style.display="none"; },700); }
+  if(o){
+    o.classList.remove("unrolling");
+    setTimeout(function(){ o.style.display="none"; o.style.clipPath=""; }, 600);
+  }
   var intro=document.getElementById("chart-intro-msg");
-  if(intro){ intro.style.opacity="0"; setTimeout(function(){ intro.style.display="none"; },600); }
+  if(intro){ intro.classList.remove("visible"); setTimeout(function(){ intro.style.display="none"; },600); }
+}
+
+function launchQuest(){
+  // Chart bursts into particles then game starts
+  var overlay = document.getElementById("chart-overlay");
+  var btn = document.getElementById("quest-btn");
+  if(btn){ btn.textContent="⚡ LAUNCHING..."; btn.style.background="rgba(255,100,0,0.9)"; }
+  
+  // Quick burst fireworks effect on overlay
+  if(overlay){
+    overlay.style.transition="opacity 0.5s ease, transform 0.5s ease";
+    overlay.style.opacity="0";
+    overlay.style.transform="scale(1.05)";
+  }
+  
+  setTimeout(function(){
+    closeChartOverlay();
+    if(overlay){ overlay.style.transform=""; overlay.style.opacity=""; }
+    startGame();
+    // Big fireworks on game start
+    setTimeout(function(){ bigFW(); setTimeout(stopFW, 3000); }, 300);
+  }, 500);
 }
 
 var fwC=document.getElementById("fwc"),fwX=fwC.getContext("2d"),fwP=[],fwOn=false,fwR=null,miniFWTimer=null;
@@ -541,18 +614,22 @@ checkSavedGame();
 </script>
 
 <div id="chart-intro-msg">
-  <div style="background:rgba(0,0,0,0.88);border:2px solid rgba(255,215,0,0.7);border-radius:20px;padding:1.5rem 2rem;max-width:300px;text-align:center;margin:0 1rem;">
-    <div style="font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(1.1rem,4.5vw,1.5rem);letter-spacing:2px;margin-bottom:0.6rem;">&#x1F4DA; A LITTLE HELP...</div>
-    <div style="color:#f5e8c0;font-family:'Nunito',sans-serif;font-size:clamp(0.85rem,3.2vw,1.05rem);font-weight:700;line-height:1.7;">Here is some help if you need it before you begin your adventure with Jack!</div>
+  <div style="background:rgba(0,20,0,0.92);border:2px solid rgba(255,215,0,0.8);border-radius:20px;padding:1.8rem 2rem;max-width:320px;text-align:center;margin:0 1.5rem;box-shadow:0 0 40px rgba(0,0,0,0.8);">
+    <div style="font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(1.2rem,5vw,1.6rem);letter-spacing:2px;margin-bottom:0.8rem;text-shadow:0 0 15px rgba(255,200,0,0.6);">&#x1F4DA; A LITTLE HELP...</div>
+    <div style="color:#f5e8c0;font-family:'Nunito',sans-serif;font-size:clamp(0.88rem,3.2vw,1.05rem);font-weight:700;line-height:1.8;">Here is some help if you need it before you begin your adventure with Jack!</div>
+    <div style="margin-top:0.8rem;color:rgba(255,215,0,0.6);font-family:'Bangers',cursive;font-size:clamp(0.75rem,2.8vw,0.95rem);letter-spacing:1px;">The grammar chart will appear shortly...</div>
   </div>
 </div>
 <div id="chart-overlay">
-  <div style="padding:0.6rem 1rem 0.4rem;background:rgba(0,0,0,0.8);border-bottom:2px solid rgba(255,215,0,0.5);border-radius:24px 24px 0 0;text-align:center;">
-    <div style="font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(0.9rem,3.5vw,1.2rem);letter-spacing:2px;">&#x1F4CB; GRAMMAR CHART</div>
+  <div style="padding:0.5rem 1rem 0.4rem;background:rgba(0,0,0,0.85);border-bottom:2px solid rgba(255,215,0,0.4);text-align:center;position:sticky;top:0;z-index:10;">
+    <div style="font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(0.9rem,3.5vw,1.2rem);letter-spacing:3px;">&#x1F4CB; GRAMMAR CHART &nbsp;&#x2022;&nbsp; Scroll to study &nbsp;&#x2022;&nbsp; &#x1F4CB;</div>
   </div>
-  <div id="chart-overlay-inner" style="padding-bottom:5rem;"></div>
-  <div style="position:sticky;bottom:0;width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;font-family:'Bangers',cursive;font-size:clamp(0.95rem,3.8vw,1.3rem);letter-spacing:2px;text-align:center;padding:0.75rem;cursor:pointer;box-shadow:0 -4px 20px rgba(0,0,0,0.6);" onclick="startGame()">
-    &#x2191; DRAG UP TO BEGIN YOUR ADVENTURE &#x2191;
+  <div id="chart-overlay-inner" style="padding-bottom:1rem;"></div>
+  <div style="padding:1rem;text-align:center;background:rgba(0,0,0,0.5);">
+    <button id="quest-btn" onclick="launchQuest()" style="font-family:'Bangers',cursive;font-size:clamp(1.2rem,5vw,1.8rem);letter-spacing:3px;background:linear-gradient(135deg,#FF4400,#FF9900,#FFD700);color:#1a0000;border:none;padding:0.8rem 2rem;border-radius:40px;cursor:pointer;box-shadow:0 6px 0 #8B2200,0 0 30px rgba(255,100,0,0.6);width:100%;max-width:380px;">
+      &#x26A1; START YOUR QUEST &#x26A1;
+    </button>
+    <div style="font-family:'Bangers',cursive;color:rgba(255,215,0,0.5);font-size:clamp(0.7rem,2.5vw,0.9rem);letter-spacing:2px;margin-top:0.5rem;">↕ SCROLL TO STUDY THE CHART ↕</div>
   </div>
 </div>
 </body>
