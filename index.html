@@ -202,7 +202,7 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   <div id="bg"></div>
   <div id="hud">
     <span class="ht">JACK</span>
-    <span class="hs">&#x2705;<span id="sv">0</span> / <span id="tv">0</span></span>
+    <span class="hs">&#x2705;<span id="sv">0</span>/<span id="tv">0</span> <span style="color:rgba(255,215,0,0.5);font-size:0.8em;">GO FOR 100</span></span>
     <button class="bh bgg" onclick="openChart(1)">CHART</button>
     <button class="bh bbl" onclick="openInst(1)">HELP</button>
     <button class="bh br" onclick="restartGame()">RESTART</button>
@@ -468,7 +468,7 @@ function checkSavedGame(){
   }
 }
 
-function startGame(){sc=0;si=0;on=true;document.getElementById("sv").textContent="0";document.getElementById("tv").textContent=TOT;document.getElementById("pf").style.width="0%";document.getElementById("wo").classList.remove("show");showSc("game-screen");loadS(0);}
+function startGame(){sc=0;si=0;on=true;attempted=0;closeChartOverlay();document.getElementById("sv").textContent="0";document.getElementById("tv").textContent="0";document.getElementById("pf").style.width="0%";document.getElementById("wo").classList.remove("show");showSc("game-screen");loadS(0);}
 function restartGame(){stopFW();on=false;clearProgress();document.getElementById("wo").classList.remove("show");setTimeout(startGame,80);}
 function openChart(f){prev=f;showSc("chart-screen");document.getElementById("chi").scrollTop=0;}
 function closeChart(){showSc(prev===0?"title-screen":"game-screen");}
@@ -484,8 +484,8 @@ function adjustChests(){
     chests.style.bottom=(h+5)+"px";
   }
 }
-function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;document.getElementById("sv").textContent=sc;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){var st=document.getElementById("st");st.classList.add("fade");setTimeout(function(){si=nxt;loadS(si);setTimeout(function(){st.classList.remove("fade");},50);},220);},450);}}else{g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
-function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,msg,sub;if(score>=100){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=90){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=78){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=62){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=48){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" / "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;
+function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;attempted++;document.getElementById("sv").textContent=sc;document.getElementById("tv").textContent=attempted;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){var st=document.getElementById("st");st.classList.add("fade");setTimeout(function(){si=nxt;loadS(si);setTimeout(function(){st.classList.remove("fade");},50);},220);},450);}}else{attempted++;document.getElementById("tv").textContent=attempted;g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
+function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,msg,sub;if(score>=100){emoji="&#x1F451;";grade="PERFECT!";msg="UNBELIEVABLE! Every answer correct!";sub="You are a Preposition CHAMPION!";}else if(score>=90){emoji="&#x1F525;";grade="INCREDIBLE!";msg="Amazing! Nearly perfect. One more try for victory!";sub="Just "+remaining+" gap"+(remaining===1?"":"s")+" away from perfection!";}else if(score>=78){emoji="&#x1F3AF;";grade="OUTSTANDING!";msg="Fantastic! You have mastered most prepositions!";sub="Can you close the gap? "+remaining+" more to go!";}else if(score>=62){emoji="&#x2B50;";grade="GREAT WORK!";msg="Excellent! You really understand prepositions now!";sub="Play again and get even closer to perfect!";}else if(score>=48){emoji="&#x1F44D;";grade="GOOD EFFORT!";msg="Well done! You are learning fast. Aim higher!";sub="Every game makes you stronger!";}else{emoji="&#x1F331;";grade="KEEP GOING!";msg="Every adventure starts somewhere. Keep exploring!";sub="Play again — the temple is waiting!";}document.getElementById("end-emoji").innerHTML=emoji;document.getElementById("end-grade").textContent=grade;document.getElementById("end-score").textContent="YOU SCORED "+score+" OUT OF "+total;document.getElementById("end-remain").textContent=remaining===0?"ABSOLUTE PERFECTION!":remaining+" gap"+(remaining===1?"":"s")+" away from perfect";document.getElementById("end-msg").textContent=msg;document.getElementById("end-sub").textContent=sub;
   // Build grade ladder
   var grades=[
     {min:0,max:47,emoji:"&#x1F331;",label:"KEEP GOING!"},
@@ -509,9 +509,9 @@ function buildEndScreen(score){var total=TOT,remaining=total-score,emoji,grade,m
     var bg=isCurrent?"rgba(255,215,0,0.35)":isAchieved?"rgba(80,200,80,0.15)":"rgba(255,255,255,0.04)";
     var border=isCurrent?"3px solid #FFD700":isAchieved?"1px solid #50c850":"1px solid rgba(255,255,255,0.08)";
     var txtCol=isCurrent?"#FFD700":isAchieved?"#90ee90":"rgba(255,255,255,0.4)";
-    row.style.cssText="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.6rem;margin-bottom:0.25rem;border-radius:8px;background:"+bg+";border:"+border+";";
+    row.style.cssText="display:flex;align-items:center;gap:0.5rem;padding:"+(isCurrent?"0.55rem":"0.3rem")+" 0.6rem;margin-bottom:0.3rem;border-radius:10px;background:"+bg+";border:"+border+";"+(isCurrent?"transform:scale(1.03);box-shadow:0 4px 20px rgba(255,215,0,0.4);":"");
     var scoreRange=gr.max===100?"100 = PERFECT":gr.min+"-"+gr.max+" correct";
-    row.innerHTML="<span style='font-size:1.1rem'>"+gr.emoji+"</span><span style='font-family:Bangers,cursive;color:"+txtCol+";font-size:clamp(0.75rem,2.8vw,0.95rem);letter-spacing:1px;flex:1'>"+gr.label+"</span><span style='font-family:Nunito,sans-serif;font-size:clamp(0.65rem,2.2vw,0.8rem);color:"+txtCol+"'>"+scoreRange+"</span>"+(isCurrent?"<span style='font-size:0.8rem'>&#x261C;</span>":"");
+    var labelSize=isCurrent?"clamp(1rem,3.8vw,1.2rem)":"clamp(0.75rem,2.8vw,0.95rem)";var scoreSize=isCurrent?"clamp(0.8rem,2.8vw,1rem)":"clamp(0.65rem,2.2vw,0.8rem)";var bold=isCurrent?"font-weight:900;text-shadow:0 0 10px currentColor;":"";row.innerHTML="<span style='font-size:"+(isCurrent?"1.4rem":"1.1rem")+"'>"+gr.emoji+"</span><span style='font-family:Bangers,cursive;color:"+txtCol+";font-size:"+labelSize+";letter-spacing:1px;flex:1;"+bold+"'>"+gr.label+"</span><span style='font-family:Nunito,sans-serif;font-size:"+scoreSize+";color:"+txtCol+";"+bold+"'>"+scoreRange+"</span>"+(isCurrent?"<span style='font-size:1rem'>&#x2B05;</span>":"");
     ladder.appendChild(row);
   }
 }
@@ -592,21 +592,23 @@ function launchQuest(){
   }, 500);
 }
 
-var fwC=document.getElementById("fwc"),fwX=fwC.getContext("2d"),fwP=[],fwOn=false,fwR=null,miniFWTimer=null;
+var fwC=document.getElementById("fwc"),fwX=fwC.getContext("2d"),fwP=[],fwOn=false,fwR=null,miniFWTimer=null,fwActive=0;
 function rsz(){fwC.width=window.innerWidth;fwC.height=window.innerHeight;}rsz();window.addEventListener("resize",rsz);window.addEventListener("resize",adjustChests);
 function burst(x,y,n){var c=["#FFD700","#FF6B6B","#4ECDC4","#96CEB4","#DDA0DD","#98FB98","#FF69B4"];for(var i=0;i<n;i++){var a=(Math.PI*2/n)*i+Math.random()*0.3,spd=3+Math.random()*5;fwP.push({x:x,y:y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd-1,col:c[i%c.length],life:1,decay:0.024+Math.random()*0.02,sz:2+Math.random()*3});}}
-function animFW(){fwX.clearRect(0,0,fwC.width,fwC.height);var alive=[];for(var i=0;i<fwP.length;i++){var p=fwP[i];if(p.life>0){p.x+=p.vx;p.y+=p.vy;p.vy+=0.1;p.life-=p.decay;fwX.beginPath();fwX.arc(p.x,p.y,p.sz*p.life,0,Math.PI*2);fwX.fillStyle=p.col;fwX.shadowColor=p.col;fwX.shadowBlur=5;fwX.fill();fwX.shadowBlur=0;alive.push(p);}}fwP=alive;if(fwOn||fwP.length>0){fwR=requestAnimationFrame(animFW);}else{fwC.style.display="none";fwR=null;}}
+function animFW(){fwX.clearRect(0,0,fwC.width,fwC.height);var alive=[];for(var i=0;i<fwP.length;i++){var p=fwP[i];if(p.life>0){p.x+=p.vx;p.y+=p.vy;p.vy+=0.1;p.life-=p.decay;fwX.beginPath();fwX.arc(p.x,p.y,Math.max(0.1,p.sz*p.life),0,Math.PI*2);fwX.fillStyle=p.col;fwX.shadowColor=p.col;fwX.shadowBlur=6;fwX.fill();fwX.shadowBlur=0;alive.push(p);}}fwP=alive;if(fwOn||fwP.length>0){fwR=requestAnimationFrame(animFW);}else{fwC.style.display="none";fwR=null;}}
 function miniFW(){
   fwC.style.display="block";
+  fwActive++;
   fwOn=true;
-  // Burst in middle of screen, slightly above center
   var cx=window.innerWidth*0.5;
-  var cy=window.innerHeight*0.45;
-  burst(cx+(Math.random()-0.5)*120,cy+(Math.random()-0.5)*80,20);
-  burst(cx+(Math.random()-0.5)*200,cy+(Math.random()-0.5)*100,12);
+  var cy=window.innerHeight*0.42;
+  burst(cx+(Math.random()-0.5)*150,cy+(Math.random()-0.5)*100,22);
+  burst(cx+(Math.random()-0.5)*250,cy+(Math.random()-0.5)*120,14);
   if(!fwR){animFW();}
-  if(miniFWTimer){clearTimeout(miniFWTimer);}
-  miniFWTimer=setTimeout(function(){fwOn=false;},600);
+  var myActive=fwActive;
+  setTimeout(function(){
+    if(fwActive===myActive){fwOn=false;}
+  },700);
 }
 function bigFW(){fwC.style.display="block";fwOn=true;var n=0;var iv=setInterval(function(){burst(Math.random()*fwC.width,Math.random()*fwC.height*0.65,52);n++;if(n>=6)clearInterval(iv);},340);if(!fwR)animFW();}
 function stopFW(){fwOn=false;fwP=[];if(fwR){cancelAnimationFrame(fwR);fwR=null;}fwX.clearRect(0,0,fwC.width,fwC.height);fwC.style.display="none";}
