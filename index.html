@@ -559,9 +559,16 @@ function startWithChart(){
                 requestAnimationFrame(scrollUp);
               } else {
                 overlay.scrollTop = 0;
+                var topBtn=document.getElementById("chart-top-btn");
+                if(topBtn){topBtn.style.display="block";}
               }
             }
             requestAnimationFrame(scrollUp);
+            // Show top button when scroll reaches top
+            setTimeout(function(){
+              var topBtn = document.getElementById("chart-top-btn");
+              if(topBtn){ topBtn.style.display="block"; }
+            }, duration + 200);
           }, 2900);
         }, 50);
       }
@@ -573,7 +580,15 @@ function closeChartOverlay(){
   var o=document.getElementById("chart-overlay");
   if(o){
     o.classList.remove("unrolling");
-    setTimeout(function(){ o.style.display="none"; o.style.clipPath=""; }, 600);
+    setTimeout(function(){
+      o.style.display="none";
+      o.style.clipPath="";
+      o.style.opacity="";
+      o.style.transition="";
+      // Reset top button for next time
+      var topBtn=document.getElementById("chart-top-btn");
+      if(topBtn){ topBtn.style.display="none"; }
+    }, 600);
   }
   var intro=document.getElementById("chart-intro-msg");
   if(intro){ intro.classList.remove("visible"); setTimeout(function(){ intro.style.display="none"; },600); }
@@ -629,6 +644,11 @@ checkSavedGame();
 <div id="chart-overlay">
   <div style="padding:0.5rem 1rem 0.4rem;background:rgba(0,0,0,0.85);border-bottom:2px solid rgba(255,215,0,0.4);text-align:center;position:sticky;top:0;z-index:10;">
     <div style="font-family:'Bangers',cursive;color:#FFD700;font-size:clamp(0.9rem,3.5vw,1.2rem);letter-spacing:3px;">&#x1F4CB; GRAMMAR CHART &nbsp;&#x2022;&nbsp; Scroll to study &nbsp;&#x2022;&nbsp; &#x1F4CB;</div>
+  </div>
+  <div id="chart-top-btn" style="display:none;padding:1rem;text-align:center;background:rgba(0,0,0,0.5);border-bottom:1px solid rgba(255,215,0,0.2);">
+    <button onclick="launchQuest()" style="font-family:'Bangers',cursive;font-size:clamp(1.2rem,5vw,1.8rem);letter-spacing:3px;background:linear-gradient(135deg,#FF4400,#FF9900,#FFD700);color:#1a0000;border:none;padding:0.8rem 2rem;border-radius:40px;cursor:pointer;box-shadow:0 6px 0 #8B2200,0 0 30px rgba(255,100,0,0.6);width:100%;max-width:380px;">
+      &#x26A1; START YOUR QUEST &#x26A1;
+    </button>
   </div>
   <div id="chart-overlay-inner" style="padding-bottom:1rem;"></div>
   <div style="padding:1rem;text-align:center;background:rgba(0,0,0,0.5);">
