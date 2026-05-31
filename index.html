@@ -408,7 +408,9 @@ var SS = [
 ["scene12.jpg","SCENE 12 - FREEDOM!","The small plane takes off [at] eight o'clock [in] the morning and climbs high above the jungle."],
 ["scene12.jpg","SCENE 12 - FREEDOM!","As the plane climbs higher, Jack remembers his amazing adventure [in] the past week. At this moment, he knows his life has changed forever."],
 ["scene12.jpg","SCENE 12 - FREEDOM!","The plane lands [in] Lima at midday [on] Friday and Jack feels happy and very proud."],
-["scene12.jpg","SCENE 12 - FREEDOM!","Jack makes himself comfortable as the plane flies home, and the golden statue rests [in] his hands. He thinks about Carlos, the brave guide who became his friend. He remembers the ancient temple, the hidden tunnel, the moment of escape. His heart still beats with the memory of danger and discovery. Jack closes his eyes and smiles and wonders what his next adventure will be."]
+["scene12.jpg","SCENE 12 - FREEDOM!","The plane takes him home and the golden statue rests [in] his hands."],
+["scene12.jpg","SCENE 12 - FREEDOM!","His heart beats at the memory of danger and the thrill of discovery. He closes his eyes, smiles and wonders what his next adventure will be."]
+
 ];
 var TOT=0;
 for(var i=0;i<SS.length;i++){var m=SS[i][2].match(/\[(?:at|in|on|At|In|On)\]/g);if(m)TOT+=m.length;}
@@ -419,6 +421,8 @@ function saveProgress(){
     localStorage.setItem("jack_si",si);
     localStorage.setItem("jack_sc",sc);
     localStorage.setItem("jack_on",on?"1":"0");
+    localStorage.setItem("jack_att",attempted);
+    localStorage.setItem("jack_wc",wrongCount);
   }catch(e){}
 }
 
@@ -428,8 +432,10 @@ function loadProgress(){
     if(saved_on==="1"){
       var saved_si=parseInt(localStorage.getItem("jack_si")||"0");
       var saved_sc=parseInt(localStorage.getItem("jack_sc")||"0");
+      var saved_att=parseInt(localStorage.getItem("jack_att")||"0");
+      var saved_wc=parseInt(localStorage.getItem("jack_wc")||"0");
       if(saved_si>0){
-        return {si:saved_si,sc:saved_sc};
+        return {si:saved_si,sc:saved_sc,att:saved_att,wc:saved_wc};
       }
     }
   }catch(e){}
@@ -444,6 +450,8 @@ function continueGame(){
   var saved=loadProgress();
   if(!saved) return startGame();
   sc=saved.sc; si=saved.si; on=true;
+  attempted=saved.att||saved.sc;
+  wrongCount=saved.wc||0;
   document.getElementById("sv").textContent=sc;
   document.getElementById("tv").textContent=TOT;
   document.getElementById("pf").style.width=(sc/TOT*100)+"%";
@@ -466,7 +474,8 @@ function closeChart(){showSc(prev===0?"title-screen":"game-screen");}
 function openInst(f){prev=f;showSc("inst-screen");document.getElementById("iin").scrollTop=0;showLang(document.querySelector(".ltab.on"));}
 function closeInst(){showSc(prev===0?"title-screen":"game-screen");}
 function showLang(btn){var panels=document.querySelectorAll(".lpn");for(var i=0;i<panels.length;i++)panels[i].classList.remove("on");var tabs=document.querySelectorAll(".ltab");for(var i=0;i<tabs.length;i++)tabs[i].classList.remove("on");var code=btn.getAttribute("data-lang");document.getElementById("lp-"+code).classList.add("on");btn.classList.add("on");}
-function loadS(idx){if(idx>=SS.length){on=false;clearProgress();setTimeout(function(){bigFW();setTimeout(function(){stopFW();buildEndScreen(sc);showSc("end-screen");},3500);},300);return;}var s=SS[idx];document.getElementById("bg").style.backgroundImage="url('"+s[0]+"')";document.getElementById("slbl").textContent=s[1];var box=document.getElementById("st");box.innerHTML="";setTimeout(adjustChests,80);box.classList.remove("fade");var parts=s[2].split(/\[([^\]]+)\]/);var gc=0;for(var i=0;i<parts.length;i++){if(i%2===0){if(parts[i]){var tsp=document.createElement("span");tsp.innerHTML=parts[i];box.appendChild(tsp);}}else{var g=document.createElement("span");g.className="gap";g.id="gap-"+gc;g.setAttribute("data-answer",parts[i].toLowerCase());g.textContent="___";box.appendChild(g);gc++;}}}
+function loadS(idx){if(idx>=SS.length){on=false;clearProgress();setTimeout(function(){bigFW();setTimeout(function(){stopFW();buildEndScreen(sc);showSc("end-screen");},3500);},300);return;}var s=SS[idx];document.getElementById("bg").style.backgroundImage="url('"+s[0]+"')";document.getElementById("slbl").textContent=s[1];var box=document.getElementById("st");box.innerHTML="";setTimeout(adjustChests,80);box.classList.remove("fade");var parts=s[2].split(/\[([^\]]+)\]/);var gc=0;for(var i=0;i<parts.length;i++){if(i%2===0){if(parts[i]){var tsp=document.createElement("span");tsp.innerHTML=parts[i];box.appendChild(tsp);}}else{var g=document.createElement("span");g.className="gap";g.id="gap-"+gc;g.setAttribute("data-answer",parts[i].toLowerCase());g.textContent="___";box.appendChild(g);gc++;}}
+if(gc===0){setTimeout(function(){si=idx+1;loadS(si);adjustChests();},2500);}}
 function adjustChests(){
   var panel=document.getElementById("sp");
   var chests=document.getElementById("chests");
