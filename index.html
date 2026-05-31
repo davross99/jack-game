@@ -148,11 +148,11 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   border-radius:0;
   box-shadow:0 -8px 40px rgba(0,0,0,0.9);
   pointer-events:none;
-  clip-path: inset(0 0 100% 0);
-  transition: clip-path 2.5s cubic-bezier(0.4,0,0.2,1);
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 2.8s cubic-bezier(0.25,0.46,0.45,0.94);
 }
 #chart-overlay.unrolling {
-  clip-path: inset(0 0 0% 0);
+  clip-path: inset(0% 0 0 0);
   pointer-events:all;
 }
 #end-screen { background:linear-gradient(rgba(0,0,0,0.62),rgba(0,0,0,0.62)),url("scene12.jpg") center/cover no-repeat; gap:1rem; text-align:center; padding:2rem 1.5rem; }
@@ -541,8 +541,29 @@ function startWithChart(){
       if(intro){ intro.style.display="none"; }
       if(overlay){
         overlay.style.display="block";
-        overlay.scrollTop=0;
-        setTimeout(function(){ overlay.classList.add("unrolling"); }, 50);
+        // Start from bottom
+        overlay.scrollTop = overlay.scrollHeight;
+        setTimeout(function(){
+          overlay.classList.add("unrolling");
+          // After unroll completes (2.8s), slowly scroll to top so student sees full chart
+          setTimeout(function(){
+            var totalHeight = overlay.scrollHeight;
+            var duration = 4000; // 4 seconds to scroll up
+            var startTime = null;
+            var startScroll = overlay.scrollTop;
+            function scrollUp(timestamp){
+              if(!startTime) startTime = timestamp;
+              var progress = (timestamp - startTime) / duration;
+              if(progress < 1){
+                overlay.scrollTop = startScroll * (1 - progress);
+                requestAnimationFrame(scrollUp);
+              } else {
+                overlay.scrollTop = 0;
+              }
+            }
+            requestAnimationFrame(scrollUp);
+          }, 2900);
+        }, 50);
       }
     }, 1200);
   }, 4500);
@@ -559,25 +580,18 @@ function closeChartOverlay(){
 }
 
 function launchQuest(){
-  // Chart bursts into particles then game starts
   var overlay = document.getElementById("chart-overlay");
   var btn = document.getElementById("quest-btn");
   if(btn){ btn.textContent="⚡ LAUNCHING..."; btn.style.background="rgba(255,100,0,0.9)"; }
-  
-  // Quick burst fireworks effect on overlay
   if(overlay){
-    overlay.style.transition="opacity 0.5s ease, transform 0.5s ease";
+    overlay.style.transition="opacity 0.4s ease";
     overlay.style.opacity="0";
-    overlay.style.transform="scale(1.05)";
   }
-  
   setTimeout(function(){
     closeChartOverlay();
-    if(overlay){ overlay.style.transform=""; overlay.style.opacity=""; }
+    if(overlay){ overlay.style.opacity=""; overlay.style.transition=""; }
     startGame();
-    // Big fireworks on game start
-    setTimeout(function(){ bigFW(); setTimeout(stopFW, 3000); }, 300);
-  }, 500);
+  }, 400);
 }
 
 var fwC=document.getElementById("fwc"),fwX=fwC.getContext("2d"),fwP=[],fwOn=false,fwR=null,miniFWTimer=null,fwActive=0;
