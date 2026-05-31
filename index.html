@@ -412,7 +412,7 @@ var SS = [
 ];
 var TOT=0;
 for(var i=0;i<SS.length;i++){var m=SS[i][2].match(/\[(?:at|in|on|At|In|On)\]/g);if(m)TOT+=m.length;}
-var sc=0,si=0,on=false,prev=0;
+var sc=0,si=0,on=false,prev=0,attempted=0,wrongCount=0;
 function showSc(id){var all=document.querySelectorAll(".screen");for(var i=0;i<all.length;i++)all[i].classList.remove("active");document.getElementById(id).classList.add("active");}
 function saveProgress(){
   try{
