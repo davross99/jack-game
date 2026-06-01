@@ -330,7 +330,7 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   <div style="text-align:center;width:100%;">
     <div class="etr" id="end-emoji">&#x1F3C6;</div>
     <div class="eti" id="end-grade">ADVENTURE COMPLETE!</div>
-    <div class="esc" id="end-score">YOU SCORED 0 / 94</div>
+    <div class="esc" id="end-score"></div>
     <div id="end-remain" style="font-family:'Bangers',cursive;font-size:clamp(0.85rem,3vw,1.1rem);color:#FFD700;margin-bottom:0.3rem;"></div>
     <div class="emg" id="end-msg" style="margin-bottom:0.3rem;"></div>
     <div id="end-sub" style="color:#90ee90;font-family:'Bangers',cursive;font-size:clamp(0.78rem,2.8vw,1rem);text-align:center;max-width:320px;padding:0 0.5rem;margin:0 auto 0.8rem;"></div>
@@ -406,7 +406,7 @@ var SS = [
 ["scene12.jpg","SCENE 12 - FREEDOM!","[On] Thursday evening Jack and Carlos rest happily [in] a small village near the airstrip."],
 ["scene12.jpg","SCENE 12 - FREEDOM!","[On] Friday morning Jack arrives [at] the airstrip early and says a warm goodbye to Carlos."],
 ["scene12.jpg","SCENE 12 - FREEDOM!","The small plane takes off [at] eight o'clock [in] the morning and climbs high above the jungle."],
-["scene12.jpg","SCENE 12 - FREEDOM!","As the plane climbs higher, Jack remembers his amazing adventure [in] the past week. At this moment, he knows his life has changed forever."],
+["scene12.jpg","SCENE 12 - FREEDOM!","As the plane climbs higher, Jack remembers his amazing adventure [in] Peru. At this moment, he knows his life has changed forever."],
 ["scene12.jpg","SCENE 12 - FREEDOM!","The plane lands [in] Lima at midday [on] Friday and Jack feels happy and very proud."],
 ["scene12.jpg","SCENE 12 - FREEDOM!","The plane takes him home and the golden statue rests [in] his hands."],
 ["scene12.jpg","SCENE 12 - FREEDOM!","His heart beats faster remembering the danger and the thrill of discovery. He then closes his eyes, smiles and wonders what his next adventure will be."]
@@ -414,6 +414,43 @@ var SS = [
 var TOT=0;
 for(var i=0;i<SS.length;i++){var m=SS[i][2].match(/\[(?:at|in|on|At|In|On)\]/g);if(m)TOT+=m.length;}
 var sc=0,si=0,on=false,prev=0,attempted=0,wrongCount=0;
+var audioCtx=null;
+function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+
+function playCorrect(){
+  try{
+    var ctx=getAudioCtx();
+    var t=ctx.currentTime;
+    var osc=ctx.createOscillator();
+    var gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type="sine";
+    osc.frequency.setValueAtTime(600,t);
+    osc.frequency.setValueAtTime(900,t+0.08);
+    osc.frequency.setValueAtTime(1200,t+0.16);
+    gain.gain.setValueAtTime(0.3,t);
+    gain.gain.exponentialRampToValueAtTime(0.001,t+0.4);
+    osc.start(t);osc.stop(t+0.4);
+  }catch(e){}
+}
+
+function playWrong(){
+  try{
+    var ctx=getAudioCtx();
+    var t=ctx.currentTime;
+    var osc=ctx.createOscillator();
+    var gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type="sawtooth";
+    osc.frequency.setValueAtTime(300,t);
+    osc.frequency.setValueAtTime(200,t+0.15);
+    osc.frequency.setValueAtTime(150,t+0.3);
+    gain.gain.setValueAtTime(0.2,t);
+    gain.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+    osc.start(t);osc.stop(t+0.5);
+  }catch(e){}
+}
+
 function showSc(id){var all=document.querySelectorAll(".screen");for(var i=0;i<all.length;i++)all[i].classList.remove("active");document.getElementById(id).classList.add("active");}
 function saveProgress(){
   try{
@@ -483,7 +520,7 @@ function adjustChests(){
     if(h>0) chests.style.bottom=(h+5)+"px";
   }
 }
-function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;attempted++;document.getElementById("sv").textContent=sc;document.getElementById("tv").textContent=attempted;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){si=nxt;loadS(si);adjustChests();},500);}}else{if(!g.getAttribute("data-had-wrong")){wrongCount++;attempted++;g.setAttribute("data-had-wrong","1");document.getElementById("tv").textContent=attempted;}g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
+function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();playCorrect();sc++;attempted++;document.getElementById("sv").textContent=sc;document.getElementById("tv").textContent=attempted;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){si=nxt;loadS(si);adjustChests();},500);}}else{if(!g.getAttribute("data-had-wrong")){wrongCount++;attempted++;g.setAttribute("data-had-wrong","1");document.getElementById("tv").textContent=attempted;}playWrong();g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
 function buildEndScreen(score){
   var total=TOT;
   var emoji,grade;
