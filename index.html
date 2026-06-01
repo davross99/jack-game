@@ -421,16 +421,18 @@ function playCorrect(){
   try{
     var ctx=getAudioCtx();
     var t=ctx.currentTime;
-    var osc=ctx.createOscillator();
-    var gain=ctx.createGain();
-    osc.connect(gain);gain.connect(ctx.destination);
-    osc.type="sine";
-    osc.frequency.setValueAtTime(600,t);
-    osc.frequency.setValueAtTime(900,t+0.08);
-    osc.frequency.setValueAtTime(1200,t+0.16);
-    gain.gain.setValueAtTime(0.3,t);
-    gain.gain.exponentialRampToValueAtTime(0.001,t+0.4);
-    osc.start(t);osc.stop(t+0.4);
+    // Sparkle pop - two quick bright oscillators
+    [800,1200,1600].forEach(function(freq,i){
+      var osc=ctx.createOscillator();
+      var gain=ctx.createGain();
+      osc.connect(gain);gain.connect(ctx.destination);
+      osc.type="sine";
+      osc.frequency.setValueAtTime(freq,t+i*0.06);
+      gain.gain.setValueAtTime(0.25,t+i*0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001,t+i*0.06+0.12);
+      osc.start(t+i*0.06);
+      osc.stop(t+i*0.06+0.12);
+    });
   }catch(e){}
 }
 
@@ -485,11 +487,13 @@ function clearProgress(){
 function continueGame(){
   var saved=loadProgress();
   if(!saved) return startGame();
-  sc=saved.sc; si=saved.si; on=true; attempted=saved.att||saved.sc; wrongCount=saved.wc||0;
+  sc=saved.sc;
+  si=saved.si;
+  on=true;
   attempted=saved.att||saved.sc;
   wrongCount=saved.wc||0;
   document.getElementById("sv").textContent=sc;
-  document.getElementById("tv").textContent=TOT;
+  document.getElementById("tv").textContent=attempted;
   document.getElementById("pf").style.width=(sc/TOT*100)+"%";
   document.getElementById("wo").classList.remove("show");
   showSc("game-screen");
