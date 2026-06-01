@@ -409,8 +409,7 @@ var SS = [
 ["scene12.jpg","SCENE 12 - FREEDOM!","As the plane climbs higher, Jack remembers his amazing adventure [in] the past week. At this moment, he knows his life has changed forever."],
 ["scene12.jpg","SCENE 12 - FREEDOM!","The plane lands [in] Lima at midday [on] Friday and Jack feels happy and very proud."],
 ["scene12.jpg","SCENE 12 - FREEDOM!","The plane takes him home and the golden statue rests [in] his hands."],
-["scene12.jpg","SCENE 12 - FREEDOM!","His heart beats at the memory of danger and the thrill of discovery. He closes his eyes, smiles and wonders what his next adventure will be."]
-
+["scene12.jpg","SCENE 12 - FREEDOM!","His heart beats faster remembering the danger and the thrill of discovery. He then closes his eyes, smiles and wonders what his next adventure will be."]
 ];
 var TOT=0;
 for(var i=0;i<SS.length;i++){var m=SS[i][2].match(/\[(?:at|in|on|At|In|On)\]/g);if(m)TOT+=m.length;}
@@ -449,7 +448,7 @@ function clearProgress(){
 function continueGame(){
   var saved=loadProgress();
   if(!saved) return startGame();
-  sc=saved.sc; si=saved.si; on=true;
+  sc=saved.sc; si=saved.si; on=true; attempted=saved.att||saved.sc; wrongCount=saved.wc||0;
   attempted=saved.att||saved.sc;
   wrongCount=saved.wc||0;
   document.getElementById("sv").textContent=sc;
@@ -484,12 +483,10 @@ function adjustChests(){
     if(h>0) chests.style.bottom=(h+5)+"px";
   }
 }
-function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;attempted++;document.getElementById("sv").textContent=sc;document.getElementById("tv").textContent=attempted;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){si=nxt;loadS(si);adjustChests();},500);}}else{attempted++;if(!g.getAttribute("data-had-wrong")){wrongCount++;g.setAttribute("data-had-wrong","1");}document.getElementById("tv").textContent=attempted;g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
+function pick(idx){if(!on)return;var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;attempted++;document.getElementById("sv").textContent=sc;document.getElementById("tv").textContent=attempted;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){si=nxt;loadS(si);adjustChests();},500);}}else{if(!g.getAttribute("data-had-wrong")){wrongCount++;attempted++;g.setAttribute("data-had-wrong","1");document.getElementById("tv").textContent=attempted;}g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");},900);}}
 function buildEndScreen(score){
   var total=TOT;
   var emoji,grade;
-
-  // New grade bands
   if(score>=total&&wrongCount===0){emoji="&#x1F451;";grade="PERFECT!";}
   else if(score>=90){emoji="&#x1F48E;";grade="BRILLIANT!";}
   else if(score>=80){emoji="&#x1F525;";grade="INCREDIBLE!";}
@@ -497,15 +494,12 @@ function buildEndScreen(score){
   else if(score>=60){emoji="&#x2B50;";grade="GREAT WORK!";}
   else if(score>=50){emoji="&#x1F44D;";grade="GOOD EFFORT!";}
   else{emoji="&#x1F331;";grade="KEEP GOING!";}
-
   document.getElementById("end-emoji").innerHTML=emoji;
   document.getElementById("end-grade").textContent=grade;
   document.getElementById("end-score").textContent="YOU SCORED "+score+" OUT OF "+total;
   document.getElementById("end-remain").textContent="";
   document.getElementById("end-msg").textContent="";
   document.getElementById("end-sub").textContent="";
-
-  // Grade ladder
   var grades=[
     {min:0,max:49,emoji:"&#x1F331;",label:"KEEP GOING!"},
     {min:50,max:59,emoji:"&#x1F44D;",label:"GOOD EFFORT!"},
