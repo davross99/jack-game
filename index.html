@@ -211,19 +211,19 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   <div id="slbl">SCENE 1</div>
   <div id="spc"></div>
   <div id="chests">
-    <div class="chest" onclick="pick(0)">
+    <div class="chest" onclick="initAudio();pick(0)">
       <div class="cr"></div>
       <div class="cl"></div><div class="cgl"></div>
       <div class="cb" style="position:relative;"><div class="cmb"></div><div class="ccp"></div><div class="cin"></div></div>
       <div class="cw" style="color:#ffdd99;">AT</div>
     </div>
-    <div class="chest" onclick="pick(1)">
+    <div class="chest" onclick="initAudio();pick(1)">
       <div class="cr"></div>
       <div class="cl"></div><div class="cgl"></div>
       <div class="cb" style="position:relative;"><div class="cmb"></div><div class="ccp"></div><div class="cin"></div></div>
       <div class="cw" style="color:#99ffbb;">IN</div>
     </div>
-    <div class="chest" onclick="pick(2)">
+    <div class="chest" onclick="initAudio();pick(2)">
       <div class="cr"></div>
       <div class="cl"></div><div class="cgl"></div>
       <div class="cb" style="position:relative;"><div class="cmb"></div><div class="ccp"></div><div class="cin"></div></div>
@@ -415,36 +415,59 @@ var TOT=0;
 for(var i=0;i<SS.length;i++){var m=SS[i][2].match(/\[(?:at|in|on|At|In|On)\]/g);if(m)TOT+=m.length;}
 var sc=0,si=0,on=false,prev=0,attempted=0,wrongCount=0,isProcessing=false;
 var audioCtx=null;
-function getAudioCtx(){
-  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  if(audioCtx.state==="suspended")audioCtx.resume();
-  return audioCtx;
+
+function initAudio(){
+  try{
+    if(!audioCtx){
+      audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    }
+    if(audioCtx.state==="suspended"){
+      audioCtx.resume();
+    }
+  }catch(e){audioCtx=null;}
 }
+
 function playCorrect(){
   try{
-    var ctx=getAudioCtx();var t=ctx.currentTime;
-    [800,1200,1600].forEach(function(freq,i){
-      var osc=ctx.createOscillator();var gain=ctx.createGain();
-      osc.connect(gain);gain.connect(ctx.destination);
-      osc.type="sine";osc.frequency.setValueAtTime(freq,t+i*0.06);
-      gain.gain.setValueAtTime(0.25,t+i*0.06);
-      gain.gain.exponentialRampToValueAtTime(0.001,t+i*0.06+0.12);
-      osc.start(t+i*0.06);osc.stop(t+i*0.06+0.12);
-    });
+    initAudio();
+    if(!audioCtx)return;
+    var ctx=audioCtx;
+    var t=ctx.currentTime;
+    var freqs=[600,900,1200];
+    for(var fi=0;fi<freqs.length;fi++){
+      (function(freq,delay){
+        var osc=ctx.createOscillator();
+        var gain=ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type="sine";
+        osc.frequency.value=freq;
+        gain.gain.setValueAtTime(0.3,t+delay);
+        gain.gain.exponentialRampToValueAtTime(0.001,t+delay+0.15);
+        osc.start(t+delay);
+        osc.stop(t+delay+0.15);
+      })(freqs[fi],fi*0.08);
+    }
   }catch(e){}
 }
+
 function playWrong(){
   try{
-    var ctx=getAudioCtx();var t=ctx.currentTime;
-    var osc=ctx.createOscillator();var gain=ctx.createGain();
-    osc.connect(gain);gain.connect(ctx.destination);
+    initAudio();
+    if(!audioCtx)return;
+    var ctx=audioCtx;
+    var t=ctx.currentTime;
+    var osc=ctx.createOscillator();
+    var gain=ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
     osc.type="sawtooth";
-    osc.frequency.setValueAtTime(300,t);
-    osc.frequency.setValueAtTime(200,t+0.15);
-    osc.frequency.setValueAtTime(150,t+0.3);
-    gain.gain.setValueAtTime(0.2,t);
-    gain.gain.exponentialRampToValueAtTime(0.001,t+0.5);
-    osc.start(t);osc.stop(t+0.5);
+    osc.frequency.setValueAtTime(280,t);
+    osc.frequency.linearRampToValueAtTime(140,t+0.4);
+    gain.gain.setValueAtTime(0.25,t);
+    gain.gain.exponentialRampToValueAtTime(0.001,t+0.45);
+    osc.start(t);
+    osc.stop(t+0.45);
   }catch(e){}
 }
 
@@ -525,7 +548,7 @@ function adjustChests(){
     if(h>0) chests.style.bottom=(h+5)+"px";
   }
 }
-function pick(idx){if(!on||isProcessing)return;isProcessing=true;getAudioCtx();var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;attempted++;document.getElementById("sv").textContent=sc;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){isProcessing=false;si=nxt;loadS(si);adjustChests();},500);}else{isProcessing=false;}}else{attempted++;if(!g.getAttribute("data-had-wrong")){wrongCount++;g.setAttribute("data-had-wrong","1");}g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");isProcessing=false;},900);}}
+function pick(idx){if(!on||isProcessing)return;isProcessing=true;initAudio();var g=document.querySelector("#st .gap:not(.correct)");if(!g)return;var word=W[idx];if(word===g.getAttribute("data-answer")){g.classList.add("correct");g.textContent=word.toUpperCase();sc++;attempted++;document.getElementById("sv").textContent=sc;document.getElementById("pf").style.width=(sc/TOT*100)+"%";miniFW();saveProgress();var all=document.querySelectorAll("#st .gap");var done=true;for(var i=0;i<all.length;i++){if(!all[i].classList.contains("correct")){done=false;break;}}if(done){var nxt=si+1;setTimeout(function(){isProcessing=false;si=nxt;loadS(si);adjustChests();},500);}else{isProcessing=false;}}else{attempted++;if(!g.getAttribute("data-had-wrong")){wrongCount++;g.setAttribute("data-had-wrong","1");}g.classList.add("wrong");document.getElementById("wo").classList.add("show");setTimeout(function(){g.classList.remove("wrong");document.getElementById("wo").classList.remove("show");isProcessing=false;},900);}}
 function buildEndScreen(score){
   var total=TOT;
   var emoji,grade;
