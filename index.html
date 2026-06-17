@@ -727,5 +727,41 @@ checkSavedGame();
     <div style="font-family:'Bangers',cursive;color:rgba(255,215,0,0.5);font-size:clamp(0.7rem,2.5vw,0.9rem);letter-spacing:2px;margin-top:0.5rem;">↕ SCROLL TO STUDY THE CHART ↕</div>
   </div>
 </div>
+ <div id="comingSoonOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;">
+  <img src="coming soon.jpg" style="width:1%;height:1%;object-fit:cover;transition:width 3s ease-in-out,height 3s ease-in-out,opacity 0.5s ease-in-out;">
+</div>
+
+<script>
+(function(){
+  var shown = false;
+  var overlay = document.getElementById('comingSoonOverlay');
+  var img = overlay.querySelector('img');
+
+  function checkEndScreen(){
+    var endScreen = document.getElementById('end-screen');
+    if(!endScreen) return;
+
+    var visible = endScreen.offsetParent !== null;
+
+    if(visible && !shown){
+      shown = true;
+      setTimeout(function(){
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto'; // enable only once visible
+        img.style.width = '100vw';
+        img.style.height = '100vh';
+      }, 3500);
+    } else if(!visible && shown){
+      shown = false;
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+      img.style.width = '1%';
+      img.style.height = '1%';
+    }
+  }
+  setInterval(checkEndScreen, 300);
+})();
+</script>
+
 </body>
 </html>
