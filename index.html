@@ -728,7 +728,7 @@ checkSavedGame();
   </div>
 </div>
  <div id="comingSoonOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;">
-  <img src="coming soon.jpg" style="width:1%;height:1%;object-fit:cover;transition:width 3s ease-in-out,height 3s ease-in-out,opacity 0.5s ease-in-out;">
+  <img src="coming soon.jpg" style="width:1%;height:1%;object-fit:contain;transition:width 6s ease-in-out,height 6s ease-in-out,opacity 0.5s ease-in-out;">
 </div>
 
 <script>
@@ -750,7 +750,7 @@ checkSavedGame();
         overlay.style.pointerEvents = 'auto'; // enable only once visible
         img.style.width = '100vw';
         img.style.height = '100vh';
-      }, 3500);
+      }, 5000);
     } else if(!visible && shown){
       shown = false;
       overlay.style.opacity = '0';
