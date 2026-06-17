@@ -740,10 +740,9 @@ checkSavedGame();
   function checkEndScreen(){
     var endScreen = document.getElementById('end-screen');
     if(!endScreen) return;
+   
 
-​
-var visible = getComputedStyle(endScreen).display !== 'none'; 
-
+   var visible = getComputedStyle(endScreen).display !== 'none';
     if(visible && !shown){
       shown = true;
       setTimeout(function(){
