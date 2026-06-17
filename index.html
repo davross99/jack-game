@@ -741,7 +741,8 @@ checkSavedGame();
     var endScreen = document.getElementById('end-screen');
     if(!endScreen) return;
 
-    var visible = endScreen.offsetParent !== null;
+​
+var visible = getComputedStyle(endScreen).display !== 'none'; 
 
     if(visible && !shown){
       shown = true;
