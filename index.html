@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Jack & The Temple of Shadows</title>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
- <link rel="manifest" href="manifest.json">
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/jack-game/sw.js');}</script> 
 <style>
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html, body { width:100%; height:100%; overflow:hidden; background:#000; position:fixed; }
@@ -451,6 +449,20 @@ function playWrong(){
 }
 
 
+function showWalkthrough(){
+  try{
+    if(!localStorage.getItem("jack_seen")){
+      document.getElementById("walkthrough").classList.add("show");
+    }
+  }catch(e){
+    document.getElementById("walkthrough").classList.add("show");
+  }
+}
+function closeWalkthrough(){
+  try{ localStorage.setItem("jack_seen","1"); }catch(e){}
+  document.getElementById("walkthrough").classList.remove("show");
+}
+
 function showSc(id){var all=document.querySelectorAll(".screen");for(var i=0;i<all.length;i++)all[i].classList.remove("active");document.getElementById(id).classList.add("active");}
 function saveProgress(){
   try{
@@ -505,6 +517,7 @@ function continueGame(){
 }
 
 function checkSavedGame(){
+  showWalkthrough();
   var saved=loadProgress();
   if(saved&&saved.si>0){
     document.getElementById("continue-btn").style.display="block";
@@ -727,41 +740,29 @@ checkSavedGame();
     <div style="font-family:'Bangers',cursive;color:rgba(255,215,0,0.5);font-size:clamp(0.7rem,2.5vw,0.9rem);letter-spacing:2px;margin-top:0.5rem;">↕ SCROLL TO STUDY THE CHART ↕</div>
   </div>
 </div>
- <div id="comingSoonOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;">
-  <img src="coming soon.jpg" style="width:1%;height:1%;object-fit:contain;transition:width 6s ease-in-out,height 6s ease-in-out,opacity 0.5s ease-in-out;">
+
+<div id="walkthrough">
+  <div id="wt-box">
+    <div id="wt-title">HOW TO PLAY</div>
+    <div class="wt-step">
+      <div class="wt-num">1</div>
+      <div class="wt-text">Read the sentence and find the gap shown as <span style="color:#FFD700;font-style:italic;">_______</span></div>
+    </div>
+    <div class="wt-step">
+      <div class="wt-num">2</div>
+      <div class="wt-text">Tap the correct chest — <span style="color:#FFD700;">AT</span>, <span style="color:#00FF88;">IN</span> or <span style="color:#44AAFF;">ON</span> — to fill the gap</div>
+    </div>
+    <div class="wt-step">
+      <div class="wt-num">3</div>
+      <div class="wt-text">Get all <span style="color:#FFD700;">100 gaps</span> correct to complete Jack's adventure!</div>
+    </div>
+    <div class="wt-step">
+      <div class="wt-num">💡</div>
+      <div class="wt-text">Tap <span style="color:#FFD700;">CHART</span> anytime to see the grammar reference guide</div>
+    </div>
+    <button id="wt-btn" onclick="closeWalkthrough()">⚡ LET'S GO!</button>
+    <button id="wt-skip" onclick="closeWalkthrough()">Skip</button>
+  </div>
 </div>
-
-<script>
-(function(){
-  var shown = false;
-  var overlay = document.getElementById('comingSoonOverlay');
-  var img = overlay.querySelector('img');
-
-  function checkEndScreen(){
-    var endScreen = document.getElementById('end-screen');
-    if(!endScreen) return;
-   
-
-   var visible = getComputedStyle(endScreen).display !== 'none';
-    if(visible && !shown){
-      shown = true;
-      setTimeout(function(){
-        overlay.style.opacity = '1';
-        overlay.style.pointerEvents = 'auto'; // enable only once visible
-        img.style.width = '100vw';
-        img.style.height = '100vh';
-      }, 5000);
-    } else if(!visible && shown){
-      shown = false;
-      overlay.style.opacity = '0';
-      overlay.style.pointerEvents = 'none';
-      img.style.width = '1%';
-      img.style.height = '1%';
-    }
-  }
- setInterval(checkEndScreen, 300);
-})();
-</script>
-
 </body>
 </html>
