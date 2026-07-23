@@ -502,7 +502,7 @@ function unlockAudio(){
   try{
    sndCorrect=new Audio(bufToUrl(makeWav([1400,1800,2200],0.12,'sine')));
 sndWrong=new Audio(bufToUrl(makeWav([300,200,150],0.4,'saw')));
-sndCorrect.volume=0.14;sndWrong.volume=0.5;
+sndCorrect.volume=0.10;sndWrong.volume=0.5;
 }catch(e){}
 }
 document.addEventListener('touchstart',unlockAudio,{once:true});
