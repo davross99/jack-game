@@ -523,7 +523,7 @@ function unlockAudio(){
 sndCorrect=new Audio(bufToUrl(makeSprinkle([1600,1900,2300,2800,3400],0.06,0.02)));
 
 sndWrong=new Audio(bufToUrl(makeWav([300,200,150],0.4,'saw')));
-sndCorrect.volume=0.10;sndWrong.volume=0.5;
+sndCorrect.volume=0.5;sndWrong.volume=0.5;
 }catch(e){}
 }
 document.addEventListener('touchstart',unlockAudio,{once:true});
