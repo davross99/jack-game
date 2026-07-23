@@ -500,10 +500,10 @@ function unlockAudio(){
   if(audioUnlocked)return;
   audioUnlocked=true;
   try{
-    sndCorrect=new Audio(bufToUrl(makeWav([800,1000,1300],0.3,'sine')));
-    sndWrong=new Audio(bufToUrl(makeWav([300,200,150],0.4,'saw')));
-    sndCorrect.volume=0.6;sndWrong.volume=0.6;
-  }catch(e){}
+   sndCorrect=new Audio(bufToUrl(makeWav([1400,1800,2200],0.12,'sine')));
+sndWrong=new Audio(bufToUrl(makeWav([300,200,150],0.4,'saw')));
+sndCorrect.volume=0.28;sndWrong.volume=0.5;
+}catch(e){}
 }
 document.addEventListener('touchstart',unlockAudio,{once:true});
 document.addEventListener('click',unlockAudio,{once:true});
