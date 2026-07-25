@@ -844,5 +844,12 @@ checkSavedGame();
   <div id="inst-msg">Tap <span class="at">AT</span>, <span class="in">IN</span> or <span class="on">ON</span> to fill the gap.</div>
   <div id="luck-msg">Good luck! &#x1F340;</div>
 </div>
-</body>>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("pwabuilder-sw.js");
+}
+</script>
+</body>
+
+  
 </html>
