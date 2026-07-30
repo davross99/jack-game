@@ -1,0 +1,11 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.gamesforimprovingEnglish.jacktemple",
+      "sha256_cert_fingerprints":
+        ["B0:7B:6D:A6:C0:CB:2F:AD:6E:AB:D9:05:18:AB:AA:13:81:BE:EC:EE:E5:59:C1:1D:9D:9F:7B:4A:00:2D:CA:E3"]
+    }
+  }
+]
