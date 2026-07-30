@@ -3,9 +3,9 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.gamesforimprovingEnglish.jacktemple",
+      "package_name": "com.zestenglish.jacktemple",
       "sha256_cert_fingerprints":
-        ["B0:7B:6D:A6:C0:CB:2F:AD:6E:AB:D9:05:18:AB:AA:13:81:BE:EC:EE:E5:59:C1:1D:9D:9F:7B:4A:00:2D:CA:E3"]
+        ["F1:23:D0:69:E5:79:97:A8:35:34:84:F4:CF:0B:0E:EF:E7:DE:CF:FC:39:B5:C6:B2:EF:AE:4C:24:EF:79:7C:04"]
     }
   }
 ]
