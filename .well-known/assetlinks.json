@@ -3,7 +3,7 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.zestenglish.jacktemple",
+      "package_name": "com.gamesforimprovingEnglish.jacktemple",
       "sha256_cert_fingerprints":
         ["F1:23:D0:69:E5:79:97:A8:35:34:84:F4:CF:0B:0E:EF:E7:DE:CF:FC:39:B5:C6:B2:EF:AE:4C:24:EF:79:7C:04"]
     }
