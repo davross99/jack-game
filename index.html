@@ -849,8 +849,6 @@ checkSavedGame();
   <div id="luck-msg">Good luck! &#x1F340;</div>
 </div>
 <script>
-if ("serviceWorker" in navigator) {
-  
 var PURCHASE_KEY = 'jack_purchased';
 var SKU_ID = 'full_game_unlock';
 
@@ -893,7 +891,8 @@ async function buyFullGame() {
   }
 }
 
-navigator.serviceWorker.register("pwabuilder-sw.js");
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("pwabuilder-sw.js");
 }
 </script>
 </body>
