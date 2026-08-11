@@ -393,7 +393,11 @@ body { font-family:"Nunito",sans-serif; user-select:none; }
   <div id="grade-ladder" style="width:100%;margin-bottom:1rem;"></div>
   <button class="btn-gold" onclick="restartGame()">&#x1F504; PLAY AGAIN</button>
 </div>
-<canvas id="fwc"></canvas>
+<div class="screen" id="paywall-screen" style="background:linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),url('scene04.jpg') center/cover no-repeat; gap:1.2rem; text-align:center; padding:2rem 1.5rem;">
+  <div class="eti" style="font-size:clamp(1.6rem,7vw,2.6rem);">Enjoyed the sample?</div>
+  <div class="tt-sub" style="max-width:320px;">To continue the adventure, buy now.</div>
+  <button class="btn-gold" onclick="buyFullGame()">BUY NOW &#x2022; $0.50</button>
+</div><canvas id="fwc"></canvas>
 <div id="wo"><div class="wm">WRONG!</div><div class="ws">Try again!</div></div>
 <script>
 var W = ["at","in","on"];
@@ -630,7 +634,7 @@ function closeChart(){showSc(prev===0?"title-screen":"game-screen");}
 function openInst(f){prev=f;showSc("inst-screen");document.getElementById("iin").scrollTop=0;showLang(document.querySelector(".ltab.on"));}
 function closeInst(){showSc(prev===0?"title-screen":"game-screen");}
 function showLang(btn){var panels=document.querySelectorAll(".lpn");for(var i=0;i<panels.length;i++)panels[i].classList.remove("on");var tabs=document.querySelectorAll(".ltab");for(var i=0;i<tabs.length;i++)tabs[i].classList.remove("on");var code=btn.getAttribute("data-lang");document.getElementById("lp-"+code).classList.add("on");btn.classList.add("on");}
-function loadS(idx){isProcessing=false;if(idx===0){showInstOverlay();}if(idx>=SS.length){on=false;clearProgress();setTimeout(function(){bigFW();setTimeout(function(){stopFW();buildEndScreen(TOT-wrongCount);showSc("end-screen");},3500);},300);return;}var s=SS[idx];document.getElementById("bg").style.backgroundImage="url('"+s[0]+"')";document.getElementById("slbl").textContent=s[1];var box=document.getElementById("st");box.innerHTML="";setTimeout(adjustChests,80);box.classList.remove("fade");var rawText=s[2].replace('\n[[END]]','<br><span style="font-family:Bangers,cursive;font-size:1.3em;color:#FFD700;letter-spacing:3px;display:block;text-align:center;margin-top:0.4rem;padding-bottom:0.5rem;">THE END...for now.</span>').replace('[[END]]','<br><span style="font-family:Bangers,cursive;font-size:1.3em;color:#FFD700;letter-spacing:3px;display:block;text-align:center;margin-top:0.4rem;padding-bottom:0.5rem;">THE END...for now.</span>');var parts=rawText.split(/\[([^\]]+)\]/);var gc=0;for(var i=0;i<parts.length;i++){if(i%2===0){if(parts[i]){var tsp=document.createElement("span");tsp.innerHTML=parts[i];box.appendChild(tsp);}}else{var g=document.createElement("span");g.className="gap";g.id="gap-"+gc;g.setAttribute("data-answer",parts[i].toLowerCase());g.textContent="___";box.appendChild(g);gc++;}}
+function loadS(idx){isProcessing=false;if(idx===0){showInstOverlay();}if(idx>=16&&!isPurchased()){showSc('paywall-screen');return;}if(idx>=SS.length){on=false;clearProgress();setTimeout(function(){bigFW();setTimeout(function(){stopFW();buildEndScreen(TOT-wrongCount);showSc("end-screen");},3500);},300);return;}var s=SS[idx];document.getElementById("bg").style.backgroundImage="url('"+s[0]+"')";document.getElementById("slbl").textContent=s[1];var box=document.getElementById("st");box.innerHTML="";setTimeout(adjustChests,80);box.classList.remove("fade");var rawText=s[2].replace('\n[[END]]','<br><span style="font-family:Bangers,cursive;font-size:1.3em;color:#FFD700;letter-spacing:3px;display:block;text-align:center;margin-top:0.4rem;padding-bottom:0.5rem;">THE END...for now.</span>').replace('[[END]]','<br><span style="font-family:Bangers,cursive;font-size:1.3em;color:#FFD700;letter-spacing:3px;display:block;text-align:center;margin-top:0.4rem;padding-bottom:0.5rem;">THE END...for now.</span>');var parts=rawText.split(/\[([^\]]+)\]/);var gc=0;for(var i=0;i<parts.length;i++){if(i%2===0){if(parts[i]){var tsp=document.createElement("span");tsp.innerHTML=parts[i];box.appendChild(tsp);}}else{var g=document.createElement("span");g.className="gap";g.id="gap-"+gc;g.setAttribute("data-answer",parts[i].toLowerCase());g.textContent="___";box.appendChild(g);gc++;}}
 if(gc===0){setTimeout(function(){si=idx+1;loadS(si);adjustChests();},2500);}}
 function adjustChests(){
   var panel=document.getElementById("sp");
@@ -846,7 +850,50 @@ checkSavedGame();
 </div>
 <script>
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("pwabuilder-sw.js");
+  <script>
+var PURCHASE_KEY = 'jack_purchased';
+var SKU_ID = 'full_game_unlock';
+
+function isPurchased() {
+  return localStorage.getItem(PURCHASE_KEY) === 'true';
+}
+
+function markPurchased() {
+  localStorage.setItem(PURCHASE_KEY, 'true');
+}
+
+async function buyFullGame() {
+  try {
+    if (!window.getDigitalGoodsService) {
+      alert('Purchases are not available in this environment.');
+      return;
+    }
+    var service = await window.getDigitalGoodsService('https://play.google.com/billing');
+    var request = new PaymentRequest(
+      [{ supportedMethods: 'https://play.google.com/billing', data: { sku: SKU_ID } }],
+      { total: { label: 'Full Game', amount: { currency: 'USD', value: '0.50' } } }
+    );
+    var response = await request.show();
+    var purchaseToken = response.details.purchaseToken;
+    await response.complete('success');
+
+    var purchases = await service.listPurchases();
+    var owned = purchases.some(function(p) { return p.itemId === SKU_ID; });
+
+    if (owned) {
+      await service.consume(purchaseToken).catch(function(){});
+      markPurchased();
+      showSc('game-screen');
+      loadS(16);
+    } else {
+      alert('Purchase could not be verified. Please try again.');
+    }
+  } catch (err) {
+    console.error('Purchase error:', err);
+  }
+}
+</script>
+navigator.serviceWorker.register("pwabuilder-sw.js");
 }
 </script>
 </body>
